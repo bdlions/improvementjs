@@ -1,0 +1,1 @@
+Your user name is : <?php echo $user_name;?>
