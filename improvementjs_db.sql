@@ -303,31 +303,6 @@ INSERT INTO `groups` (`id`, `name`, `description`) VALUES
 (3, 'demo', 'General User');
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `project_info`
---
-
-CREATE TABLE IF NOT EXISTS `project_info` (
-  `project_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `project_name` varchar(100) DEFAULT '',
-  `project_content` text,
-  `project_content_backup` text,
-  `project_configuration` text,
-  PRIMARY KEY (`project_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
-
---
--- Dumping data for table `project_info`
---
-
-INSERT INTO `project_info` (`project_id`, `project_name`, `project_content`, `project_content_backup`, `project_configuration`) VALUES
-(1, 'project1', '<li class="ui-widget-content" id="0">Click here to edit block</li>', '<li class="ui-widget-content" id="0">Click here to edit block</li>', NULL),
-(2, 'test', '\n    <li class="ui-widget-content" id="0">IF</li><li class="ui-widget-content" id="5"><a title="start_space_anchor_condition" style="cursor:pointer;" id="ssaid"> <input style="" id="natural" type="hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a><a title="cc29start" style="cursor:pointer;" id="cc29"> <input style="" id="natural" value="number" name="DecimalConstant" type="hidden">0.0</a> <a style="cursor:pointer;" id="6ff5" title="comparison"> <input style="" value="comparison" name="HigherThan" type="hidden">is higher than </a> <a title="cc29end" style="cursor:pointer;" id="5e21"> <input style="" value="number" name="DecimalConstant" type="hidden">0.0</a><div id="code"><input style="" title="cc29start" id="cc29" value="0.0" name="condition" type="hidden"><input style="" title="comparison" id="6ff5" value=" > " name="condition" type="hidden"><input style="" title="cc29end" id="5e21" value="0.0" name="condition" type="hidden"></div></li><li class="ui-widget-content" id="0">THEN</li><li class="ui-widget-content ui-selected" id="5"><a title="start_space_anchor_action" style="cursor:pointer;" id="ssaid"> <input id="natural" type="hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a><a style="cursor:pointer;" id="5df6"><input class="ui-selectee" style="" value="action" name="run" type="hidden">run on Monday</a><div id="code"><input id="5df6" value="Run(Monday)" name="action" type="hidden"></div></li>', '\n    <li class="ui-widget-content" id="0">IF</li><li class="ui-widget-content" id="5"><a title="start_space_anchor_condition" style="cursor:pointer;" id="ssaid"> <input style="" id="natural" type="hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a><a title="cc29start" style="cursor:pointer;" id="cc29"> <input style="" id="natural" value="number" name="DecimalConstant" type="hidden">0.0</a> <a style="cursor:pointer;" id="6ff5" title="comparison"> <input style="" value="comparison" name="HigherThan" type="hidden">is higher than </a> <a title="cc29end" style="cursor:pointer;" id="5e21"> <input style="" value="number" name="DecimalConstant" type="hidden">0.0</a><div id="code"><input style="" title="cc29start" id="cc29" value="0.0" name="condition" type="hidden"><input style="" title="comparison" id="6ff5" value=" > " name="condition" type="hidden"><input style="" title="cc29end" id="5e21" value="0.0" name="condition" type="hidden"></div></li><li class="ui-widget-content" id="0">THEN</li><li class="ui-widget-content ui-selected" id="5"><a title="start_space_anchor_action" style="cursor:pointer;" id="ssaid"> <input id="natural" type="hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a><a style="cursor:pointer;" id="5df6"><input class="ui-selectee" style="" value="action" name="run" type="hidden">run on Monday</a><div id="code"><input id="5df6" value="Run(Monday)" name="action" type="hidden"></div></li>', NULL),
-(3, 'asd', '<li class="ui-widget-content" id="0">Click here to edit block</li>', '<li class="ui-widget-content" id="0">Click here to edit block</li>', NULL);
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `users`
 --
@@ -361,8 +336,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `remember_code`, `created_on`, `last_login`, `active`, `is_inactivated_by_admin`, `first_name`, `last_name`, `country`, `browser`, `created_date`, `session_id`) VALUES
 (1, '127.0.0.1', 'administrator', '59beecdf7fc966e2f17fd8f65a4a9aeb09d4a3d4', '9462e8eee0', 'admin@admin.com', '', NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 0, 'Admin', 'istrator', 'US', 'Mozilla Firefox', '2013-06-17 15:03:12', 'e33c0af7dff17ead9fe3e383ae773c7d'),
-(2, '127.0.0.1', 'alamgir kabir', 'b98de0d98b4f9500b9e948134b97f15fc32fe4c1', NULL, 'alamgir@apurbatech.com', NULL, NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 0, 'alamgir', 'kabir', 'US', 'Mozilla Firefox', '2013-06-17 15:03:12', ''),
-(3, '127.0.0.1', 'nazmul hasan', '907598a213a9ba73a5867f918e1784b6dc481736', NULL, 'nazmul@apurbatech.com', NULL, NULL, 'a062b8cc4e50b3ad32519fc5b99646e6f25c86dd', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 0, 'nazmul', 'hasan', 'US', 'Mozilla Firefox', '2013-06-17 15:03:12', '1f68e07cee83aa329294dc769df561ec');
+(2, '127.0.0.1', 'alamgir kabir', '59beecdf7fc966e2f17fd8f65a4a9aeb09d4a3d4', NULL, 'alamgir@apurbatech.com', NULL, NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 0, 'alamgir', 'kabir', 'US', 'Mozilla Firefox', '2013-06-17 15:03:12', ''),
+(3, '127.0.0.1', 'nazmul hasan', '59beecdf7fc966e2f17fd8f65a4a9aeb09d4a3d4', NULL, 'nazmul@apurbatech.com', NULL, NULL, 'a062b8cc4e50b3ad32519fc5b99646e6f25c86dd', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 0, 'nazmul', 'hasan', 'US', 'Mozilla Firefox', '2013-06-17 15:03:12', '1f68e07cee83aa329294dc769df561ec');
 
 -- --------------------------------------------------------
 
@@ -387,70 +362,65 @@ INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 (3, 3, 3);
 
 -- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `project_types` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3;   
+INSERT INTO `project_types` (`id`, `description`) VALUES
+(1, 'Program'),
+(2, 'Script');
 
+CREATE TABLE IF NOT EXISTS `project_info` (
+  `project_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project_type_id` int(11) unsigned DEFAULT NULL,
+  `user_id` int(11) unsigned DEFAULT NULL,
+  `project_name` varchar(100) DEFAULT '',
+  `project_content` text,
+  `project_content_backup` text,
+  `project_configuration` text,
+  PRIMARY KEY (`project_id`),
+  KEY `fk_project_info_project_types1_idx` (`project_type_id`),
+  KEY `fk_project_info_users1_idx` (`user_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+ALTER TABLE `project_info`
+  ADD CONSTRAINT `fk_project_info_project_types1` FOREIGN KEY (`project_type_id`) REFERENCES `project_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_project_info_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 --
 -- Table structure for table `users_projects`
 --
-
 CREATE TABLE IF NOT EXISTS `users_projects` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` mediumint(8) unsigned NOT NULL,
   `project_id` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
-
---
--- Dumping data for table `users_projects`
---
-
-INSERT INTO `users_projects` (`id`, `user_id`, `project_id`) VALUES
-(1, 3, 1),
-(2, 3, 2),
-(3, 3, 3);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `variables_projects`
---
-
-CREATE TABLE IF NOT EXISTS `variables_projects` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `variable_id` mediumint(8) unsigned NOT NULL,
-  `project_id` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `variables_projects`
---
-
-INSERT INTO `variables_projects` (`id`, `variable_id`, `project_id`) VALUES
-(1, 1, 1),
-(2, 2, 1);
-
--- --------------------------------------------------------
-
+  PRIMARY KEY (`id`),
+  KEY `fk_users_projects_users1_idx` (`user_id`),
+  KEY `fk_users_projects_project_info1_idx` (`project_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+ALTER TABLE `users_projects`
+  ADD CONSTRAINT `fk_users_projects_project_info1` FOREIGN KEY (`project_id`) REFERENCES `project_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_users_projects_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 --
 -- Table structure for table `variable_list`
 --
-
 CREATE TABLE IF NOT EXISTS `variable_list` (
   `variable_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `variable_name` varchar(100) DEFAULT '',
   `variable_type` varchar(100) DEFAULT '',
   `variable_value` varchar(100) DEFAULT '',
   PRIMARY KEY (`variable_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 --
--- Dumping data for table `variable_list`
+-- Table structure for table `variables_projects`
 --
-
-INSERT INTO `variable_list` (`variable_id`, `variable_name`, `variable_type`, `variable_value`) VALUES
-(1, 'n1', 'NUMBER', '34'),
-(2, 'var1', 'NUMBER', '25');
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+CREATE TABLE IF NOT EXISTS `variables_projects` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `variable_id` mediumint(8) unsigned NOT NULL,
+  `project_id` mediumint(8) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_variables_projects_variable_list1_idx` (`variable_id`),
+  KEY `fk_variables_projects_project_info1_idx` (`project_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+ALTER TABLE `variables_projects`
+  ADD CONSTRAINT `fk_variables_projects_project_info1` FOREIGN KEY (`project_id`) REFERENCES `project_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_variables_projects_variable_list1` FOREIGN KEY (`variable_id`) REFERENCES `variable_list` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

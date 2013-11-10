@@ -3,8 +3,10 @@
         <a href="#">Projects</a>
         <ul>
             <?php
-                echo anchor('auth/index', 'All Projects');
-                echo anchor('welcome/create_project', 'Create Project');
+                echo anchor('programs/all_programs', 'All Programs');
+                echo anchor('scripts/all_scripts', 'All Scripts');
+                echo anchor('programs/create_program', 'Create Program');
+                echo anchor('scripts/create_script', 'Create Script');
                 
             ?>
         </ul>

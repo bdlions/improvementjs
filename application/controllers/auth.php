@@ -27,15 +27,17 @@ class Auth extends CI_Controller {
                 $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
                 $this->template->set('css', $css);
                 $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-                $this->data['projects'] = $this->ion_auth->where('users.id', $this->session->userdata('user_id'))->projects()->result();
-                $this->template->load("default_template", "auth/project", $this->data);
+                //$this->data['projects'] = $this->ion_auth->where('users.id', $this->session->userdata('user_id'))->projects()->result();
+                $this->data['projects'] = $this->ion_auth->where('user_id', $this->session->userdata('user_id'))->get_all_projects()->result();
+                $this->template->load("default_template", "auth/projects", $this->data);
             } else if ($this->ion_auth->is_demo()) {
                 $base = base_url();
                 $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
                 $this->template->set('css', $css);
                 $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-                $this->data['projects'] = $this->ion_auth->where('users.id', $this->session->userdata('user_id'))->projects()->result();
-                $this->template->load("default_template", "auth/project", $this->data);
+                //$this->data['projects'] = $this->ion_auth->where('users.id', $this->session->userdata('user_id'))->projects()->result();
+                $this->data['projects'] = $this->ion_auth->where('user_id', $this->session->userdata('user_id'))->get_all_projects()->result();
+                $this->template->load("default_template", "auth/projects", $this->data);
             } else {
                 redirect('auth/login', 'refresh');
             }

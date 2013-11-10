@@ -7,6 +7,7 @@ class Project extends CI_Controller
         parent::__construct();
         $this->load->library('ion_auth');
         $this->load->library('session');
+        $this->load->library('project/js/variable/variable_library');
         $this->load->helper('file');
         $this->load->helper('form');
         $this->load->library('form_validation');
@@ -139,7 +140,7 @@ class Project extends CI_Controller
                         $additional_project_data = array(
                             'project_id' => $this->session->userdata('project_id'),
                         );
-                        $this->ion_auth->create_variable($additional_variable_data, $additional_project_data);
+                        $this->variable_library->create_variable($additional_variable_data, $additional_project_data);
                     endforeach;
 
                     $redirect_path = "welcome/load_project/".$project_id;

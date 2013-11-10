@@ -290,6 +290,14 @@ function reverse_code_process(parentNode, childNode, selectedCode)
             }
             returned_array[0] = nameArray;
             returned_array[1] = valueArray;
+            if( selectedCode.indexOf("[", 0) >= 0 )
+            {
+                returned_array[2] = selectedCode.substr(0, selectedCode.indexOf("[", 0));
+            }
+            else if( selectedCode.indexOf("(", 0) >= 0 )
+            {
+                returned_array[2] = selectedCode.substr(0, selectedCode.indexOf("(", 0));
+            }
         }
     }
     return returned_array;    

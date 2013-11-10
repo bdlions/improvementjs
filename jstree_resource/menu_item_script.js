@@ -35,6 +35,590 @@ function save()
 
 function generate_code()
 {
+    if( !is_expression_valid() )
+    {
+        return;
+    }
+        
+    var parentBlock = new Array();
+    
+    var li_list = new Array();
+    var li_list_counter = 0;
+    //console.log($('#selectable'));
+    $('#selectable').each(function()
+    {
+        $("li", $(this)).each(function ()
+        {
+            //console.log($(this));
+            //li_list = li_list+ $("<div />").append( $(this).clone()).html();
+            li_list[li_list_counter++] = $(this);
+            //$.merge($(this), li_list);
+        });
+    });
+    parentBlock = generate_if_blocks(li_list);
+
+    var parentScript = new Script();
+    parentScript.setBlock(parentBlock);
+
+    var scripts = new Scripts();
+    scripts.setScript(parentScript);
+
+    var sprite = new Sprite();
+    sprite.setScripts(scripts);
+
+    var sprites = new Sprites();
+    sprites.setSprite(sprite);
+
+    var stage = new Stage();
+    stage.setSprites(sprites);
+
+    var project = new Project();
+    project.setStage(stage);
+    //console.log('project');
+    //console.log(project);
+    $.get('../../json/blockMap.json', function(mapping){
+        $.get('../../json/sample.xml', function(xml) {
+            var jsonObj = $.xml2json(xml);
+            console.log(jsonObj);
+            console.log(project);
+            console.log(mapping);
+
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost/smartycode/service.php',
+                dataType: "json",
+                data: {project_xml : project, mapping:mapping},
+                complete:function(data){
+                    //alert(data.responseText);
+                    $('#generate_code_div_modal').dialog('open');
+                    //console.log(data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, ''));
+                    document.getElementById("generated_code_text_area").value = data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
+                }
+            });
+
+        });   
+    });
+    /*$.get('../../json/blockMap.json', function(mapping){
+        $.get('../../json/sample.xml', function(xml) {
+            var jsonObj = $.xml2json(xml);
+            //console.log(jsonObj);
+            console.log(jsonObj);
+
+            var action = new Block();
+            action.setS('run');
+            action.setL('Monday');
+
+            var action2 = new Block();
+            action2.setS('turn');
+            action2.setL('15');
+
+            var actionBlock = new Array();
+            actionBlock[0] = action;
+            //actionBlock[1] = action2;
+
+            var actionScript = new Script();
+            actionScript.setBlock(actionBlock);
+
+            var conditionBlock = new Block();
+            conditionBlock.setS('>');
+
+            var leftOperatorBlock = new Block();
+            leftOperatorBlock.setS('Age');
+            var paramArray = new Array();
+            paramArray[0] = '10';
+            paramArray[1] = 'naz';
+            //leftOperatorBlock.setL('10');
+            leftOperatorBlock.setL(paramArray);
+
+            var rightOperatorBlock = new Block();
+            rightOperatorBlock.setS('Height');
+            rightOperatorBlock.setL('10');
+
+            var operatorBlock = new Array();
+            operatorBlock[0] = leftOperatorBlock;
+            operatorBlock[1] = rightOperatorBlock;
+
+            conditionBlock.setBlock(operatorBlock);
+
+            var expressionBlock = new Block();
+            expressionBlock.setS('doIf');
+            expressionBlock.setBlock(conditionBlock);
+            expressionBlock.setScript(actionScript);
+
+            var parentBlock = new Array();
+            parentBlock[0] = expressionBlock;
+
+            var parentScript = new Script();
+            parentScript.setBlock(parentBlock);
+
+            var scripts = new Scripts();
+            scripts.setScript(parentScript);
+
+            var sprite = new Sprite();
+            sprite.setScripts(scripts);
+
+            var sprites = new Sprites();
+            sprites.setSprite(sprite);
+
+            var stage = new Stage();
+            stage.setSprites(sprites);
+
+            var project = new Project();
+            project.setStage(stage);
+            
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost/smartycode/service.php',
+                dataType: "json",
+                data: {project_xml : project, mapping:mapping},
+                complete:function(data){
+                    //alert(data.responseText);
+                    $('#generate_code_div_modal').dialog('open');
+                    document.getElementById("generated_code_text_area").value = data.responseText;
+                }
+            });
+
+        });   
+    });*/
+    
+}
+function is_expression_valid()
+{
+    var is_valid_code = true;
+    var error_message = "";
+    $('#selectable').each(function()
+    {
+        $("li", $(this)).each(function ()
+        {
+            //removing the selected item before user selects generate -> code from menu item
+            $(this).attr("class",$(this).attr("class").replace(" ui-selected", ""));
+            if(!is_valid_code)
+            {
+                return;
+            }
+            if($(this).text().trim() == "Click here to edit block")
+            {
+                is_valid_code = false;
+                error_message = "There is undefined item.";
+                //focusing current item from left panel for which there is error while generating code
+                $(this).attr("class",$(this).attr("class")+" ui-selected");
+                return;
+            }
+            else if($(this).text().trim() == "Click here to edit action")
+            {
+                is_valid_code = false;
+                error_message = "Action is not defined.";
+                //focusing current item from left panel for which there is error while generating code
+                $(this).attr("class",$(this).attr("class")+" ui-selected");
+                return;
+            }
+            else if($(this).text().trim() == "Click here to edit condition")
+            {
+                is_valid_code = false;
+                error_message = "Condition is not defined.";
+                //focusing current item from left panel for which there is error while generating code
+                $(this).attr("class",$(this).attr("class")+" ui-selected");
+                return;
+            }
+        });
+    });
+    if(!is_valid_code)
+    {
+        alert(error_message);
+        return false;
+    }
+    return is_valid_code;
+}
+
+function generate_if_blocks(li_list)
+{
+    var parentBlock = new Array();
+    var parentBlockCounter = 0;
+    
+    var if_block = new Block();
+    var condition_block = new Block();
+    var then_action_script = new Script();
+    var else_action_script = new Script();
+    var then_action_block = new Block();
+    var else_action_block = new Block();
+    var script_actions_array = new Array();
+    
+    var first_li = li_list[0];
+    $("li", li_list).each(function ()
+    {
+        first_li = $(this);
+    });
+    var first_li_length = first_li.attr("id");
+    for(var counter = 0 ; counter < li_list.length ; counter++)
+    {
+        var single_li = li_list[counter];
+        //handling root 
+        if( single_li.attr("id") == first_li_length)
+        {
+            if(single_li.text().trim().toLowerCase() == "if")
+            {
+                if_block = new Block();
+                condition_block = new Block();
+                then_action_script = new Script();
+                else_action_script = new Script();
+                then_action_block = new Block();
+                else_action_block = new Block();
+                script_actions_array = new Array();
+                condition_block = generate_condition_block(single_li);
+            }
+            else if(single_li.text().trim().toLowerCase() == "then")
+            {
+                then_action_block = generate_action_block(single_li);
+                then_action_script.setBlock(then_action_block); 
+                if_block.setS("doIf");    
+                if_block.setBlock(condition_block);
+                if_block.setScript(then_action_script);
+                parentBlock[parentBlockCounter++] = if_block;
+            }
+            else if(single_li.text().trim().toLowerCase() == "else")
+            {
+                else_action_block = generate_action_block(single_li);
+                else_action_script.setBlock(else_action_block);
+                script_actions_array[0] = then_action_script;
+                script_actions_array[1] = else_action_script;
+                if_block.setS("doIfElse");  
+                if_block.setScript(script_actions_array);
+                parentBlock[--parentBlockCounter] = if_block;
+                parentBlockCounter++;
+            } 
+        }
+    }
+    /*$("li", li_list).each(function ()
+    {
+        //handling root 
+        if( $(this).attr("id") == first_li_length)
+        {
+            if($(this).text().trim().toLowerCase() == "if")
+            {
+                if_block = new Block();
+                condition_block = new Block();
+                action_script = new Script();
+                action_block = new Block();
+                condition_block = generate_condition_block($(this));
+            }
+            else if($(this).text().trim().toLowerCase() == "then")
+            {
+                action_block = generate_action_block($(this));
+                action_script.setBlock(action_block); 
+                if_block.setS("doIf");    
+                if_block.setBlock(condition_block);
+                if_block.setScript(action_script);
+                parentBlock[parentBlockCounter++] = if_block;
+            }
+            else if($(this).text().trim().toLowerCase() == "else")
+            {
+                
+            } 
+        }
+
+    });*/
+    return parentBlock;
+}
+function generate_condition_block(condition)
+{
+    condition = condition.next("li");
+    //consider all actions
+    var anchor_id_to_name = {};
+    var anchor_id_to_value = {};
+    $("a", condition).each(function ()
+    {
+        var anchor_id = 0;
+        if( $(this).attr("id") )
+        {
+            anchor_id = $(this).attr("id");
+        }
+        $("input", $(this)).each(function ()
+        {
+            if( $(this).attr("name") && $(this).attr("value") )
+            {
+                anchor_id_to_name[anchor_id] = $(this).attr("name");
+                anchor_id_to_value[anchor_id] = $(this).attr("value");
+            }
+
+        });
+    });
+    var result_array;
+    var comparison_value = "";
+    var left_block = new Block();
+    var left_value = "";
+    var right_block = new Block();
+    var right_value = "";
+    var condition_block = new Block();
+    var counter = 0;
+    $("div", condition).each(function ()
+    {
+        $("input", $(this)).each(function ()
+        {
+            var value = anchor_id_to_value[$(this).attr("id")];
+            if(counter == 0)
+            {
+               //add external opation later
+               if(value == "basicfunction" || value == "advancedfunction")
+               {
+                    result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
+                    left_block.setS(result_array[2]);                    
+                    left_block.setL(result_array[1]);
+               }
+               else
+               {
+                   left_value = $(this).attr("value");
+               }
+            }
+            else if(counter == 2)
+            {
+               if(value == "basicfunction" || value == "advancedfunction")
+               {
+                    result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
+                    right_block.setS(result_array[2]);  
+                    right_block.setL(result_array[1]);
+               }
+               else
+               {
+                   right_value = $(this).attr("value");
+               }
+            }
+            
+            else if(value == "comparison")
+            {
+                comparison_value = $(this).attr("value").trim();                
+            }
+            counter++;            
+        });
+    });
+    if( left_value == "" && right_value == "")
+    {
+        var function_array = new Array();
+        function_array[0] = left_block;
+        function_array[1] = right_block;
+        condition_block.setBlock(function_array);
+    }
+    else if( left_value != "" && right_value != "")
+    {
+        var value_array = new Array();
+        value_array[0] = left_value;
+        value_array[1] = right_value;
+        condition_block.setL(value_array);
+    }
+    else
+    {
+        if(left_value != "")
+        {
+            condition_block.setL(left_value);
+        }
+        else
+        {
+            condition_block.setBlock(left_block);
+        }
+        if(right_value != "")
+        {
+            condition_block.setL(right_value);
+        }
+        else
+        {
+            condition_block.setBlock(right_block);
+        }
+    }
+    condition_block.setS(comparison_value);
+    //console.log(condition_block);
+    return condition_block;
+}
+
+function generate_action_block(action)
+{
+    var then_length = parseInt(action.attr("id"));
+    var current_action = action;
+    var current_action_length = 0;
+    
+    var anchor_id_to_name = {};
+    var anchor_id_to_value = {};
+    var action_block_array = new Array();
+    var action_counter = 0;
+    
+    var action_type = "";
+    var variable_assignment_operator = "";
+    var variable_left_part_text = "";
+    var variable_right_part_text = "";
+    var variable_div_counter = 0;
+    var variable_text_array = new Array();
+    
+    while( true )
+    {
+        current_action = current_action.next("li");
+        current_action_length = parseInt(current_action.attr("id"));
+        //current action list is completed and we get a new block
+        if(current_action_length <= then_length)
+        {
+            break;
+        }
+        //console.log("current_action:"+current_action.text().trim());
+        //console.log("current_action_length:"+current_action_length);
+        if( current_action_length == parseInt(then_length) + parseInt(indentation_space_length) )
+        {
+            if( current_action.text().trim().toLowerCase() == "if" || current_action.text().trim().toLowerCase() == "then" || current_action.text().trim().toLowerCase() == "else" )
+            {
+                //handle recursive call
+                if(current_action.text().trim().toLowerCase() == "if")
+                {
+                    var temp_action = current_action;   
+                    var li_list = new Array();
+                    var li_list_counter = 0;
+                    li_list[li_list_counter++] = temp_action;  
+                    temp_action = temp_action.next("li");
+                    //console.log('current_action_length:'+current_action_length+',temp length:'+temp_action.attr("id")+',text:'+temp_action.text());
+                    while(true)
+                    {
+                        if( temp_action.attr("id") == current_action_length && (temp_action.text().trim().toLowerCase() == "then" || temp_action.text().trim().toLowerCase() == "else"))
+                        {
+                            li_list[li_list_counter++] = temp_action;
+                            //console.log('then,else');
+                        }
+                        else if( parseInt(temp_action.attr("id")) > current_action_length )
+                        {
+                            li_list[li_list_counter++] = temp_action;
+                            //console.log('adding');
+                        }
+                        else
+                        {
+                            //console.log('break');
+                            break;
+                        }
+                        if(temp_action.next('li').length <= 0)
+                        {
+                            break;
+                        }
+                        temp_action = temp_action.next("li");
+                    }
+                    //console.log(li_list);
+                    action_block_array[action_counter++] = generate_if_blocks(li_list)[0];
+                }
+                
+            }
+            else
+            {
+                //console.log("current_action:"+current_action.text().trim());
+                //console.log("current_action_length:"+current_action_length);
+            
+                anchor_id_to_name = {};
+                anchor_id_to_value = {};
+                $("a", current_action).each(function ()
+                {
+                    var anchor_id = 0;
+                    if( $(this).attr("id") )
+                    {
+                        anchor_id = $(this).attr("id");
+                    }
+                    $("input", $(this)).each(function ()
+                    {
+                        if( $(this).attr("name") && $(this).attr("value") )
+                        {
+                            action_type = $(this).attr("value");
+                            anchor_id_to_name[anchor_id] = $(this).attr("name");
+                            anchor_id_to_value[anchor_id] = $(this).attr("value");
+                        }
+
+                    });                    
+                });
+                //console.log('action_type:'+action_type);
+                var action_block = new Block();
+                if( action_type == 'action')
+                {
+                    $("div", current_action).each(function ()
+                    {
+                        $("input", $(this)).each(function ()
+                        {
+                            var value = anchor_id_to_value[$(this).attr("id")];
+                            var name = anchor_id_to_name[$(this).attr("id")];
+                            action_block.setS(name);
+                            var result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
+                            action_block.setL(result_array[1]);                        
+                        });
+                    });
+                }
+                else if( action_type == 'variable')
+                {
+                    $("div", current_action).each(function ()
+                    {
+                        $("input", $(this)).each(function ()
+                        {
+                            if(variable_div_counter == 0)
+                            {
+                                variable_left_part_text = $(this).attr("value");
+                            }
+                            else if(variable_div_counter == 1)
+                            {
+                                variable_assignment_operator = $(this).attr("value").trim();
+                            }
+                            else if(variable_div_counter == 2)
+                            {
+                                variable_right_part_text = $(this).attr("value");
+                            }
+                            variable_div_counter++;
+                        });
+                    });
+                    variable_text_array[0] = variable_left_part_text;
+                    variable_text_array[1] = variable_right_part_text;
+                    action_block.setL(variable_text_array);
+                    action_block.setS(variable_assignment_operator);
+                }
+                
+                //console.log(action_block);
+                //console.log("action_counter:"+action_counter);
+                action_block_array[action_counter++] = action_block;
+            }
+        }
+        
+        if(current_action.next('li').length <= 0)
+        {
+            break;
+        }
+    }
+    /*action = action.next("li");
+    var anchor_id_to_name = {};
+    var anchor_id_to_value = {};
+    $("a", action).each(function ()
+    {
+        var anchor_id = 0;
+        if( $(this).attr("id") )
+        {
+            anchor_id = $(this).attr("id");
+        }
+        $("input", $(this)).each(function ()
+        {
+            if( $(this).attr("name") && $(this).attr("value") )
+            {
+                anchor_id_to_name[anchor_id] = $(this).attr("name");
+                anchor_id_to_value[anchor_id] = $(this).attr("value");
+            }
+
+        });
+    });
+    var action_block_array = new Array();
+    var action_block = new Block();
+    $("div", action).each(function ()
+    {
+        $("input", $(this)).each(function ()
+        {
+            var value = anchor_id_to_value[$(this).attr("id")];
+            var name = anchor_id_to_name[$(this).attr("id")];
+            action_block.setS(name);
+            var result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
+            action_block.setL(result_array[1]);
+            //console.log(reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value")));
+        });
+    });
+    console.log(action_block);
+    action_block_array[0] = action_block;
+    return action_block_array;*/
+    return action_block_array;
+}
+
+/*function generate_code()
+{
     updateClientEndOperationCounter();
     //alert("On Progress.");
     var code = "";
@@ -258,7 +842,7 @@ function generate_code()
         alert("Invalid expression to generate code."+error_message);
     }
 
-}
+}*/
 
 function getLineBreakSequence()
 {

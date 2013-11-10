@@ -27,7 +27,6 @@
         <ul>
             <a onclick="add_variables()">Add</a>
             <a onclick="show_variables()">Show Variables</a>
-            <?php //echo anchor('welcome/create_variable', 'Add');?>
         </ul>        
     </li>
     <li>

@@ -13,6 +13,7 @@ class Welcome extends CI_Controller
         $this->load->helper('file');
         $this->load->helper('form');
         $this->load->library('form_validation');
+        $this->load->library('project/js/variable/variable_library');
         $this->load->helper('array');
     }
     public function index()
@@ -260,119 +261,6 @@ class Welcome extends CI_Controller
     }
     
     /*
-     * This controller is called when user presses save button from variable creation pop up dialog
-     * This method calls ion_auth model to create a new variable
-     */
-    function create_variable()
-    {
-        if (!$this->ion_auth->logged_in())
-        {
-            //redirect them to the login page
-            redirect('auth/login', 'refresh');
-        }
-        $variable_name = $_POST['add_variable_name'];
-        $variable_type = $_POST['add_variable_type_selection_combo'];
-        $variable_value = "";
-        if($variable_type == 'BOOLEAN')
-        {
-            $variable_value = $_POST['add_variable_value_selection_combo'];
-        }
-        else if($variable_type == 'NUMBER')
-        {
-            $variable_value = $_POST['add_variable_value'];
-        }
-        
-        $additional_variable_data = array(
-            'variable_name' => $variable_name,
-            'variable_type' => $variable_type,
-            'variable_value' => $variable_value,
-        );
-        $additional_project_data = array(
-            'project_id' => $this->session->userdata('project_id'),
-        );
-        $this->ion_auth->create_variable($additional_variable_data, $additional_project_data);
-        
-        if(isset($_POST['project_left_panel_content_backup']) && $_POST['project_left_panel_content_backup'] != "")
-        {
-            $project_left_panel_content_backup = $_POST['project_left_panel_content_backup'];
-            $data = array(
-                'project_content_backup' => $project_left_panel_content_backup
-            );
-            $this->ion_auth->where('project_id',$this->session->userdata('project_id'))->update_project($data);
-
-        }
-        
-        //loading the project
-        $redirect_path = "welcome/load_project/".$this->session->userdata('project_id');
-        redirect($redirect_path, 'refresh');
-    }
-    
-    /*function create_variable()
-    {
-        if (!$this->ion_auth->logged_in())
-        {
-            //redirect them to the login page
-            redirect('auth/login', 'refresh');
-        }
-        $this->data['title'] = "Create Variable";
-
-        if (!$this->ion_auth->logged_in())
-        {
-            redirect('auth', 'refresh');
-        }
-
-        //validate form input
-        $this->form_validation->set_rules('variable_name', 'Variable Name', 'required|xss_clean|alpha_numeric');
-        $this->form_validation->set_rules('variable_value', 'Variable Value', 'required|xss_clean');
-        
-        if ($this->form_validation->run() == true)
-        {
-            $additional_data = array('variable_name' => $this->input->post('variable_name'),
-                'variable_type' => $this->input->post('variable_type'),
-                'variable_value' => $this->input->post('variable_value'),
-            );
-        }
-        if ($this->form_validation->run() == true && $this->ion_auth->create_variable($additional_data))
-        { 
-            ////check to see if we are creating the project            
-            //redirect them back to the admin page
-            
-            $this->session->set_flashdata('message', "Variable Created");
-            $redirect_path = "welcome/load_project/".$this->session->userdata('project_id');
-            redirect($redirect_path, 'refresh');
-
-        }
-        else
-        { //display the create user form
-            //set the flash data error message if there is one
-            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-
-            $this->data['variable_name'] = array('name' => 'variable_name',
-                'id' => 'variable_name',
-                'type' => 'text',
-                'value' => $this->form_validation->set_value('variable_name'),
-            );
-            $this->data['variable_value'] = array('name' => 'variable_value',
-                'id' => 'variable_value',
-                'type' => 'text',
-                'value' => $this->form_validation->set_value('variable_value'),
-            );
-            
-            $this->data['variable_type'] = array();
-            $this->data['variable_type']['BOOLEAN'] = 'BOOLEAN';
-            $this->data['variable_type']['NUMBER'] = 'NUMBER'; 
-
-            $base = base_url();
-            $css = "<link rel='stylesheet' href='{$base}css/form_design.css' />" ;
-            $this->template->set('css', $css);
-            //$this->template->set('main_content', "auth/create_user");
-            $this->template->load("default_template", 'auth/create_variable', $this->data);
-
-            //$this->load->view('auth/create_user', $this->data);
-        }
-    }*/
-    
-    /*
      * creating a new project
      */
     function create_project()
@@ -534,7 +422,7 @@ class Welcome extends CI_Controller
             $additional_project_data = array(
                 'project_id' => $new_project_id,
             );
-            $this->ion_auth->create_variable($additional_variable_data, $additional_project_data);
+            $this->variable_library->create_variable($additional_variable_data, $additional_project_data);
         endforeach;
         
         

@@ -22,7 +22,7 @@ if (!defined('BASEPATH'))
  * Requirements: PHP5 or above
  *
  */
-class Ion_auth_model extends CI_Model {
+class Program_model extends CI_Model {
 
     /**
      * Holds an array of tables used
@@ -1414,10 +1414,10 @@ class Ion_auth_model extends CI_Model {
 
         return $filtered_data;
     }
-
-    public function projects() {
-        $this->trigger_events('projects');
-
+    //------------------------------------program module-----------------------------------------------
+    public function get_all_programs() {
+        $this->trigger_events('pre_get_all_programs');
+        
         if (isset($this->_ion_select)) {
             foreach ($this->_ion_select as $select) {
                 $this->db->select($select);
@@ -1425,10 +1425,6 @@ class Ion_auth_model extends CI_Model {
 
             $this->_ion_select = array();
         }
-
-        $this->trigger_events('extra_where');
-
-        //run each where that was passed
         if (isset($this->_ion_where)) {
             foreach ($this->_ion_where as $where) {
                 $this->db->where($where);
@@ -1436,15 +1432,12 @@ class Ion_auth_model extends CI_Model {
 
             $this->_ion_where = array();
         }
-
         if (isset($this->_ion_limit) && isset($this->_ion_offset)) {
             $this->db->limit($this->_ion_limit, $this->_ion_offset);
 
             $this->_ion_limit = NULL;
             $this->_ion_offset = NULL;
         }
-
-        //set the order
         if (isset($this->_ion_order_by) && isset($this->_ion_order)) {
             $this->db->order_by($this->_ion_order_by, $this->_ion_order);
 
@@ -1452,326 +1445,74 @@ class Ion_auth_model extends CI_Model {
             $this->_ion_order_by = NULL;
         }
 
-        $this->response = $this->db->select('*')->from($this->tables['project_info'])->join($this->tables['USER_PROJECTS'], 'project_info.project_id = users_projects.project_id')->join($this->tables['users'], 'users_projects.user_id = users.id')->get();
-
+        $this->response = $this->db->select('*')
+                ->from($this->tables['project_info'])
+                ->join($this->tables['project_types'], $this->tables['project_info'].'.project_type_id='.$this->tables['project_types'].'.id')
+                ->get();
+        $this->trigger_events('post_get_all_programs');
         return $this;
     }
-
-    public function create_project($additional_data = array()) {
-        //$additional_data['project_content'] = '<li class="ui-widget-content">Click here to edit block</li>';
-        //$additional_data['project_content_backup'] = '<li class="ui-widget-content">Click here to edit block</li>';
-        $this->trigger_events('pre_register');
-        $this->trigger_events('extra_set');
+    
+    public function is_program_name_exists($name)
+    {
+        if (empty($name))
+        {
+            return FALSE;
+        }
+        $query = $this->db->select('project_id')
+                                ->where('project_name', $name)
+                                ->limit(1)
+                                ->get($this->tables['project_info']);
+        if ($query->num_rows() !== 1)
+        {
+            return FALSE;
+        }
+        return TRUE;
+    }
+    
+    /*
+     * This method will create a new program.
+     */
+    public function create_program($additional_data = array()) {
+        $this->trigger_events('pre_create_program');
+        //inserting into project_info table
         $this->db->insert($this->tables['project_info'], $additional_data);
         $id = $this->db->insert_id();
-
+        if ( isset($id) ) {
+            $this->set_message('Program is created successfully.');
+        } 
+        else
+        {            
+            $this->set_error('Error while creating a program.');
+        }
+        //inserting into user_projects table 
         $data = array(
             'user_id' => $this->session->userdata('user_id'),
             'project_id' => $id
         );
         $this->db->insert($this->tables['USER_PROJECTS'], $data);
+        
+        $this->trigger_events('post_create_program');
         return (isset($id)) ? $id : FALSE;
     }
-
-    function delete_project() {
+    
+    function delete_program() {
         if (isset($this->_ion_where)) {
             foreach ($this->_ion_where as $where) {
                 $this->db->where($where);
             }
-
             $this->_ion_where = array();
         }
         $this->db->delete($this->tables['project_info']);
     }
-
-    function delete_user_project() {
+    
+    function update_program($data) {
         if (isset($this->_ion_where)) {
             foreach ($this->_ion_where as $where) {
                 $this->db->where($where);
             }
-
-            $this->_ion_where = array();
-        }
-        $this->db->delete($this->tables['USER_PROJECTS']);
-    }
-
-    function update_project($data) {        
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-
             $this->_ion_where = array();
         }
         $this->db->update($this->tables['project_info'], $data);
-    }
-
-    function get_project_info() {
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-
-            $this->_ion_where = array();
-        }
-        $this->db->update($this->tables['project_info'], $data);
-    }
-
-    public function get_all_countries() {
-        $this->trigger_events('get_all_countries');
-
-        if (isset($this->_ion_select)) {
-            foreach ($this->_ion_select as $select) {
-                $this->db->select($select);
-            }
-            $this->_ion_select = array();
-        }
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-            $this->_ion_where = array();
-        }
-
-        if (isset($this->_ion_limit) && isset($this->_ion_offset)) {
-            $this->db->limit($this->_ion_limit, $this->_ion_offset);
-            $this->_ion_limit = NULL;
-            $this->_ion_offset = NULL;
-        }
-
-        if (isset($this->_ion_order_by) && isset($this->_ion_order)) {
-            $this->db->order_by($this->_ion_order_by, $this->_ion_order);
-            $this->_ion_order = NULL;
-            $this->_ion_order_by = NULL;
-        }
-
-        $this->response = $this->db->get($this->tables['country']);
-        return $this;
-    }
-    
-    public function get_session_id(){
-        $this->trigger_events('get_session_id');
-
-        if (isset($this->_ion_select)) {
-            foreach ($this->_ion_select as $select) {
-                $this->db->select($select);
-            }
-            $this->_ion_select = array();
-        }
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-            $this->_ion_where = array();
-        }
-
-        if (isset($this->_ion_limit) && isset($this->_ion_offset)) {
-            $this->db->limit($this->_ion_limit, $this->_ion_offset);
-            $this->_ion_limit = NULL;
-            $this->_ion_offset = NULL;
-        }
-
-        if (isset($this->_ion_order_by) && isset($this->_ion_order)) {
-            $this->db->order_by($this->_ion_order_by, $this->_ion_order);
-            $this->_ion_order = NULL;
-            $this->_ion_order_by = NULL;
-        }
-
-        //$this->response = $this->db->select('*')->from($this->tables['users'])->get();
-        //return $this;       
-        
-        return $this->db->select('*')->from($this->tables['users'])->get();
-    }
-    
-    function get_global_user_info()
-    {
-        return $this->global_user_info;        
-    }
-    //---------------------- project variable related queries start ------------------------------
-    /*
-     * This method checks whether a variable name under a project exists or not.
-     * @return 1 if variable already exists otherwiswe returns 0
-     */
-    public function check_variable()
-    {
-
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-            $this->_ion_where = array();
-        }
-        $query = $this->db->select('*')->from($this->tables['VARIABLE_LIST_TABLE'])->join($this->tables['VARIABLES_PROJECTS'], 'variable_list.variable_id = variables_projects.variable_id')->get();
-        if(sizeof($query->result())>0)
-        {
-            return 1;
-        }
-        return 0;
-    } 
-    
-    /*
-     * This method removes variables from a project
-     */
-    function delete_project_variable_map() 
-    {
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-
-            $this->_ion_where = array();
-        }
-        $this->db->delete($this->tables['VARIABLES_PROJECTS']);
-    }
-    /*
-     * This method removes variable from variables_projects table
-     */
-    function delete_project_variable() 
-    {
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-
-            $this->_ion_where = array();
-        }
-        $this->db->delete($this->tables['VARIABLES_PROJECTS']);      
-    }
-    /*
-     * This method removes variable from variable_list table
-     */
-    function delete_variable() 
-    {
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-
-            $this->_ion_where = array();
-        }
-        $this->db->delete($this->tables['VARIABLE_LIST_TABLE']);        
-    }
-    function delete_project_variables() 
-    {
-        if (isset($this->_ion_where_in)) {
-            foreach ($this->_ion_where_in as $where_in) {
-                $key = array_keys($where_in);
-                $this->db->where_in($key[0],$where_in[$key[0]]);
-            }
-            $this->_ion_where_in = array();
-        }
-        $this->db->delete($this->tables['VARIABLES_PROJECTS']);      
-    }
-    function delete_variables() 
-    {
-        if (isset($this->_ion_where_in)) {
-            foreach ($this->_ion_where_in as $where_in) {
-                $key = array_keys($where_in);
-                $this->db->where_in($key[0],$where_in[$key[0]]);
-            }
-            $this->_ion_where_in = array();
-        }
-        $this->db->delete($this->tables['VARIABLE_LIST_TABLE']);        
-    }
-    /*
-     * This method add one project variable to another project (cloning project) 
-     */
-    public function clone_project_variable($additional_variable_data = array(), $additional_project_data = array()) 
-    {
-        $this->trigger_events('pre_register');
-        $this->trigger_events('extra_set');
-        $this->db->insert($this->tables['VARIABLE_LIST_TABLE'], $additional_variable_data);
-        $id = $this->db->insert_id();
-
-        $data = array(
-            'project_id' => $additional_project_data['project_id'],
-            'variable_id' => $id
-        );
-        $this->db->insert($this->tables['VARIABLES_PROJECTS'], $data);
-    }
-    
-    /*
-     * This method returns variable list of a project
-     */
-    public function get_project_variables() 
-    {
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-
-            $this->_ion_where = array();
-        }
-        $this->response = $this->db->select('*')->from($this->tables['VARIABLE_LIST_TABLE'])->join($this->tables['VARIABLES_PROJECTS'], 'variable_list.variable_id = variables_projects.variable_id')->get();
-        return $this;
-    }
-    //---------------------- project variable related queries end ------------------------------
-    
-    /**
-        * logged_in
-        *
-        * @return bool
-        * @author Mathew
-        **/
-    public function logged_in()
-    {
-        //checking user session id
-        //$user_infos = $this->ci->ion_auth_model->where('users.id',$this->ci->session->userdata('user_id'))->get_session_id()->result();
-        $this->where('users.id',$this->session->userdata('user_id'));
-        $query = $this->get_session_id();
-        if($query->num_rows() == 0)
-        {
-            $this->session->set_flashdata('message', "Your session is expired.");            
-            return false;
-        }
-        $user_infos = $query->result();
-        $session_id = $user_infos[0]->session_id;
-        if($this->session->userdata('session_id') != $session_id)
-        {
-            if(time() - $this->session->userdata('last_updated_time') > $this->config->item('sess_expiration'))
-            {
-                $this->session->set_flashdata('message', "Your session is expired.");            
-                return false;
-            }
-            
-            $this->set_error('multiuser_login');
-            $this->session->set_flashdata('message', "Another user logged in using your user name and password. Only one person can use it at a time.");
-            return false;
-        }        
-        $session_data = array(
-            'last_activity' => time()
-        );
-        $this->session->set_userdata($session_data);
-
-        $this->session->set_userdata('last_updated_time',time());
-        
-        $this->trigger_events('logged_in');
-        $identity = $this->config->item('identity', 'ion_auth');
-        return (bool) $this->session->userdata($identity);
-    }
-    /*
-     * This method will return all programs and scripts
-     */
-    public function get_all_projects() {
-        $this->trigger_events('projects');
-
-        if (isset($this->_ion_select)) {
-            foreach ($this->_ion_select as $select) {
-                $this->db->select($select);
-            }
-            $this->_ion_select = array();
-        }
-        if (isset($this->_ion_where)) {
-            foreach ($this->_ion_where as $where) {
-                $this->db->where($where);
-            }
-
-            $this->_ion_where = array();
-        }
-        $this->response = $this->db->select('*')
-                ->from($this->tables['project_info'])
-                ->join($this->tables['project_types'], $this->tables['project_info'].'.project_type_id='.$this->tables['project_types'].'.id')
-                ->get();
-        return $this;
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<stage>
+		<sprites>
+			<sprite>
+				<scripts>
+					<script>
+						<block s="doIf">
+							<block s="AND">
+								<block s="&gt;">
+									<block s="Age">
+										<l>10</l>
+									</block>
+									<block s="AdvancedAge">
+										<l>USA</l>
+										<l>White</l>
+										<l>1950</l>
+									</block>
+								</block>
+								<block s="&gt;">
+									<block s="Height">
+										<l>10</l>
+									</block>
+									<block s="custombyuser">
+										<l>USA</l>
+										<l>White</l>
+										<l>1950</l>
+									</block>
+								</block>
+
+							</block>
+							<script>
+								<block s="Run">
+									<l>Monday</l>
+								</block>
+								<block s="Sleep">
+									<l>Monday</l>
+									<l>20</l>
+								</block>								
+							</script>
+						</block>
+					</script>
+				</scripts>
+			</sprite>
+		</sprites>
+	</stage>	
+</project>

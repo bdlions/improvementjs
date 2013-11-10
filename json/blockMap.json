@@ -1,0 +1,33 @@
+{
+	"operators":
+	{    
+		"AND":"&&",
+		"OR":"||",
+		"+":"+",
+		"-":"-",
+		"*":"*",
+		"/":"/",
+		">":">",
+                ">=":">=",
+		"<":"<",
+                "<=":"<=",
+                "==":"==",
+		"=":"="
+	},
+	"functions":
+	{
+		"Age":"basicfunction",
+		"AdvancedAge":"advancedfunction",
+		"Height":"advancedfunction",
+		"custombyuser":"externaloption"
+	},
+	"actions":
+	{
+		"Run":"action",
+		"Sleep":"action"
+	},
+	"variables":
+	{
+		
+	}
+}

@@ -24,10 +24,14 @@
 	$config['tables']['users']           = 'users';
 	$config['tables']['users_groups']    = 'users_groups';
         $config['tables']['VARIABLE_LIST_TABLE']    = 'variable_list';
-        $config['tables']['PROJECT_INFO']    = 'project_info';
+        $config['tables']['project_info']    = 'project_info';
         $config['tables']['USER_PROJECTS']    = 'users_projects';
         $config['tables']['VARIABLES_PROJECTS']    = 'variables_projects';
         $config['tables']['country']    = 'country';
+        $config['tables']['project_types']    = 'project_types';
+        
+        $config['project_types']['program_id']    = '1';
+        $config['project_types']['script_id']     = '2';
 	
         /**
 	 * Default administrators group, use name

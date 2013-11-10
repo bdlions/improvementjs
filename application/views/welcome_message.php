@@ -82,7 +82,7 @@ $(document).ready(function()
 </script>
 <table width="610px" border="1" style="border-collapse:collapse" >
     <tr align="right" style="color:green">
-        <td><div id="project_name_label">Project Name : <?php echo $selected_project->project_name?> Welcome:<?php echo $user_info['username']?></div></td>
+        <td><div id="project_name_label">Project Name : <?php echo $selected_project->project_name?> Type : <?php echo$project_type;?> Welcome:<?php echo $user_info['username']?></div></td>
     </tr>
 </table>
 
@@ -557,7 +557,7 @@ $(document).ready(function()
 
 <!-- start of add variable  div modal -->
 <div id="add_variables_div" >
-    <?php echo form_open("welcome/create_variable");?>    
+    <?php echo form_open("variables/create_variable");?>    
     <table>
         <tr>
             <td aligh="left">Variable Name</td>

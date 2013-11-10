@@ -12,7 +12,7 @@
                     echo $title;
                 }
             ?>
-        </title>
+        </title>        
         <link rel="stylesheet" href="<?php echo base_url();?>css/template_style.css" />
         <?php
 
@@ -30,6 +30,14 @@
             }
 
         ?>
+        <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.xml2json.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/block.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/scripts.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/script.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/project.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/stage.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/sprites.js"></script>
+        <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/sprite.js"></script>
     </head>
     <body>
 	    <div class="BackgroundGradient"> </div>
@@ -110,7 +118,7 @@
                         <!-- End of main div -->
                     </div>
                     <div class="Footer">
-                        All rights reserved and &copy; 2012 by bdlions
+                        All rights reserved and &copy; 2013 by bdlions
                     </div>
                     <span class="BackLink"></span>
                 </div>
