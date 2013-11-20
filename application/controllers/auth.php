@@ -291,21 +291,6 @@ class Auth extends CI_Controller {
         }
     }
 
-    function update_project() {
-        if (!$this->ion_auth->logged_in()) {
-            redirect('auth/login', 'refresh');
-            echo "Your session is expired";
-        } else {
-            $project_content = $_POST['project_content'];
-            $data = array(
-                'project_content' => $project_content,
-                'project_content_backup' => $project_content
-            );
-            $this->ion_auth->where('project_id', $this->session->userdata('project_id'))->update_project($data);
-            echo "Project successfully saved.";
-        }
-    }
-
     function send_email_activation($id) 
     {
         $user_infos = $this->ion_auth->where('users.id',$id)->users()->result_array();

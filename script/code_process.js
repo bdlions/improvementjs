@@ -122,7 +122,7 @@ function server_process(nameArray, valueArray, id, name)
                     var textInputId = "textinput"+text_input_counter;
                     if(parameter_name == "external")
                     {
-                        buttonInsertionCode = "<form method='post' id='external_variable_form_upload' action='../../welcome/upload_external_variable'>  <input type = 'hidden' value='' name='external_variable_upload_project_left_panel_content' id='external_variable_upload_project_left_panel_content'/><input type = 'hidden' value='' name='ev_anchor_id' id='ev_anchor_id'/><input type='button' id='external_variable_upload' name='external_variable_upload' onclick='externalVariableFormSubmit()' value='Upload'> </form>";                            
+                        buttonInsertionCode = "<form method='post' id='external_variable_form_upload' action='../../general_process/upload_external_variable'>  <input type = 'hidden' value='' name='external_variable_upload_project_left_panel_content' id='external_variable_upload_project_left_panel_content'/><input type = 'hidden' value='' name='ev_anchor_id' id='ev_anchor_id'/><input type='button' id='external_variable_upload' name='external_variable_upload' onclick='externalVariableFormSubmit()' value='Upload'> </form>";                            
                         textInputId = "externalTextInput";
                     }
                     table_content = table_content+"<input type='text' id='"+textInputId+"' name = '"+parameter_name+"' value = '"+dataArray[parameter_name]+"' onchange='customTextChange(\""+options_name+"\",\""+options_id+"\",\""+haslimit+"\",\""+lower+"\",\""+upper+"\",\""+parameter_type+"\",\""+textInputId+"\")'></input>"+buttonInsertionCode+"</td></tr>";

@@ -1511,4 +1511,20 @@ class Script_model extends CI_Model {
         }
         $this->db->update($this->tables['project_info'], $data);
     }
+    /*
+     * This method add one script variable to another script (cloning script) 
+     */
+    public function clone_script_variable($additional_variable_data = array(), $additional_script_data = array()) 
+    {
+        $this->trigger_events('pre_register');
+        $this->trigger_events('extra_set');
+        $this->db->insert($this->tables['VARIABLE_LIST_TABLE'], $additional_variable_data);
+        $id = $this->db->insert_id();
+
+        $data = array(
+            'project_id' => $additional_script_data['project_id'],
+            'variable_id' => $id
+        );
+        $this->db->insert($this->tables['VARIABLES_PROJECTS'], $data);
+    }
 }

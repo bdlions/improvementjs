@@ -1,6 +1,6 @@
 <ul id="nav">
    <li>
-        <a href="#">Projects</a>
+       <a href="<?php echo base_url(); ?>auth">Projects</a>
         <ul>
             <?php
                 echo anchor('programs/all_programs', 'All Programs');

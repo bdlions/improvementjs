@@ -148,41 +148,15 @@ class Programs extends CI_Controller {
     function load_program($project_id)
     {
         
+        $session_data = array(
+            'current_project_type_id' => $this->project_types_list['program_id']
+        );
+        $this->session->set_userdata($session_data);
+            
         $this->data['project_type'] = "Program"; 
         
         $this->session->set_userdata('project_id', $project_id);
         $base = base_url();
-        $css =
-                "<link rel='stylesheet' href='{$base}jstree_resource/design.css' />" .
-                "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" .
-                "<link rel='stylesheet' type='text/css' href='{$base}css/jquery-ui.css'/>" .
-                "<link type='text/css' rel='stylesheet' href='{$base}jstree_resource/_docs/syntax/!style.css'/>";
-
-        $js = "<script type=\"text/javascript\" src=\"{$base}js/jquery.min.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/parse_feature_xml.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/feature.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/parameter.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/code_process.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/_lib/jquery.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/_lib/jquery.cookie.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/_lib/jquery.hotkeys.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/jquery.jstree.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}js/jquery-ui.min.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/_docs/syntax/!script.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/custom_script.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/manage_variables.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/common.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/parameter_table.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/manage_action.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}script/variable.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/logical_connector_script.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/arithmetic_operator_script.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}jstree_resource/menu_item_script.js\"></script>" .
-                "<script type=\"text/javascript\" src=\"{$base}js/jquery.blockUI.js\" ></script>" .
-        
-
-        $this->template->set('css', $css);
-        $this->template->set('js', $js);
         $this->template->set('title', 'Welcome');
         //$this->template->set('main_content', 'test');
         $this->template->set('main_content', 'welcome_message');
@@ -191,7 +165,7 @@ class Programs extends CI_Controller {
 
         $this->load->library('xmlperser');
         $fObjectArray = $this->xmlperser->readXML();
-
+        
         //$this->load->model('language_process_model');
         $custom_variables = $this->ion_auth->where('project_id',$this->session->userdata('project_id'))->get_project_variables()->result();
 

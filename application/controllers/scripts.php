@@ -153,6 +153,10 @@ class Scripts extends CI_Controller
     function load_script($project_id)
     {
         
+        $session_data = array(
+            'current_project_type_id' => $this->project_types_list['script_id']
+        );
+        $this->session->set_userdata($session_data);
         $this->data['project_type'] = "Script"; 
         
         $this->session->set_userdata('project_id', $project_id);

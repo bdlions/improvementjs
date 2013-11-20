@@ -16,6 +16,8 @@ class XMLPerser
     {
         $this->ci =& get_instance();
         $this->ci->load->library('session'); 
+        $this->ci->load->library('feature'); 
+        $this->ci->load->library('parameter'); 
     }
     public function readXML()
     {
@@ -24,13 +26,13 @@ class XMLPerser
         $xml_path = 'xml/'.$this->ci->session->userdata('project_id').'.xml';
         $doc = new DOMDocument();    
         $doc->load($xml_path);
-
+        
         $fObjectArray = array();
         $features = $doc->getElementsByTagName("feature");
 
         foreach ($features as $feature)
         {
-            $fObject = null;
+            $fObject = new Feature();
             $fObject = &get_instance()->feature;
 
             $options = $feature->getElementsByTagName("options");
@@ -57,7 +59,7 @@ class XMLPerser
             $fObject->parameters = array();
             foreach ($parameters as $parameter)
             {
-                $pObject = null;
+                $pObject = new Parameter();
                 $pObject = &get_instance()->parameter;
                 
                 $names = $parameter->getElementsByTagName("name");

@@ -22,40 +22,6 @@ class CodeProcess extends CI_Controller
         $this->load->helper('file');
     }
 
-    function save_project_code()
-    {
-        $status = "false";
-        $project_id = $this->session->userdata('project_id');
-        if(isset($_POST['code']))
-        {
-            $project_code = $_POST['code'];
-            $file_path = "./code/".$project_id.".txt";
-            if ( write_file($file_path, $project_code))
-            {
-                $status = "true";
-            }
-        }
-        echo $status;
-    }
-    
-    function download_project_code()
-    {
-        $project_id = $this->session->userdata('project_id');
-        $file_path = "./code/".$project_id.".txt";
-        if (file_exists($file_path)) {
-            $content = "";
-            $lines = file($file_path); // gets file in array using new lines character
-            foreach($lines as $line)
-            {
-                $content = $content.$line."\r\n";
-            }
-            header("Content-Type:text/plain");
-            //header("Content-Length: " . filesize($file_path));
-            header("Content-Disposition: 'attachment'; filename=code.txt");
-            echo $content;
-        }
-    } 
-    
     /*
      *  This controller is called when variable validation id performed
      *  This method calls ion_auth model to check the existance of a variable name

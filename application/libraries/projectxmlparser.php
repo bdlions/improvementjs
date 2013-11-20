@@ -11,6 +11,9 @@ class projectxmlparser
     {
         $this->ci =& get_instance();
         $this->ci->load->library('session'); 
+        $this->ci->load->library('project/parser/project_object'); 
+        $this->ci->load->library('project/parser/variable'); 
+        $this->ci->load->library('project/parser/properties');
     }
     public function readXML()
     {   
@@ -18,23 +21,23 @@ class projectxmlparser
         $doc = new DOMDocument();    
         $doc->load($xml_path);
 
-        $pObject = null;            
         $projects = $doc->getElementsByTagName("project");
 
         foreach ($projects as $project)
         {
-            $pObject = &get_instance()->project;
+            $pObject = new Project_object();
+            //$pObject = &get_instance()->project;
 
             $options = $project->getElementsByTagName("code");
             $options = $options->item(0)->nodeValue;
             $pObject->code = $options;
-
+            
             $variables = $project->getElementsByTagName("variable");
 
             $pObject->variables = array();
             foreach ($variables as $variable)
             {
-                $variableObject = null;
+                $variableObject = new Variable();
                 $variableObject = &get_instance()->variable;
                 
                 $ids = $variable->getElementsByTagName("id");
@@ -54,6 +57,15 @@ class projectxmlparser
                 $variableObject->value = $value;
                 
                 array_push($pObject->variables, $variableObject);               
+            }
+            $project_properties = $project->getElementsByTagName("properties");
+            foreach ($project_properties as $project_property)
+            {
+                $project_type_id = $project_property->getElementsByTagName("project_type_id");
+                $project_type_id = $project_type_id->item(0)->nodeValue;
+                $properties = new Properties();
+                $properties->project_type_id = $project_type_id;
+                $pObject->properties = $properties;
             }
         }
         return $pObject;

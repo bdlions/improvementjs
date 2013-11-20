@@ -1515,4 +1515,20 @@ class Program_model extends CI_Model {
         }
         $this->db->update($this->tables['project_info'], $data);
     }
+    /*
+     * This method add one project variable to another project (cloning project) 
+     */
+    public function clone_program_variable($additional_variable_data = array(), $additional_program_data = array()) 
+    {
+        $this->trigger_events('pre_register');
+        $this->trigger_events('extra_set');
+        $this->db->insert($this->tables['VARIABLE_LIST_TABLE'], $additional_variable_data);
+        $id = $this->db->insert_id();
+
+        $data = array(
+            'project_id' => $additional_program_data['project_id'],
+            'variable_id' => $id
+        );
+        $this->db->insert($this->tables['VARIABLES_PROJECTS'], $data);
+    }
 }

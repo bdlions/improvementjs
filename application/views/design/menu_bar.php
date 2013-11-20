@@ -3,7 +3,7 @@
     <li>
         <a href="#">Projects</a>
         <ul>
-            <a onclick="pre_load_project()">My Projects</a>
+            <a onclick="load_project_list()">My Projects</a>
             <a onclick="save()">Save</a>
             <a onclick="save_as()">Save As</a>
             <a onclick="download_project()">Download Project</a>

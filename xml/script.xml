@@ -67,7 +67,7 @@
 		<options>basicfunction</options>
 		<optionstype>UserAge</optionstype>
 		<natural>User Age $p years ago </natural>
-		<code>Script_Age[$p]</code>
+		<code>Age[$p]</code>
 		<help>http://www.help.com/age</help>
 		<parameters>
 			<parameter>

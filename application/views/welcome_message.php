@@ -82,7 +82,7 @@ $(document).ready(function()
 </script>
 <table width="610px" border="1" style="border-collapse:collapse" >
     <tr align="right" style="color:green">
-        <td><div id="project_name_label">Project Name : <?php echo $selected_project->project_name?> Type : <?php echo$project_type;?> Welcome:<?php echo $user_info['username']?></div></td>
+        <td><div id="project_name_label"><b>Project Name :</b> <?php echo $selected_project->project_name?> <b>Type :</b> <?php echo$project_type;?> <b>Welcome:</b><?php echo $user_info['username']?></div></td>
     </tr>
 </table>
 
@@ -232,7 +232,7 @@ $(document).ready(function()
 
                         </textarea>
                         <!--downloading generated code-->
-                        <?php echo form_open("CodeProcess/download_project_code");?>
+                        <?php echo form_open("general_process/download_project_code");?>
                         <input type="submit" id="generate_code_save_button" value="Download" onclick="generate_code_save_button_pressed()"/>
                         <?php echo form_close();?>
                     </td>
@@ -706,7 +706,7 @@ $(document).ready(function()
         <tr>
             <td width="100%" height="100%" align='center'>
                 <!--downloading project-->
-                <?php echo form_open("project/download_project");?>
+                <?php echo form_open("general_process/download_project");?>
                      <label >File Name</label>
                     <input type="text" id="project_content_file_name" name="project_content_file_name" value=""/>
                     <input type="submit" id="download_project_save_button" value="Save" onclick="download_project_save_button_clicked()"/>
@@ -796,7 +796,7 @@ $(document).ready(function()
 <!-- end of logical connector boolean variable div modal -->
 
 <div id="load_projects_confirmation_window_div_modal" >
-    <?php echo form_open("welcome/pre_load_project");?>    
+    <?php echo form_open("general_process/load_project_list_project_panel");?>    
     <table>
         
         <tr>
@@ -819,7 +819,7 @@ $(document).ready(function()
                 
                 <?php
                 $attributes = array('name' => 'form_submission' , 'onsubmit' =>'return save_as_project_save_button_clicked()');
-                echo form_open("welcome/save_as_project", $attributes);?>
+                echo form_open("general_process/save_as_project", $attributes);?>
                 <label >Project Name</label>
                 <input type="text" id="save_as_project_project_name" name="save_as_project_project_name" value=""/>
                 <input type="hidden" id="save_as_project_left_panel_content" name="save_as_project_left_panel_content" value=""/>
@@ -835,7 +835,7 @@ $(document).ready(function()
     <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
         <tr>
             <td width="100%" height="100%" align='center'>
-                <?php echo form_open("welcome/save_as_replace_project");?>
+                <?php echo form_open("general_process/save_as_replace_project");?>
                     <label >Project already exists. Do you want to replace it?</label><br/>
                     <input type="hidden" id="save_as_replace_project_left_panel_content" name="save_as_replace_project_left_panel_content" value=""/>
                     <input type="hidden" id="save_as_replace_project_name" name="save_as_replace_project_name" value=""/>
@@ -857,7 +857,7 @@ $(document).ready(function()
             <td>Variable Value</td>
             <td>Delete</td>
         </tr> 
-        <?php echo form_open('project/delete_variable');?>                
+        <?php echo form_open('variables/delete_variable');?>                
         <?php
             foreach ($custom_variables as $cv) 
             {
@@ -976,7 +976,7 @@ $(document).ready(function()
 
 <div id="upload_project_div" >
     <table>        
-        <?php echo form_open("project/upload_project");?>
+        <?php echo form_open("general_process/upload_project");?>
         <tr>
             <td>                
                 <label >Do you want to keep your current changes?</label><br/>
