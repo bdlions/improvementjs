@@ -36,6 +36,10 @@ function set_project_variables(variable_list)
         project_variable_list[variable_counter++] = variable;
     }
 }
+function get_project_variables()
+{
+    return project_variable_list;
+}
 
 function get_variable_info(variable_id)
 {

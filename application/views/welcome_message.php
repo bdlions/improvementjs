@@ -82,7 +82,7 @@ $(document).ready(function()
 </script>
 <table width="610px" border="1" style="border-collapse:collapse" >
     <tr align="right" style="color:green">
-        <td><div id="project_name_label"><b>Project Name :</b> <?php echo $selected_project->project_name?> <b>Type :</b> <?php echo$project_type;?> <b>Welcome:</b><?php echo $user_info['username']?></div></td>
+        <td><div id="project_name_label"><b>Project Name&nbsp;:&nbsp;</b> <?php echo $selected_project->project_name?> <b>&nbsp;Type&nbsp;:&nbsp;</b> <?php echo$project_type;?> <b>&nbsp;Welcome&nbsp;:&nbsp;</b><?php echo $user_info['username']?></div></td>
     </tr>
 </table>
 

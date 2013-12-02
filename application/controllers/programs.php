@@ -9,6 +9,7 @@ class Programs extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->library('project/js/program/program');
+        $this->load->library('project/project_library');
         $this->load->library('ion_auth');
         $this->project_types_list = $this->config->item('project_types', 'ion_auth');
         $this->load->library('session');
@@ -32,8 +33,8 @@ class Programs extends CI_Controller {
         $this->form_validation->set_rules('program_name', 'Program Name', 'required|xss_clean');
 
         if ($this->form_validation->run() == true) {
-            if ( $this->program->is_program_name_exists($this->input->post('program_name')) ) {
-                $this->data['message'] = 'Program name already exists. Please use a different name';
+            if ( $this->project_library->is_project_exists($this->input->post('program_name')) ) {
+                $this->data['message'] = $this->project_library->errors();
             } 
             else 
             {

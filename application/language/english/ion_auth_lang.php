@@ -49,3 +49,6 @@ $lang['update_successful'] 		 	         = 'Account Information Successfully Upda
 $lang['update_unsuccessful'] 		 	     = 'Unable to Update Account Information';
 $lang['delete_successful'] 		 	         = 'User Deleted';
 $lang['delete_unsuccessful'] 		 	     = 'Unable to Delete User';
+
+$lang['program_name_exist'] 		 	     = 'There is a program with that name. Please use a different name.';
+$lang['script_name_exist'] 		 	     = 'There is a script with that name. Please use a different name.';

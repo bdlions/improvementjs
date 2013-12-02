@@ -35,6 +35,8 @@
         <link rel='stylesheet' type='text/css' href='<?php echo base_url(); ?>css/jquery-ui.css'/>
         <link type='text/css' rel='stylesheet' href='<?php echo base_url(); ?>jstree_resource/_docs/syntax/!style.css'/>
         
+        <script type="text/javascript" src="<?php echo base_url(); ?>jstree_resource/js/lib/beautify.js"></script>
+        
         <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>script/parse_feature_xml.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>script/feature.js"></script>

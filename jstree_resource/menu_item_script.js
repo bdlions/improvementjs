@@ -1,20 +1,3 @@
-//$.getScript('web/third-party/codemirror/lib/codemirror.js');
-//$.getScript('web/third-party/codemirror/mode/javascript/javascript.js');
-//
-//$.getScript('web/third-party/jquery/jquery.js');
-//$.getScript('web/third-party/jquery/jquery.cookie.js');
-
-
-$.getScript('http://localhost/improvementjs/jstree_resource/js/lib/beautify.js');
-//$.getScript('js/lib/beautify-css.js');
-//$.getScript('js/lib/beautify-html.js');
-//$.getScript('js/test/sanitytest.js');
-//$.getScript('js/test/beautify-tests.js');
-//$.getScript('js/lib/unpackers/javascriptobfuscator_unpacker.js');
-//$.getScript('js/lib/unpackers/urlencode_unpacker.js');
-//$.getScript('js/lib/unpackers/p_a_c_k_e_r_unpacker.js');
-//$.getScript('js/lib/unpackers/myobfuscate_unpacker.js');
-
 var _gaq = [
             ['_setAccount', 'UA-7409939-1'],
             ['_trackPageview']
@@ -192,11 +175,11 @@ function beautify(unindent_code) {
             source = unpacker_filter(source);
         }
         output = js_beautify(source, opts);
-        console.log(output);
+        //console.log(output);
     }
     if (the.editor)
     {
-        console.log(output);
+        //console.log(output);
         the.editor.setValue(output);
     } 
     else {
@@ -294,10 +277,11 @@ function generate_code()
     $.get('../../json/blockMap.json', function(mapping){
         $.get('../../json/sample.xml', function(xml) {
             var jsonObj = $.xml2json(xml);
-            console.log(jsonObj);
-            console.log(project);
-            console.log(mapping);
-
+            //console.log(jsonObj);
+            //console.log(project);
+            //console.log(mapping);
+            mapping['variables'] = get_project_variables();
+            //console.log(mapping);
             $.ajax({
                 type: "POST",
                 url: 'http://localhost/smartycode/service.php',
@@ -306,10 +290,11 @@ function generate_code()
                 complete:function(data){
                     $('#generate_code_div_modal').dialog('open');
                     //console.log(data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, ''));
-                    var generated_code = data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
-                    //console.log(generated_code);
+                    var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
+                    console.log(generated_code);
                     //document.getElementById("generated_code_text_area").value = data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
-                    beautify(generated_code);
+                    beautify(generated_code.trim());
+                    //beautify(data);
                     $.ajax({
                         type: "POST",
                         url: "../../general_process/save_project_code",

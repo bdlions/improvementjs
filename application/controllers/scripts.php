@@ -9,6 +9,7 @@ class Scripts extends CI_Controller
     {
         parent::__construct();
         $this->load->library('project/js/script/script');
+        $this->load->library('project/project_library');
         $this->load->library('ion_auth');
         $this->project_types_list = $this->config->item('project_types', 'ion_auth');
         $this->load->library('session');
@@ -36,8 +37,8 @@ class Scripts extends CI_Controller
         
         if ($this->form_validation->run() == true)
         {            
-            if ( $this->script->is_script_name_exists($this->input->post('script_name')) ) {
-                $this->data['message'] = 'Script name already exists. Please use a different name';
+            if ( $this->project_library->is_project_exists($this->input->post('script_name')) ) {
+                $this->data['message'] = $this->project_library->errors();
             }
             else 
             {
