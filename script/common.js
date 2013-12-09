@@ -13,6 +13,26 @@ var clientEndOperationCounter = 0;
 var lastOperationExecutionTimeInSecond = 0;
 var sessionRenewConfirmed = true;
 
+var anchor_id_to_optionstype = {};
+var anchor_id_to_options = {};
+
+function set_anchor_id_to_optionstype(value)
+{
+    anchor_id_to_optionstype = value;
+}
+function get_anchor_id_to_optionstype()
+{
+    return anchor_id_to_optionstype;
+}
+
+function set_anchor_id_to_options(value)
+{
+    anchor_id_to_options = value;
+}
+function get_anchor_id_to_options()
+{
+    return anchor_id_to_options;
+}
 
 function set_server_base_url(base_url)
 {

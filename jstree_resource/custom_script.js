@@ -2292,7 +2292,16 @@ function changeLogicalOperator(selectedItem)
                 $("input", $(this)).each(function () {
                     if($(this).attr("id") == selected_id){
                         $(this).removeAttr("value");
+                        $(this).removeAttr("title");
                         $(this).attr("value",current_anchor_updated_code);
+                        if(selectedItem == "OR")
+                        {
+                            $(this).attr("title", 'logical_connector_or');
+                        }
+                        else if(selectedItem == "AND")
+                        {
+                            $(this).attr("title", 'logical_connector_and');
+                        }
                     }
                 });
             });

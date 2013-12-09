@@ -237,15 +237,11 @@ function generate_code()
     
     var li_list = new Array();
     var li_list_counter = 0;
-    //console.log($('#selectable'));
     $('#selectable').each(function()
     {
         $("li", $(this)).each(function ()
         {
-            //console.log($(this));
-            //li_list = li_list+ $("<div />").append( $(this).clone()).html();
             li_list[li_list_counter++] = $(this);
-            //$.merge($(this), li_list);
         });
     });
     parentBlock = generate_if_blocks(li_list);
@@ -278,7 +274,7 @@ function generate_code()
         $.get('../../json/sample.xml', function(xml) {
             var jsonObj = $.xml2json(xml);
             //console.log(jsonObj);
-            //console.log(project);
+            console.log(project);
             //console.log(mapping);
             mapping['variables'] = get_project_variables();
             //console.log(mapping);
@@ -291,7 +287,6 @@ function generate_code()
                     $('#generate_code_div_modal').dialog('open');
                     //console.log(data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, ''));
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
-                    console.log(generated_code);
                     //document.getElementById("generated_code_text_area").value = data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
                     beautify(generated_code.trim());
                     //beautify(data);
@@ -461,10 +456,10 @@ function generate_if_blocks(li_list)
     var script_actions_array = new Array();
     
     var first_li = li_list[0];
-    $("li", li_list).each(function ()
+    /*$("li", li_list).each(function ()
     {
         first_li = $(this);
-    });
+    });*/
     var first_li_length = first_li.attr("id");
     for(var counter = 0 ; counter < li_list.length ; counter++)
     {
@@ -505,38 +500,10 @@ function generate_if_blocks(li_list)
             } 
         }
     }
-    /*$("li", li_list).each(function ()
-    {
-        //handling root 
-        if( $(this).attr("id") == first_li_length)
-        {
-            if($(this).text().trim().toLowerCase() == "if")
-            {
-                if_block = new Block();
-                condition_block = new Block();
-                action_script = new Script();
-                action_block = new Block();
-                condition_block = generate_condition_block($(this));
-            }
-            else if($(this).text().trim().toLowerCase() == "then")
-            {
-                action_block = generate_action_block($(this));
-                action_script.setBlock(action_block); 
-                if_block.setS("doIf");    
-                if_block.setBlock(condition_block);
-                if_block.setScript(action_script);
-                parentBlock[parentBlockCounter++] = if_block;
-            }
-            else if($(this).text().trim().toLowerCase() == "else")
-            {
-                
-            } 
-        }
-
-    });*/
     return parentBlock;
 }
-function generate_condition_block(condition)
+
+/*function generate_condition_block(condition)
 {
     condition = condition.next("li");
     //consider all actions
@@ -643,6 +610,263 @@ function generate_condition_block(condition)
     condition_block.setS(comparison_value);
     //console.log(condition_block);
     return condition_block;
+}*/
+
+function generate_condition_block(condition)
+{
+    condition = condition.next("li");
+    var anchor_id_to_name = {};
+    var anchor_id_to_value = {};
+    $("a", condition).each(function ()
+    {
+        var anchor_id = 0;
+        if( $(this).attr("id") )
+        {
+            anchor_id = $(this).attr("id");
+        }
+        $("input", $(this)).each(function ()
+        {
+            if( $(this).attr("name") && $(this).attr("value") )
+            {
+                anchor_id_to_name[anchor_id] = $(this).attr("name");
+                anchor_id_to_value[anchor_id] = $(this).attr("value");
+            }
+
+        });
+    });
+    set_anchor_id_to_optionstype(anchor_id_to_name);
+    set_anchor_id_to_options(anchor_id_to_value);
+    
+    var input_list = new Array();
+    var counter = 0;
+    $("div", condition).each(function ()
+    {
+        $("input", $(this)).each(function ()
+        {
+            input_list[counter++] = $(this);
+        });
+    });
+    var condition_block = new Block();    
+    condition_block = process_expression(input_list);
+    
+    return condition_block;
+}
+
+
+function process_expression(expression)
+{
+    var left_expression_list = new Array();
+    var right_expression_list = new Array();
+    var left_expression_counter = 0;
+    var right_expression_counter = 0;
+    var is_logical_operator_exists = false;
+    var logical_operator_value = "";
+    var left_block = new Block();
+    var right_block = new Block();
+    var block = new Block();
+    
+    for(var counter = 0 ; counter < expression.length ; counter++)
+    {
+        var single_input = expression[counter];
+        if( is_logical_operator_exists === false && (single_input.attr("title") === 'logical_connector_and' || single_input.attr("title") === 'logical_connector_or') )
+        {
+            is_logical_operator_exists = true;
+            logical_operator_value = single_input.attr("value").trim();
+        }
+        else
+        {
+            if(is_logical_operator_exists === true)
+            {
+                right_expression_list[right_expression_counter++] = single_input;
+            }
+            else
+            {
+                left_expression_list[left_expression_counter++] = single_input;
+            }
+        }
+    }
+    if(is_logical_operator_exists === true)
+    {
+        left_block = process_expression(left_expression_list);
+        right_block = process_expression(right_expression_list);
+        
+        var block_array = new Array();
+        block_array[0] = left_block;
+        block_array[1] = right_block;
+        block.setBlock(block_array);
+        block.setS(logical_operator_value);
+    }
+    else
+    {
+        block = process_condition(expression);
+    }
+    return block;
+}
+
+function process_condition(expression)
+{
+    var condition_block = new Block();
+    var left_operand_input_list = new Array();
+    var right_operand_input_list = new Array();
+    var left_operand_counter = 0;
+    var right_operand_counter = 0;
+    var flag = false;
+    var comparison_value = "";
+    for(var counter = 0 ; counter < expression.length ; counter++)
+    {
+        var single_input = expression[counter];
+        if( single_input.attr("title") === 'comparison')
+        {
+            flag = true;
+            comparison_value = single_input.attr("value").trim();
+        }
+        else
+        {
+            if(flag === true)
+            {
+                right_operand_input_list[right_operand_counter++] = single_input;
+            }
+            else
+            {
+                left_operand_input_list[left_operand_counter++] = single_input;
+            }
+        }
+    }
+    var left_operand_result = process_operand(left_operand_input_list);
+    var right_operand_result = process_operand(right_operand_input_list);
+    if( left_operand_result.constructor === Block && right_operand_result.constructor === Block)
+    {
+        var function_array = new Array();
+        function_array[0] = left_operand_result;
+        function_array[1] = right_operand_result;
+        condition_block.setBlock(function_array);
+    }
+    else if( left_operand_result.constructor !== Block && right_operand_result.constructor !== Block)
+    {
+        var value_array = new Array();
+        value_array[0] = left_operand_result;
+        value_array[1] = right_operand_result;
+        condition_block.setL(value_array);
+    }
+    else
+    {
+        if(left_operand_result.constructor !== Block)
+        {
+            condition_block.setL(left_operand_result);
+        }
+        else
+        {
+            condition_block.setBlock(left_operand_result);
+        }
+        if(right_operand_result.constructor !== Block)
+        {
+            condition_block.setL(right_operand_result);
+        }
+        else
+        {
+            condition_block.setBlock(right_operand_result);
+        }
+    }
+    condition_block.setS(comparison_value);
+    return condition_block;
+}
+
+function process_operand(operand_input_list)
+{
+    var block = new Block();
+    var value = "";
+    var anchor_id_to_name_list = get_anchor_id_to_optionstype();
+    var anchor_id_to_value_list = get_anchor_id_to_options();
+    var result_array;
+    
+    var left_part_input_list = new Array();
+    var right_part_input_list = new Array();
+    var left_part_input_list_counter = 0;
+    var right_part_input_list_counter = 0;
+    var arithmetic_operator_value = "";
+    
+    var is_arithmetic_operator_exists = false;
+    
+    for(var counter = 0 ; counter < operand_input_list.length ; counter++)
+    {
+        var single_input = operand_input_list[counter];
+        if( is_arithmetic_operator_exists === false && (single_input.attr("value") === '+' || single_input.attr("value") === '-' || single_input.attr("value") === '*' || single_input.attr("value") === '/') )
+        {
+            is_arithmetic_operator_exists = true;
+            arithmetic_operator_value = single_input.attr("value").trim();
+        }
+        else
+        {
+            if(is_arithmetic_operator_exists === true)
+            {
+                right_part_input_list[right_part_input_list_counter++] = single_input;
+            }
+            else
+            {
+                left_part_input_list[left_part_input_list_counter++] = single_input;
+            }
+        }
+    }
+    if(is_arithmetic_operator_exists === true)
+    {
+        var left_operand_result = process_operand(left_part_input_list);
+        var right_operand_result = process_operand(right_part_input_list);
+        if( left_operand_result.constructor === Block && right_operand_result.constructor === Block)
+        {
+            var function_array = new Array();
+            function_array[0] = left_operand_result;
+            function_array[1] = right_operand_result;
+            block.setBlock(function_array);
+        }
+        else if( left_operand_result.constructor !== Block && right_operand_result.constructor !== Block)
+        {
+            var value_array = new Array();
+            value_array[0] = left_operand_result;
+            value_array[1] = right_operand_result;
+            block.setL(value_array);
+        }
+        else
+        {
+            if(left_operand_result.constructor !== Block)
+            {
+                block.setL(left_operand_result);
+            }
+            else
+            {
+                block.setBlock(left_operand_result);
+            }
+            if(right_operand_result.constructor !== Block)
+            {
+                block.setL(right_operand_result);
+            }
+            else
+            {
+                block.setBlock(right_operand_result);
+            }
+        }
+        block.setS(arithmetic_operator_value);
+        return block;
+    }
+    else
+    {
+        for(var counter = 0 ; counter < operand_input_list.length ; counter++)
+        {
+            var single_input = operand_input_list[counter];
+            var value = anchor_id_to_value_list[single_input.attr("id")];
+            if(value === "basicfunction" || value === "advancedfunction")
+            {
+                 result_array = reverse_code_process(anchor_id_to_value_list[single_input.attr("id")], anchor_id_to_name_list[single_input.attr("id")], single_input.attr("value"));
+                 block.setS(result_array[2]);                    
+                 block.setL(result_array[1]);
+                 return block;
+            }
+            else
+            {
+                value = single_input.attr("value");
+                return value;
+            }
+        }
+    }
 }
 
 function generate_action_block(action)
@@ -672,8 +896,6 @@ function generate_action_block(action)
         {
             break;
         }
-        //console.log("current_action:"+current_action.text().trim());
-        //console.log("current_action_length:"+current_action_length);
         if( current_action_length == parseInt(then_length) + parseInt(indentation_space_length) )
         {
             if( current_action.text().trim().toLowerCase() == "if" || current_action.text().trim().toLowerCase() == "then" || current_action.text().trim().toLowerCase() == "else" )
@@ -697,11 +919,9 @@ function generate_action_block(action)
                         else if( parseInt(temp_action.attr("id")) > current_action_length )
                         {
                             li_list[li_list_counter++] = temp_action;
-                            //console.log('adding');
                         }
                         else
                         {
-                            //console.log('break');
                             break;
                         }
                         if(temp_action.next('li').length <= 0)
@@ -710,16 +930,12 @@ function generate_action_block(action)
                         }
                         temp_action = temp_action.next("li");
                     }
-                    //console.log(li_list);
                     action_block_array[action_counter++] = generate_if_blocks(li_list)[0];
                 }
                 
             }
             else
             {
-                //console.log("current_action:"+current_action.text().trim());
-                //console.log("current_action_length:"+current_action_length);
-            
                 anchor_id_to_name = {};
                 anchor_id_to_value = {};
                 $("a", current_action).each(function ()
