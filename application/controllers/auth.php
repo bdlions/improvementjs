@@ -466,6 +466,11 @@ class Auth extends CI_Controller {
                 'type' => 'password',
                 'value' => $password,
             );
+            
+            //$this->load->library('user_agent');
+            //$this->data['browser'] = $this->agent->browser();
+            //$this->data['version'] = $this->agent->version();
+            
             $this->data['remember'] = $remember;
             $this->template->set('main_content', 'auth/login');
             $this->template->load("default_template", 'auth/login', $this->data);

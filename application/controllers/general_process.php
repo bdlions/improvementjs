@@ -281,6 +281,7 @@ class General_process extends CI_Controller
                 $this->template->set('css', $css);
                 $this->template->set('menu_bar', 'design/menu_bar_member_demo');
                 $this->template->load("default_template", "upload/upload_project", $this->data); 
+                return;
             } 
             else 
             {

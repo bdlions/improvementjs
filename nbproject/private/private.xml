@@ -18,9 +18,8 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/improvementjs/script/common.js</file>
-            <file>file:/C:/xampp/htdocs/improvementjs/application/views/welcome_message.php</file>
-            <file>file:/C:/xampp/htdocs/improvementjs/application/controllers/programs.php</file>
+            <file>file:/C:/xampp/htdocs/improvementjs/script/impjs/program/block.js</file>
+            <file>file:/C:/xampp/htdocs/improvementjs/script/impjs/program/script.js</file>
         </group>
     </open-files>
 </project-private>

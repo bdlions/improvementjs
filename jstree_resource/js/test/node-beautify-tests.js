@@ -10,7 +10,7 @@ var SanityTest = require('./sanitytest'),
 
 function node_beautifier_tests() {
     var results = run_beautifier_tests(new SanityTest(), Urlencoded, js_beautify, html_beautify, css_beautify);
-    console.log(results.results_raw());
+    //console.log(results.results_raw());
     return results;
 }
 

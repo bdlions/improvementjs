@@ -8,13 +8,15 @@
 						<block s="doIf">
 							<block s="AND">
 								<block s="&gt;">
-									<block s="Age">
+									<block s="+">
+										<block s="Age">
+											<l>10</l>
+										</block>
+										<l>8</l>
+									</block>									
+									<block s="+">
 										<l>10</l>
-									</block>
-									<block s="AdvancedAge">
-										<l>USA</l>
-										<l>White</l>
-										<l>1950</l>
+										<l>5</l>
 									</block>
 								</block>
 								<block s="&gt;">
@@ -27,7 +29,6 @@
 										<l>1950</l>
 									</block>
 								</block>
-
 							</block>
 							<script>
 								<block s="Run">

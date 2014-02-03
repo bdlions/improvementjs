@@ -46,11 +46,11 @@ $(function () {
 
             $(window).bind('keydown', function (e) {
                 if (e.ctrlKey && e.keyCode == 13) {
-                    beautify();
+                    //beautify();
                 }
             })
-            $('.submit').click(beautify);
-            $('select').change(beautify);
+             //$('.submit').click(beautify);
+             //$('select').change(beautify);
 
 
         });
@@ -247,22 +247,22 @@ function generate_code()
     parentBlock = generate_if_blocks(li_list);
 
     var parentScript = new Script();
-    parentScript.setBlock(parentBlock);
+    parentScript.block=(parentBlock);
 
     var scripts = new Scripts();
-    scripts.setScript(parentScript);
+    scripts.script=(parentScript);
 
     var sprite = new Sprite();
-    sprite.setScripts(scripts);
+    sprite.scripts=(scripts);
 
     var sprites = new Sprites();
-    sprites.setSprite(sprite);
+    sprites.sprite=(sprite);
 
     var stage = new Stage();
-    stage.setSprites(sprites);
+    stage.sprites=(sprites);
 
     var project = new Project();
-    project.setStage(stage);
+    project.stage=(stage);
     //console.log('project');
     //console.log(project);
     $.blockUI({
@@ -274,10 +274,8 @@ function generate_code()
         $.get('../../json/sample.xml', function(xml) {
             var jsonObj = $.xml2json(xml);
             //console.log(jsonObj);
-            console.log(project);
-            //console.log(mapping);
+            //console.log(project);
             mapping['variables'] = get_project_variables();
-            //console.log(mapping);
             $.ajax({
                 type: "POST",
                 url: 'http://localhost/smartycode/service.php',
@@ -314,7 +312,7 @@ function generate_code()
         $.get('../../json/sample.xml', function(xml) {
             var jsonObj = $.xml2json(xml);
             //console.log(jsonObj);
-            console.log(jsonObj);
+            //console.log(jsonObj);
 
             var action = new Block();
             action.setS('run');
@@ -481,20 +479,20 @@ function generate_if_blocks(li_list)
             else if(single_li.text().trim().toLowerCase() == "then")
             {
                 then_action_block = generate_action_block(single_li);
-                then_action_script.setBlock(then_action_block); 
-                if_block.setS("doIf");    
-                if_block.setBlock(condition_block);
-                if_block.setScript(then_action_script);
+                then_action_script.block=(then_action_block); 
+                if_block.s=("doIf");    
+                if_block.block=(condition_block);
+                if_block.script=(then_action_script);
                 parentBlock[parentBlockCounter++] = if_block;
             }
             else if(single_li.text().trim().toLowerCase() == "else")
             {
                 else_action_block = generate_action_block(single_li);
-                else_action_script.setBlock(else_action_block);
+                else_action_script.block=(else_action_block);
                 script_actions_array[0] = then_action_script;
                 script_actions_array[1] = else_action_script;
-                if_block.setS("doIfElse");  
-                if_block.setScript(script_actions_array);
+                if_block.s=("doIfElse");  
+                if_block.script=(script_actions_array);
                 parentBlock[--parentBlockCounter] = if_block;
                 parentBlockCounter++;
             } 
@@ -693,8 +691,8 @@ function process_expression(expression)
         var block_array = new Array();
         block_array[0] = left_block;
         block_array[1] = right_block;
-        block.setBlock(block_array);
-        block.setS(logical_operator_value);
+        block.block=(block_array);
+        block.s=(logical_operator_value);
     }
     else
     {
@@ -739,39 +737,247 @@ function process_condition(expression)
         var function_array = new Array();
         function_array[0] = left_operand_result;
         function_array[1] = right_operand_result;
-        condition_block.setBlock(function_array);
+        condition_block.block=(function_array);
     }
     else if( left_operand_result.constructor !== Block && right_operand_result.constructor !== Block)
     {
         var value_array = new Array();
         value_array[0] = left_operand_result;
         value_array[1] = right_operand_result;
-        condition_block.setL(value_array);
+        condition_block.l=(value_array);
     }
     else
     {
         if(left_operand_result.constructor !== Block)
         {
-            condition_block.setL(left_operand_result);
+            condition_block.l=(left_operand_result);
         }
         else
         {
-            condition_block.setBlock(left_operand_result);
+            condition_block.block=(left_operand_result);
         }
         if(right_operand_result.constructor !== Block)
         {
-            condition_block.setL(right_operand_result);
+            condition_block.l=(right_operand_result);
         }
         else
         {
-            condition_block.setBlock(right_operand_result);
+            condition_block.block=(right_operand_result);
         }
     }
-    condition_block.setS(comparison_value);
+    condition_block.s=(comparison_value);
     return condition_block;
 }
 
 function process_operand(operand_input_list)
+{
+    var anchor_id_to_name_list = get_anchor_id_to_optionstype();
+    var anchor_id_to_value_list = get_anchor_id_to_options();
+    var result_array;        
+    
+    //polish postfix logic starts
+    var stack_array = new Array();
+    var operand_array = new Array();
+    var stack_array_counter = 0;
+    var operand_array_counter = 0;
+    for(var counter = 0 ; counter < operand_input_list.length ; counter++)
+    {
+        var single_input = operand_input_list[counter];
+        var value = single_input.attr("value");
+        if(value === '(')
+        {
+            stack_array[stack_array_counter++] = single_input;
+        }
+        else if(value === ')')
+        {
+           var temp_element =  stack_array[--stack_array_counter];
+           while(temp_element.attr("value") !== '(')
+           {
+               operand_array[operand_array_counter++] = temp_element;
+               temp_element =  stack_array[--stack_array_counter];
+           }
+        }
+        else if( is_arithmetic_operator(value) )
+        {
+            
+            while( stack_array_counter > 0 && is_arithmetic_operator(stack_array[stack_array_counter-1].attr("value")) && check_high_priority_operator(stack_array[stack_array_counter-1].attr("value") , value) )
+            {
+                operand_array[operand_array_counter++] = stack_array[--stack_array_counter];
+            }
+            stack_array[stack_array_counter++] = single_input;
+        }
+        else
+        {
+            operand_array[operand_array_counter++] = single_input;
+        }
+    }
+    while( stack_array_counter > 0 )
+    {
+        operand_array[operand_array_counter++] = stack_array[--stack_array_counter];
+    }
+    //polish postfix logic ends
+    
+    //we have one single operand
+    if( operand_array_counter === 1)
+    {
+        var block = new Block();
+        
+        var single_input = operand_array[operand_array_counter-1];
+        var value = anchor_id_to_value_list[single_input.attr("id")];
+        if(value === "basicfunction" || value === "advancedfunction")
+        {
+             result_array = reverse_code_process(anchor_id_to_value_list[single_input.attr("id")], anchor_id_to_name_list[single_input.attr("id")], single_input.attr("value"));
+             block.s=(result_array[2]);                    
+             block.l=(result_array[1]);
+             return block;
+        }
+        else
+        {
+            value = single_input.attr("value");
+            return value;
+        }
+    }
+    else
+    {
+        //console.log(operand_array);
+        var processing_stack_array = new Array();
+        var processing_stack_array_counter = 0;
+        for( var counter = 0 ; counter < operand_array.length ; counter++ )
+        {
+            //console.log(counter);
+            var single_input = operand_array[counter];
+            var value = single_input.attr("value");
+            if( is_arithmetic_operator(value) )
+            {
+                //console.log('got operator');
+                var second_element = processing_stack_array[--processing_stack_array_counter];
+                var first_element = processing_stack_array[--processing_stack_array_counter];
+                
+                var left_block = new Block();
+                var left_value = "";
+                var right_block = new Block();
+                var right_value = "";
+                var operand_block = new Block();
+                //operand_block.setS(value);
+                if(first_element.constructor === Block)
+                {
+                    left_block = first_element;                    
+                }
+                else
+                {
+                    var first_element_value = anchor_id_to_value_list[first_element.attr("id")];                
+                    if(first_element_value === "basicfunction" || first_element_value === "advancedfunction")
+                    {
+                         result_array = reverse_code_process(anchor_id_to_value_list[first_element.attr("id")], anchor_id_to_name_list[first_element.attr("id")], first_element.attr("value"));
+                         left_block.s=(result_array[2]);                    
+                         left_block.l=(result_array[1]);
+                    }
+                    else
+                    {
+                        left_value = first_element.attr("value");
+                    }
+                }
+                if(second_element.constructor === Block)
+                {
+                    right_block = second_element;                    
+                }
+                else
+                {
+                    var second_element_value = anchor_id_to_value_list[second_element.attr("id")];                
+                    if(second_element_value === "basicfunction" || second_element_value === "advancedfunction")
+                    {
+                         result_array = reverse_code_process(anchor_id_to_value_list[second_element.attr("id")], anchor_id_to_name_list[second_element.attr("id")], second_element.attr("value"));
+                         right_block.s=(result_array[2]);                    
+                         right_block.l=(result_array[1]);
+                    }
+                    else
+                    {
+                        right_value = second_element.attr("value");
+                    }
+                }
+                if( left_value === "" && right_value === "")
+                {
+                    var function_array = new Array();
+                    function_array[0] = left_block;
+                    function_array[1] = right_block;
+                    operand_block.block=(function_array);
+                }
+                else if( left_value !== "" && right_value !== "")
+                {
+                    var value_array = new Array();
+                    value_array[0] = left_value;
+                    value_array[1] = right_value;
+                    operand_block.l=(value_array);
+                }
+                else
+                {
+                    if(left_value !== "")
+                    {
+                        operand_block.l=(left_value);
+                    }
+                    else
+                    {
+                        operand_block.block=(left_block);
+                    }
+                    if(right_value !== "")
+                    {
+                        operand_block.l=(right_value);
+                    }
+                    else
+                    {
+                        operand_block.block=(right_block);
+                    }
+                }
+                operand_block.s=(value);
+                processing_stack_array[processing_stack_array_counter++] = operand_block;
+            }
+            else
+            {
+                processing_stack_array[processing_stack_array_counter++] = single_input;
+            }
+        }
+        return processing_stack_array[0];
+    }
+}
+
+function is_arithmetic_operator(value)
+{
+    if( value === '+' || value === '-' || value === '*' || value === '/')
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/*
+ * This method will check priority of two operators
+ * @param first_operator, first operator
+ * @param second_operator, second operator
+ * @return true if priority of first operator is higher than the second operator, otherwise false
+ */
+function check_high_priority_operator(first_operator, second_operator)
+{
+    var operator_weight = {};
+    operator_weight['+'] = 1;
+    operator_weight['-'] = 1;
+    operator_weight['*'] = 2;
+    operator_weight['/'] = 2;
+    if( operator_weight[first_operator] >= operator_weight[second_operator] )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+    
+}
+
+
+/*function process_operand(operand_input_list)
 {
     var block = new Block();
     var value = "";
@@ -867,7 +1073,7 @@ function process_operand(operand_input_list)
             }
         }
     }
-}
+}*/
 
 function generate_action_block(action)
 {
@@ -966,9 +1172,9 @@ function generate_action_block(action)
                         {
                             var value = anchor_id_to_value[$(this).attr("id")];
                             var name = anchor_id_to_name[$(this).attr("id")];
-                            action_block.setS(name);
+                            action_block.s=(name);
                             var result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
-                            action_block.setL(result_array[1]);                        
+                            action_block.l=(result_array[1]);                        
                         });
                     });
                 }
@@ -995,8 +1201,8 @@ function generate_action_block(action)
                     });
                     variable_text_array[0] = variable_left_part_text;
                     variable_text_array[1] = variable_right_part_text;
-                    action_block.setL(variable_text_array);
-                    action_block.setS(variable_assignment_operator);
+                    action_block.l=(variable_text_array);
+                    action_block.s=(variable_assignment_operator);
                 }
                 
                 //console.log(action_block);
@@ -1044,7 +1250,7 @@ function generate_action_block(action)
             //console.log(reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value")));
         });
     });
-    console.log(action_block);
+    //console.log(action_block);
     action_block_array[0] = action_block;
     return action_block_array;*/
     return action_block_array;
