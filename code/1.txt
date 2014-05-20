@@ -1,0 +1,3 @@
+if (((Age[0] > 0) && (AdvancedAge(USA, White, 1960) > 0)) || (Height(5.1) > 0.0)) {
+    run(Mon);
+}

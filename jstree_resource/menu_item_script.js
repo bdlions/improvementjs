@@ -221,7 +221,9 @@ function save()
         },
         success: function (data) {            
             $.unblockUI();
-            alert(data);                       
+            $('#label_alert_message').text(data);
+            $('#div_alert_message').dialog('open');
+            //alert(data);                       
         }
     });
 }
@@ -297,7 +299,9 @@ function generate_code()
                         success: function (ajaxReturnedData) {
                             if(ajaxReturnedData === "false")
                             {
-                                alert("Server processing error. Please try again.");
+                                $('#label_alert_message').text("Server processing error. Please try again.");
+                                $('#div_alert_message').dialog('open');
+                                //alert("Server processing error. Please try again.");
                             }
                             $.unblockUI();
                         }
@@ -434,7 +438,9 @@ function is_expression_valid()
     });
     if(!is_valid_code)
     {
-        alert(error_message);
+        $('#label_alert_message').text(error_message);
+        $('#div_alert_message').dialog('open');
+        //alert(error_message);
         return false;
     }
     return is_valid_code;
@@ -651,8 +657,29 @@ function generate_condition_block(condition)
 }
 
 
-function process_expression(expression)
+function process_expression(temp_expression)
 {
+    var expression = new Array();
+    if(temp_expression.length >= 2)
+    {
+        var f_exp = temp_expression[0];
+        var l_exp = temp_expression[temp_expression.length - 1];
+        if(f_exp.attr("value") === '(' && l_exp.attr("value") === ')' && f_exp.attr("title") === f_exp.attr("id")+'-'+l_exp.attr("id")+'-startbracket' && l_exp.attr("title") === f_exp.attr("id")+'-'+l_exp.attr("id")+'-endbracket')
+        {
+            for(var counter = 0 ; counter < temp_expression.length - 2 ; counter++)
+            {
+                expression[counter] = temp_expression[counter+1];
+            }
+        }
+        else
+        {
+            expression = temp_expression;
+        }        
+    }
+    else
+    {
+        expression = temp_expression;
+    }
     var left_expression_list = new Array();
     var right_expression_list = new Array();
     var left_expression_counter = 0;
@@ -662,11 +689,19 @@ function process_expression(expression)
     var left_block = new Block();
     var right_block = new Block();
     var block = new Block();
-    
+    var bracket_counter = 0;
     for(var counter = 0 ; counter < expression.length ; counter++)
     {
         var single_input = expression[counter];
-        if( is_logical_operator_exists === false && (single_input.attr("title") === 'logical_connector_and' || single_input.attr("title") === 'logical_connector_or') )
+        if(single_input.attr("value") === '(')
+        {
+           bracket_counter++; 
+        }
+        else if(single_input.attr("value") === ')')
+        {
+           bracket_counter--; 
+        }
+        if( bracket_counter === 0 && is_logical_operator_exists === false && (single_input.attr("title") === 'logical_connector_and' || single_input.attr("title") === 'logical_connector_or') )
         {
             is_logical_operator_exists = true;
             logical_operator_value = single_input.attr("value").trim();
@@ -701,8 +736,29 @@ function process_expression(expression)
     return block;
 }
 
-function process_condition(expression)
+function process_condition(temp_expression)
 {
+    var expression = new Array();
+    if(temp_expression.length >= 2)
+    {
+        var f_exp = temp_expression[0];
+        var l_exp = temp_expression[temp_expression.length - 1];
+        if(f_exp.attr("value") === '(' && l_exp.attr("value") === ')' && f_exp.attr("title") === f_exp.attr("id")+'-'+l_exp.attr("id")+'-startbracket' && l_exp.attr("title") === f_exp.attr("id")+'-'+l_exp.attr("id")+'-endbracket')
+        {
+            for(var counter = 0 ; counter < temp_expression.length - 2 ; counter++)
+            {
+                expression[counter] = temp_expression[counter+1];
+            }
+        }
+        else
+        {
+            expression = temp_expression;
+        }        
+    }
+    else
+    {
+        expression = temp_expression;
+    }
     var condition_block = new Block();
     var left_operand_input_list = new Array();
     var right_operand_input_list = new Array();
@@ -1518,7 +1574,9 @@ function add_action()
     }
     else
     {
-        alert("You are not allowed to add action here.");
+        $('#label_alert_message').text("You are not allowed to add action here.");
+        $('#div_alert_message').dialog('open');
+        //alert("You are not allowed to add action here.");
     }
 }
 
@@ -1529,12 +1587,16 @@ function add_brackets()
     var selectedItemText = $('#selectable .ui-selected').text().trim();
     if(selectedItemText.toLowerCase() == "if" || selectedItemText.toLowerCase() == "then" || selectedItemText.toLowerCase() == "else")
     {
-        alert("You are not allowed to add bracket here.")
+        $('#label_alert_message').text("You are not allowed to add bracket here.");
+        $('#div_alert_message').dialog('open');
+        //alert("You are not allowed to add bracket here.")
         return;
     }
     if(selectedItemText.trim() == "Click here to edit condition" || selectedItemText.trim() == "Click here to edit action" || selectedItemText.trim() == "Click here to edit block")
     {
-        alert("You are not allowed to add bracket here.")
+        $('#label_alert_message').text("You are not allowed to add bracket here.");
+        $('#div_alert_message').dialog('open');
+        //alert("You are not allowed to add bracket here.")
         return;
     }
     $('#selectable li').each(function()
@@ -1545,7 +1607,9 @@ function add_brackets()
             {
                 if($(this).attr("id") == "ssaid" && ($(this).attr("title") == "start_space_anchor_action" || $(this).attr("title") == "start_space_anchor_action_variable"))
                 {
-                    alert("You are not allowed to add bracket here.")
+                    $('#label_alert_message').text("You are not allowed to add bracket here.");
+                    $('#div_alert_message').dialog('open');
+                    //alert("You are not allowed to add bracket here.")
                     return;
                 }
             });
@@ -1606,6 +1670,8 @@ function add_brackets()
         //checking whether bracket already exists or not
         if(currentItem.next("li").text().trim() == "(")
         {
+            $('#label_alert_message').text("Breaket already exists.");
+            $('#div_alert_message').dialog('open');
             alert("Breaket already exists.")
         }
         else
@@ -1625,7 +1691,9 @@ function add_brackets()
         //checking whether bracket already exists or not
         if($('#selectable .ui-selected').next("li").text().trim() == "{")
         {
-            alert("Breaket already exists.")
+            $('#label_alert_message').text("Breaket already exists.");
+            $('#div_alert_message').dialog('open');
+            //alert("Breaket already exists.")
         }
         else
         {
@@ -1678,29 +1746,39 @@ function delete_block()
     //validation checking before deletion
     if($('#selectable .ui-selected').text().length == 0)
     {
-        alert("Please select an item to delete.");
+        $('#label_alert_message').text("Please select an item to delete.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select an item to delete.");
         return;
     }
     else if($('#selectable .ui-selected').text().trim() == "Click here to edit condition")
     {
-        alert("You are not allowed to remove empty condition.");
+        $('#label_alert_message').text("You are not allowed to remove empty condition.");
+        $('#div_alert_message').dialog('open');
+        //alert("You are not allowed to remove empty condition.");
         return;
     }
     else if($('#selectable .ui-selected').text().trim() == "Click here to edit block")
     {
-        alert("You are not allowed to remove an empty block.");
+        $('#label_alert_message').text("You are not allowed to remove an empty block.");
+        $('#div_alert_message').dialog('open');
+        //alert("You are not allowed to remove an empty block.");
         return;
     }
     //user wants to remove bracket
     else if($('#selectable .ui-selected').text().trim() == ")" || $('#selectable .ui-selected').text().trim() == "}" || $('#selectable .ui-selected').text().trim() == "(" || $('#selectable .ui-selected').text().trim() == "{")
     {
-        alert("Please select delete option from Bracket menu item to delete this selected item.");
+        $('#label_alert_message').text("Please select delete option from Bracket menu item to delete this selected item.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select delete option from Bracket menu item to delete this selected item.");
         return;
     }
     
     else if($('#selectable .ui-selected').text().trim() == "THEN")
     {
-        alert("You are not allowed to remove THEN expression.");
+        $('#label_alert_message').text("You are not allowed to remove THEN expression.");
+        $('#div_alert_message').dialog('open');
+        //alert("You are not allowed to remove THEN expression.");
         return;
     }
     
@@ -1855,7 +1933,9 @@ function delete_item()
                     //selected condition is yet assigned.
                     if($(this).text().trim() == "Click here to edit condition")
                     {
-                        alert("You are not allowed to remove an empty condition");
+                        $('#label_alert_message').text("You are not allowed to remove an empty condition");
+                        $('#div_alert_message').dialog('open');
+                        //alert("You are not allowed to remove an empty condition");
                     }
                     else
                     {
@@ -1870,7 +1950,9 @@ function delete_item()
                         $(this).before("<li class='ui-widget-content' id='"+total_initial_spaces+"'>"+initial_spaces+"Click here to edit condition</li>");
                         //removing current selected condition
                         $(this).remove();
-                        alert("Your selected condition is successfully removed.");
+                        $('#label_alert_message').text("Your selected condition is successfully removed.");
+                        $('#div_alert_message').dialog('open');
+                        //alert("Your selected condition is successfully removed.");
                         //clearing natural language panel, code panel, parameter table and tree
                         $('#changing_stmt').html("");
                         $('#code_stmt').html("");
@@ -1889,7 +1971,9 @@ function delete_item()
                     //selected condition is empty.
                     if($(this).text().trim() == "Click here to edit action")
                     {
-                        alert("You are not allowed to remove an empty action");
+                        $('#label_alert_message').text("You are not allowed to remove an empty action");
+                        $('#div_alert_message').dialog('open');
+                        //alert("You are not allowed to remove an empty action");
                     }
                     else
                     {
@@ -1916,7 +2000,9 @@ function delete_item()
                         }
                         //removing current selected condition
                         $(this).remove();
-                        alert("Your selected action is successfully removed.");
+                        $('#label_alert_message').text("Your selected action is successfully removed.");
+                        $('#div_alert_message').dialog('open');
+                        //alert("Your selected action is successfully removed.");
                         //clearing natural language panel, code panel, parameter table and tree
                         $('#changing_stmt').html("");
                         $('#code_stmt').html("");
@@ -2007,7 +2093,9 @@ function delete_item()
                 }
             });
         });
-        alert("Your selected action is successfully removed.");
+        $('#label_alert_message').text("Your selected action is successfully removed.");
+        $('#div_alert_message').dialog('open');
+        //alert("Your selected action is successfully removed.");
         return;
         
         //alert("You are not allowed to remove expression");
@@ -2078,7 +2166,9 @@ function download_project()
             }
             else
             {
-                alert("Server processing error. Please try again.");
+                $('#label_alert_message').text("Server processing error. Please try again.");
+                $('#div_alert_message').dialog('open');
+                //alert("Server processing error. Please try again.");
             }
             $.unblockUI();
         }
@@ -2189,7 +2279,9 @@ function delete_bracket()
             });
 
         });
-        alert("Your selected bracket is removed.");
+        $('#label_alert_message').text("Your selected bracket is removed.");
+        $('#div_alert_message').dialog('open');
+        //alert("Your selected bracket is removed.");
         return;
     }
     //selected bracket to be removed is from (condition/action in) natural language Panel ends
@@ -2198,7 +2290,9 @@ function delete_bracket()
     //user wants to remove ending bracket from left panel
     if($('#selectable .ui-selected').text().trim() == ")" || $('#selectable .ui-selected').text().trim() == "}")
     {
-        alert("Please select starting breaket to remove.");
+        $('#label_alert_message').text("Please select starting breaket to remove.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select starting breaket to remove.");
         return;
     }
     //user wants to remove starting bracket from left panel
@@ -2228,7 +2322,9 @@ function delete_bracket()
             {
                 $('#selectable .ui-selected').remove();
                 currentItem.remove();
-                alert("Your selected bracket is removed.");
+                $('#label_alert_message').text("Your selected bracket is removed.");
+                $('#div_alert_message').dialog('open');
+                //alert("Your selected bracket is removed.");
                 return;
             }
             if(list_item_counter++ > total_list_items)
@@ -2237,7 +2333,9 @@ function delete_bracket()
             }
         }
     }
-    alert("Please select a bracket to delete.");
+    $('#label_alert_message').text("Please select a bracket to delete.");
+    $('#div_alert_message').dialog('open');
+    //alert("Please select a bracket to delete.");
     return;
 }
 
@@ -2270,7 +2368,9 @@ function save_as_project_save_button_clicked()
     var projectNameRegExp = /^[a-z0-9]+$/i;
     if(projectNameRegExp.test(save_as_project_name)==false)
     {
-        alert( "Please enter a valid project name." );
+        $('#label_alert_message').text("Please enter a valid project name.");
+        $('#div_alert_message').dialog('open');
+        //alert( "Please enter a valid project name." );
         return false;
     }
     

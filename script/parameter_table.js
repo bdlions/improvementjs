@@ -171,11 +171,13 @@ function customTextChange(childNodeName, parentNodeName, hasLimit, lowerLimit, u
                                     }
                                 });
                                 if(isBooleanVariable) {
-                                    alert("You can't use boolean variable as function parameter. Please use number variable");
+                                    $('#label_alert_message').text("You can't use boolean variable as function parameter. Please use number variable");
+                                    $('#div_alert_message').dialog('open');
                                     isValid = 0;
                                 }
                                 else if(!isBooleanVariable && !isNumberVariable) {
-                                    alert("Please use number variable");
+                                    $('#label_alert_message').text("Please use number variable");
+                                    $('#div_alert_message').dialog('open');
                                     isValid = 0;
                                 }
                             }
@@ -183,20 +185,23 @@ function customTextChange(childNodeName, parentNodeName, hasLimit, lowerLimit, u
                                 if(inputType == "INTEGER") {
                                     regExp = /^-?\d+$/g;
                                     if(!regExp.test($(this).attr("value").trim())) {
-                                        alert("Invalid input type.");
+                                        $('#label_alert_message').text("Invalid input type.");
+                                        $('#div_alert_message').dialog('open');
                                         isValid = 0;
                                     }
                                 }
                                 else if(inputType == "REAL") {
                                     regExp = /^-?\d+.{1}\d+$/g;
                                     if(!regExp.test($(this).attr("value").trim())) {
-                                        alert("Invalid input type.");
+                                        $('#label_alert_message').text("Invalid input type.");
+                                        $('#div_alert_message').dialog('open');
                                         isValid = 0;
                                     }
                                 }
                                 if(hasLimit == 1 && isValid == 1) {
                                     if(Number($(this).attr("value").trim()) < lowerLimit || Number($(this).attr("value").trim()) > upperLimit) {
-                                        alert("Your given input for "+$(this).attr("name")+" is out or range. Please assign value within ["+lowerLimit+","+upperLimit+"]");
+                                        $('#label_alert_message').text("Your given input for "+$(this).attr("name")+" is out or range. Please assign value within ["+lowerLimit+","+upperLimit+"]");
+                                        $('#div_alert_message').dialog('open');
                                         isValid = 0;
                                     }
                                 }

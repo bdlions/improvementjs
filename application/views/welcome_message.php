@@ -47,11 +47,15 @@ $(document).ready(function()
         });
         if(is_cancel_pressed_external_variable_upload == 'true')
         {
-            alert("Press upload button again to load external variables.");
+            $('#label_alert_message').text("Press upload button again to load external variables.");
+            $('#div_alert_message').dialog('open');
+            //alert("Press upload button again to load external variables.");
         }
         else if(external_file_content_error == 'true')
         {
-            alert("Each variable must be in a separated line");
+            $('#label_alert_message').text("Each variable must be in a separated line");
+            $('#div_alert_message').dialog('open');
+            //alert("Each variable must be in a separated line");
         }
         else if(external_variable_length > 0) {
             //$('#external_variable_list').dialog('open');
@@ -993,4 +997,12 @@ $(document).ready(function()
         </tr>
         <?php echo form_close();?>
     </table> 
+</div>
+
+<div id="div_alert_message" >
+    <table>
+        <tr>
+            <td><label id="label_alert_message"></label></td>            
+        </tr>
+    </table>
 </div>

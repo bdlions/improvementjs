@@ -5,7 +5,9 @@ function add_logical_operators()
     //to add logical connector operator user has to select if from left panel
     if($('#selectable .ui-selected').text().trim().toLowerCase() != "if")
     {
-        alert("Please select if from left panel to add logical operator.");
+        $('#label_alert_message').text("Please select if from left panel to add logical operator.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select if from left panel to add logical operator.");
         return;
     }
     //user selects if from left panel and that item is selected item
@@ -20,13 +22,17 @@ function add_logical_operators()
     //user didn't add proper condition
     if(currentItem.text().trim() == "Click here to edit condition")
     {
-        alert("Please edit your incomplete condition first.");
+        $('#label_alert_message').text("Please edit your incomplete condition first.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please edit your incomplete condition first.");
         return;
     }
     //next item of if on left panel is assumed to be whole condition in one li
     if(currentItem.text().trim() == "" || currentItem.text().trim() == "(" || currentItem.text().trim() == ")" || currentItem.text().trim() == "{" || currentItem.text().trim() == "}")
     {
-        alert("Incorrect condition.");
+        $('#label_alert_message').text("Incorrect condition.");
+        $('#div_alert_message').dialog('open');
+        //alert("Incorrect condition.");
         return;
     }
     var logical_connector_list_items = "";
@@ -91,7 +97,9 @@ function delete_logical_operator()
     //alert("You are about to delete logical operator. Id:"+selected_logical_operator_id+" and title:"+selected_logical_operator_title);
     if(selected_logical_operator_id == "")
     {
-        alert("Please select logical connector operator from condition to delete.");
+        $('#label_alert_message').text("Please select logical connector operator from condition to delete.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select logical connector operator from condition to delete.");
         return;
     }
     //selected item from left panel
@@ -248,7 +256,9 @@ function delete_logical_operator()
     //alert("debugging message:"+debugging_message);
     if(remove_logical_operator_valid == "false")
     {
-        alert(error_message);
+        $('#label_alert_message').text(error_message);
+        $('#div_alert_message').dialog('open');
+        //alert(error_message);
         return;
     }
     
@@ -274,7 +284,9 @@ function button_logical_connector_removing_condition_delete_pressed()
     //user presses delete button without selecting a condition from condition list
     if(currentItem.text() == "")
     {
-        alert("Please select an item.");
+        $('#label_alert_message').text("Please select an item.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select an item.");
         return;
     }
     var start_id = "";
@@ -410,8 +422,9 @@ function button_logical_connector_removing_condition_delete_pressed()
     $('#logical_connector_removing_condition_div').dialog('close');
     //unblocking the user interface
     $.unblockUI();
-    
-    alert("Successfully deleted.");
+    $('#label_alert_message').text("Successfully deleted.");
+    $('#div_alert_message').dialog('open');
+    //alert("Successfully deleted.");
 }
 
 //user presses ok button in logical connector modal window
@@ -434,7 +447,9 @@ function button_logical_connector_ok_pressed()
     //user presses ok button without selecting a condition from condition list
     if(currentItem.text() == "")
     {
-        alert("Please select an item.");
+        $('#label_alert_message').text("Please select an item.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select an item.");
         return;
     }
     var start_id = "";
@@ -590,14 +605,18 @@ function buttonLogicalConnectorConditionOkPressed()
     
     if((left_part_type == "BOOLEAN" && right_part_type != "BOOLEAN") || (left_part_type != "BOOLEAN" && right_part_type == "BOOLEAN"))
     {
-        alert("Boolean variable can't be compared to number/function");
+        $('#label_alert_message').text("Boolean variable can't be compared to number/function");
+        $('#div_alert_message').dialog('open');
+        //alert("Boolean variable can't be compared to number/function");
         return;
     }
     //boolean variable comparison ends
 
     //checking whether user selects all of the three parts of a condition
     if (leftP == "" || cmpP == "" || rightP == "") {
-        alert("Incomple condition.");
+        $('#label_alert_message').text("Incomple condition.");
+        $('#div_alert_message').dialog('open');
+        //alert("Incomple condition.");
         return;
     }
     else
@@ -791,15 +810,21 @@ function logical_connector_boolean_variable_selected_ok_pressed()
     
     //checking whether user selects three parts of a boolean variable 
     if (booleanVariableLeftPart == "") {
-        alert("Please select a boolean variable.");
+        $('#label_alert_message').text("Please select a boolean variable.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select a boolean variable.");
         return false;
     }
     else if (booleanVariableMiddlePart == "") {
-        alert("Please select comparison for boolean variable.");
+        $('#label_alert_message').text("Please select comparison for boolean variable.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select comparison for boolean variable.");
         return false;
     }
     else if (booleanVariableRightPart == "") {
-        alert("Please select boolean variable comparison value.");
+        $('#label_alert_message').text("Please select boolean variable comparison value.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select boolean variable comparison value.");
         return false;
     }
     else

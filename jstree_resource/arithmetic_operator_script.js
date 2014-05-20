@@ -41,12 +41,16 @@ function add_arithmetic_operators()
     });
     if(selected_part_anchor_id == "")
     {
-        alert("Please select an item from condition.");
+        $('#label_alert_message').text("Please select an item from condition.");
+        $('#div_alert_message').dialog('open');
+        //alert("Please select an item from condition.");
         return;
     }
     else if(valid_selection == "false")
     {
-        alert(error_message);
+        $('#label_alert_message').text(error_message);
+        $('#div_alert_message').dialog('open');
+        //alert(error_message);
         return;
     }
 
