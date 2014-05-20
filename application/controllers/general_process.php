@@ -301,6 +301,19 @@ class General_process extends CI_Controller
                 }
                 else
                 {
+                    $properties = $project_xml_object->properties;
+                    if($project_type_id != $properties->project_type_id)
+                    {
+                        $error = array('error' => 'Please upload correct project.');
+                        $this->data['error'] = $error;
+                        $this->data['project_id'] = $this->session->userdata('project_id');
+                        $base = base_url();        
+                        $css ="<link rel='stylesheet' href='{$base}css/bluedream.css' />";
+                        $this->template->set('css', $css);
+                        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
+                        $this->template->load("default_template", "upload/upload_project", $this->data);
+                        return;
+                    }
                     $project_content = $project_xml_object->code;
                     if($project_content != false){
                         $data = array(
@@ -335,7 +348,7 @@ class General_process extends CI_Controller
                         );
                         $this->variable_library->create_variable($additional_variable_data, $additional_project_data);
                     endforeach;
-                    $properties = $project_xml_object->properties;
+                    
                     if( $properties->project_type_id != null && $properties->project_type_id != "")
                     {
                         $project_type_id = $properties->project_type_id;

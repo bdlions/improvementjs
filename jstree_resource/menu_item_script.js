@@ -280,7 +280,7 @@ function generate_code()
             mapping['variables'] = get_project_variables();
             $.ajax({
                 type: "POST",
-                url: 'http://localhost/smartycode/service.php',
+                url: server_base_url+'../smartycode/service.php',
                 dataType: "json",
                 data: {project_xml : project, mapping:mapping},
                 complete:function(data){

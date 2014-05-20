@@ -27,7 +27,7 @@ $(document).ready(function()
         ?>');
     set_project_variables(custom_variable_list.variable_list); 
     
-    var base_url = '<?php echo $base_url?>';
+    var base_url = '<?php echo base_url();?>';
     
     has_external_variables = '<?php echo $has_external_variables?>';
     is_cancel_pressed_external_variable_upload = '<?php echo $is_cancel_pressed_external_variable_upload?>';

@@ -38,6 +38,10 @@ function set_server_base_url(base_url)
 {
     server_base_url = base_url;
 }
+function get_server_base_url()
+{
+    return server_base_url;
+}
 
 /*
  * This method stores project variable list
