@@ -313,25 +313,18 @@ function updateConditionAndCode(parentNodeName, childNodeName, nameArray, valueA
             });
         }
     });	
-    //updating code panel
-    $("a", $("#code_stmt")).each(function () {
-        if ($(this).attr("id") == selectedId) {
-            $customAnchor = $(this);
-            var codeData = code_dynamic_process(nameArray, valueArray, childNodeName, parentNodeName)
-            htmlText = $customAnchor.html();
-            textContent = $customAnchor.text();
-            htmlText = htmlText.trim().replace(textContent.trim(), "");
-            $customAnchor.html(htmlText + codeData);
-            $("div",  $('#selectable .ui-selected')).each(function () {
-                $("input", $(this)).each(function () {
-                    if($(this).attr("id") == selectedId) {
-                        $(this).removeAttr("value");
-                        $(this).attr("value",codeData);
-                    }
-                });
-            });                        		
-        }
+    //updating code structure in left panel
+    var codeData = code_dynamic_process(nameArray, valueArray, childNodeName, parentNodeName);
+    $("div",  $('#selectable .ui-selected')).each(function () {
+        $("input", $(this)).each(function () {
+            if($(this).attr("id") === selectedId) {
+                $(this).removeAttr("value");
+                $(this).attr("value",codeData);
+            }
+        });
     });
+    //updating code panel
+    generate_selected_item_code();        
 }
 
 /*

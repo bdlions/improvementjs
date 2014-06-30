@@ -183,10 +183,11 @@ function beautify(unindent_code) {
         the.editor.setValue(output);
     } 
     else {
-        $('#generated_code_text_area').val(output);
+        
     }
 
     the.beautify_in_progress = false;
+    return output;
 }
 
 function looks_like_html(source) {
@@ -228,6 +229,51 @@ function save()
     });
 }
 
+function generate_selected_item_code()
+{
+    var block = new Block();
+    var name = "";
+    var service_url = "";
+    $('#selectable .ui-selected').each(function()
+    {
+        $("div input", $(this)).each(function ()
+        {
+            if(name === "")
+            {
+                name = $(this).attr("name");
+            }
+        });
+        if(name === "condition")
+        {
+            block = generate_condition_block($(this));
+            service_url = server_base_url+'../smartycode/code_condition_service.php';
+        }
+        else if(name === "action")
+        {
+            block = process_action_statement($(this));
+            service_url = server_base_url+'../smartycode/code_action_service.php';
+        }
+        
+    });
+    if(name !== "")
+    {
+        $.get('../../json/blockMap.json', function(mapping){
+            $.ajax({
+                type: "POST",
+                url: service_url,
+                dataType: "json",
+                data: {project_xml : block, mapping:mapping},
+                complete:function(data){
+                    var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
+                    generated_code = beautify(generated_code.trim());
+                    //alert(generated_code);
+                    $("#code_stmt").html(generated_code); 
+                }
+            });
+        });
+    }
+}
+
 function generate_code()
 {
     if( !is_expression_valid() )
@@ -247,7 +293,7 @@ function generate_code()
         });
     });
     parentBlock = generate_if_blocks(li_list);
-
+    
     var parentScript = new Script();
     parentScript.block=(parentBlock);
 
@@ -285,11 +331,8 @@ function generate_code()
                 data: {project_xml : project, mapping:mapping},
                 complete:function(data){
                     $('#generate_code_div_modal').dialog('open');
-                    //console.log(data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, ''));
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
-                    //document.getElementById("generated_code_text_area").value = data.responseText.replace(/( |\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
-                    beautify(generated_code.trim());
-                    //beautify(data);
+                    $('#generated_code_text_area').val(beautify(generated_code.trim()));
                     $.ajax({
                         type: "POST",
                         url: "../../general_process/save_project_code",
@@ -311,90 +354,7 @@ function generate_code()
             });
 
         });   
-    });
-    /*$.get('../../json/blockMap.json', function(mapping){
-        $.get('../../json/sample.xml', function(xml) {
-            var jsonObj = $.xml2json(xml);
-            //console.log(jsonObj);
-            //console.log(jsonObj);
-
-            var action = new Block();
-            action.setS('run');
-            action.setL('Monday');
-
-            var action2 = new Block();
-            action2.setS('turn');
-            action2.setL('15');
-
-            var actionBlock = new Array();
-            actionBlock[0] = action;
-            //actionBlock[1] = action2;
-
-            var actionScript = new Script();
-            actionScript.setBlock(actionBlock);
-
-            var conditionBlock = new Block();
-            conditionBlock.setS('>');
-
-            var leftOperatorBlock = new Block();
-            leftOperatorBlock.setS('Age');
-            var paramArray = new Array();
-            paramArray[0] = '10';
-            paramArray[1] = 'naz';
-            //leftOperatorBlock.setL('10');
-            leftOperatorBlock.setL(paramArray);
-
-            var rightOperatorBlock = new Block();
-            rightOperatorBlock.setS('Height');
-            rightOperatorBlock.setL('10');
-
-            var operatorBlock = new Array();
-            operatorBlock[0] = leftOperatorBlock;
-            operatorBlock[1] = rightOperatorBlock;
-
-            conditionBlock.setBlock(operatorBlock);
-
-            var expressionBlock = new Block();
-            expressionBlock.setS('doIf');
-            expressionBlock.setBlock(conditionBlock);
-            expressionBlock.setScript(actionScript);
-
-            var parentBlock = new Array();
-            parentBlock[0] = expressionBlock;
-
-            var parentScript = new Script();
-            parentScript.setBlock(parentBlock);
-
-            var scripts = new Scripts();
-            scripts.setScript(parentScript);
-
-            var sprite = new Sprite();
-            sprite.setScripts(scripts);
-
-            var sprites = new Sprites();
-            sprites.setSprite(sprite);
-
-            var stage = new Stage();
-            stage.setSprites(sprites);
-
-            var project = new Project();
-            project.setStage(stage);
-            
-            $.ajax({
-                type: "POST",
-                url: 'http://localhost/smartycode/service.php',
-                dataType: "json",
-                data: {project_xml : project, mapping:mapping},
-                complete:function(data){
-                    //alert(data.responseText);
-                    $('#generate_code_div_modal').dialog('open');
-                    document.getElementById("generated_code_text_area").value = data.responseText;
-                }
-            });
-
-        });   
-    });*/
-    
+    });    
 }
 function is_expression_valid()
 {
@@ -480,7 +440,7 @@ function generate_if_blocks(li_list)
                 then_action_block = new Block();
                 else_action_block = new Block();
                 script_actions_array = new Array();
-                condition_block = generate_condition_block(single_li);
+                condition_block = generate_condition_block(single_li.next("li"));
             }
             else if(single_li.text().trim().toLowerCase() == "then")
             {
@@ -507,118 +467,9 @@ function generate_if_blocks(li_list)
     return parentBlock;
 }
 
-/*function generate_condition_block(condition)
-{
-    condition = condition.next("li");
-    //consider all actions
-    var anchor_id_to_name = {};
-    var anchor_id_to_value = {};
-    $("a", condition).each(function ()
-    {
-        var anchor_id = 0;
-        if( $(this).attr("id") )
-        {
-            anchor_id = $(this).attr("id");
-        }
-        $("input", $(this)).each(function ()
-        {
-            if( $(this).attr("name") && $(this).attr("value") )
-            {
-                anchor_id_to_name[anchor_id] = $(this).attr("name");
-                anchor_id_to_value[anchor_id] = $(this).attr("value");
-            }
-
-        });
-    });
-    var result_array;
-    var comparison_value = "";
-    var left_block = new Block();
-    var left_value = "";
-    var right_block = new Block();
-    var right_value = "";
-    var condition_block = new Block();
-    var counter = 0;
-    $("div", condition).each(function ()
-    {
-        $("input", $(this)).each(function ()
-        {
-            var value = anchor_id_to_value[$(this).attr("id")];
-            if(counter == 0)
-            {
-               //add external opation later
-               if(value == "basicfunction" || value == "advancedfunction")
-               {
-                    result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
-                    left_block.setS(result_array[2]);                    
-                    left_block.setL(result_array[1]);
-               }
-               else
-               {
-                   left_value = $(this).attr("value");
-               }
-            }
-            else if(counter == 2)
-            {
-               if(value == "basicfunction" || value == "advancedfunction")
-               {
-                    result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
-                    right_block.setS(result_array[2]);  
-                    right_block.setL(result_array[1]);
-               }
-               else
-               {
-                   right_value = $(this).attr("value");
-               }
-            }
-            
-            else if(value == "comparison")
-            {
-                comparison_value = $(this).attr("value").trim();                
-            }
-            counter++;            
-        });
-    });
-    if( left_value == "" && right_value == "")
-    {
-        var function_array = new Array();
-        function_array[0] = left_block;
-        function_array[1] = right_block;
-        condition_block.setBlock(function_array);
-    }
-    else if( left_value != "" && right_value != "")
-    {
-        var value_array = new Array();
-        value_array[0] = left_value;
-        value_array[1] = right_value;
-        condition_block.setL(value_array);
-    }
-    else
-    {
-        if(left_value != "")
-        {
-            condition_block.setL(left_value);
-        }
-        else
-        {
-            condition_block.setBlock(left_block);
-        }
-        if(right_value != "")
-        {
-            condition_block.setL(right_value);
-        }
-        else
-        {
-            condition_block.setBlock(right_block);
-        }
-    }
-    condition_block.setS(comparison_value);
-    //console.log(condition_block);
-    return condition_block;
-}*/
-
 function generate_condition_block(condition)
 {
-    condition = condition.next("li");
+    //condition = condition.next("li");
     var anchor_id_to_name = {};
     var anchor_id_to_value = {};
     $("a", condition).each(function ()
@@ -1032,123 +883,14 @@ function check_high_priority_operator(first_operator, second_operator)
     
 }
 
-
-/*function process_operand(operand_input_list)
-{
-    var block = new Block();
-    var value = "";
-    var anchor_id_to_name_list = get_anchor_id_to_optionstype();
-    var anchor_id_to_value_list = get_anchor_id_to_options();
-    var result_array;
-    
-    var left_part_input_list = new Array();
-    var right_part_input_list = new Array();
-    var left_part_input_list_counter = 0;
-    var right_part_input_list_counter = 0;
-    var arithmetic_operator_value = "";
-    
-    var is_arithmetic_operator_exists = false;
-    
-    for(var counter = 0 ; counter < operand_input_list.length ; counter++)
-    {
-        var single_input = operand_input_list[counter];
-        if( is_arithmetic_operator_exists === false && (single_input.attr("value") === '+' || single_input.attr("value") === '-' || single_input.attr("value") === '*' || single_input.attr("value") === '/') )
-        {
-            is_arithmetic_operator_exists = true;
-            arithmetic_operator_value = single_input.attr("value").trim();
-        }
-        else
-        {
-            if(is_arithmetic_operator_exists === true)
-            {
-                right_part_input_list[right_part_input_list_counter++] = single_input;
-            }
-            else
-            {
-                left_part_input_list[left_part_input_list_counter++] = single_input;
-            }
-        }
-    }
-    if(is_arithmetic_operator_exists === true)
-    {
-        var left_operand_result = process_operand(left_part_input_list);
-        var right_operand_result = process_operand(right_part_input_list);
-        if( left_operand_result.constructor === Block && right_operand_result.constructor === Block)
-        {
-            var function_array = new Array();
-            function_array[0] = left_operand_result;
-            function_array[1] = right_operand_result;
-            block.setBlock(function_array);
-        }
-        else if( left_operand_result.constructor !== Block && right_operand_result.constructor !== Block)
-        {
-            var value_array = new Array();
-            value_array[0] = left_operand_result;
-            value_array[1] = right_operand_result;
-            block.setL(value_array);
-        }
-        else
-        {
-            if(left_operand_result.constructor !== Block)
-            {
-                block.setL(left_operand_result);
-            }
-            else
-            {
-                block.setBlock(left_operand_result);
-            }
-            if(right_operand_result.constructor !== Block)
-            {
-                block.setL(right_operand_result);
-            }
-            else
-            {
-                block.setBlock(right_operand_result);
-            }
-        }
-        block.setS(arithmetic_operator_value);
-        return block;
-    }
-    else
-    {
-        for(var counter = 0 ; counter < operand_input_list.length ; counter++)
-        {
-            var single_input = operand_input_list[counter];
-            var value = anchor_id_to_value_list[single_input.attr("id")];
-            if(value === "basicfunction" || value === "advancedfunction")
-            {
-                 result_array = reverse_code_process(anchor_id_to_value_list[single_input.attr("id")], anchor_id_to_name_list[single_input.attr("id")], single_input.attr("value"));
-                 block.setS(result_array[2]);                    
-                 block.setL(result_array[1]);
-                 return block;
-            }
-            else
-            {
-                value = single_input.attr("value");
-                return value;
-            }
-        }
-    }
-}*/
-
 function generate_action_block(action)
 {
     var then_length = parseInt(action.attr("id"));
     var current_action = action;
-    var current_action_length = 0;
-    
-    var anchor_id_to_name = {};
-    var anchor_id_to_value = {};
+    var current_action_length = 0;    
+
     var action_block_array = new Array();
     var action_counter = 0;
-    
-    var action_type = "";
-    var variable_assignment_operator = "";
-    var variable_left_part_text = "";
-    var variable_right_part_text = "";
-    var variable_div_counter = 0;
-    var variable_text_array = new Array();
-    
     while( true )
     {
         current_action = current_action.next("li");
@@ -1160,384 +902,130 @@ function generate_action_block(action)
         }
         if( current_action_length == parseInt(then_length) + parseInt(indentation_space_length) )
         {
-            if( current_action.text().trim().toLowerCase() == "if" || current_action.text().trim().toLowerCase() == "then" || current_action.text().trim().toLowerCase() == "else" )
-            {
-                //handle recursive call
-                if(current_action.text().trim().toLowerCase() == "if")
-                {
-                    var temp_action = current_action;   
-                    var li_list = new Array();
-                    var li_list_counter = 0;
-                    li_list[li_list_counter++] = temp_action;  
-                    temp_action = temp_action.next("li");
-                    //console.log('current_action_length:'+current_action_length+',temp length:'+temp_action.attr("id")+',text:'+temp_action.text());
-                    while(true)
-                    {
-                        if( temp_action.attr("id") == current_action_length && (temp_action.text().trim().toLowerCase() == "then" || temp_action.text().trim().toLowerCase() == "else"))
-                        {
-                            li_list[li_list_counter++] = temp_action;
-                            //console.log('then,else');
-                        }
-                        else if( parseInt(temp_action.attr("id")) > current_action_length )
-                        {
-                            li_list[li_list_counter++] = temp_action;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                        if(temp_action.next('li').length <= 0)
-                        {
-                            break;
-                        }
-                        temp_action = temp_action.next("li");
-                    }
-                    action_block_array[action_counter++] = generate_if_blocks(li_list)[0];
-                }
-                
-            }
-            else
-            {
-                anchor_id_to_name = {};
-                anchor_id_to_value = {};
-                $("a", current_action).each(function ()
-                {
-                    var anchor_id = 0;
-                    if( $(this).attr("id") )
-                    {
-                        anchor_id = $(this).attr("id");
-                    }
-                    $("input", $(this)).each(function ()
-                    {
-                        if( $(this).attr("name") && $(this).attr("value") )
-                        {
-                            action_type = $(this).attr("value");
-                            anchor_id_to_name[anchor_id] = $(this).attr("name");
-                            anchor_id_to_value[anchor_id] = $(this).attr("value");
-                        }
-
-                    });                    
-                });
-                //console.log('action_type:'+action_type);
-                var action_block = new Block();
-                if( action_type == 'action')
-                {
-                    $("div", current_action).each(function ()
-                    {
-                        $("input", $(this)).each(function ()
-                        {
-                            var value = anchor_id_to_value[$(this).attr("id")];
-                            var name = anchor_id_to_name[$(this).attr("id")];
-                            action_block.s=(name);
-                            var result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
-                            action_block.l=(result_array[1]);                        
-                        });
-                    });
-                }
-                else if( action_type == 'variable')
-                {
-                    $("div", current_action).each(function ()
-                    {
-                        $("input", $(this)).each(function ()
-                        {
-                            if(variable_div_counter == 0)
-                            {
-                                variable_left_part_text = $(this).attr("value");
-                            }
-                            else if(variable_div_counter == 1)
-                            {
-                                variable_assignment_operator = $(this).attr("value").trim();
-                            }
-                            else if(variable_div_counter == 2)
-                            {
-                                variable_right_part_text = $(this).attr("value");
-                            }
-                            variable_div_counter++;
-                        });
-                    });
-                    variable_text_array[0] = variable_left_part_text;
-                    variable_text_array[1] = variable_right_part_text;
-                    action_block.l=(variable_text_array);
-                    action_block.s=(variable_assignment_operator);
-                }
-                
-                //console.log(action_block);
-                //console.log("action_counter:"+action_counter);
-                action_block_array[action_counter++] = action_block;
-            }
-        }
-        
+            action_block_array[action_counter++] = process_action_statement(current_action);            
+        }        
         if(current_action.next('li').length <= 0)
         {
             break;
         }
-    }
-    /*action = action.next("li");
-    var anchor_id_to_name = {};
-    var anchor_id_to_value = {};
-    $("a", action).each(function ()
-    {
-        var anchor_id = 0;
-        if( $(this).attr("id") )
-        {
-            anchor_id = $(this).attr("id");
-        }
-        $("input", $(this)).each(function ()
-        {
-            if( $(this).attr("name") && $(this).attr("value") )
-            {
-                anchor_id_to_name[anchor_id] = $(this).attr("name");
-                anchor_id_to_value[anchor_id] = $(this).attr("value");
-            }
-
-        });
-    });
-    var action_block_array = new Array();
-    var action_block = new Block();
-    $("div", action).each(function ()
-    {
-        $("input", $(this)).each(function ()
-        {
-            var value = anchor_id_to_value[$(this).attr("id")];
-            var name = anchor_id_to_name[$(this).attr("id")];
-            action_block.setS(name);
-            var result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
-            action_block.setL(result_array[1]);
-            //console.log(reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value")));
-        });
-    });
-    //console.log(action_block);
-    action_block_array[0] = action_block;
-    return action_block_array;*/
+    }    
     return action_block_array;
 }
 
-/*function generate_code()
+function process_action_statement(current_action)
 {
-    updateClientEndOperationCounter();
-    //alert("On Progress.");
-    var code = "";
-    var is_valid_code = true;
-    var error_message = "";
-    var temp_text = "";
-    var totalSpacesForBracket = new Array();
-    var totalSpacesForBracketCounter = -1;
-    var spacesForBracket = new Array();
-    var spacesForBracketCounter = -1;
-
-    //clearing natural language panel, code panel, parameter table and tree
-    $('#changing_stmt').html("");
-    $('#code_stmt').html("");
-    $('#parameters_table').html("");
-    $("li", $("#demo1")).each(function ()
+    var current_action_length = 0;    
+    var anchor_id_to_name = {};
+    var anchor_id_to_value = {};
+    
+    var action_type = "";
+    var variable_assignment_operator = "";
+    var variable_left_part_text = "";
+    var variable_right_part_text = "";
+    var variable_div_counter = 0;
+    var variable_text_array = new Array();
+    
+    current_action_length = parseInt(current_action.attr("id"));
+    
+    if( current_action.text().trim().toLowerCase() === "if" || current_action.text().trim().toLowerCase() === "then" || current_action.text().trim().toLowerCase() === "else" )
     {
-        $(this).hide();
-    });
-    for(var variable_counter = 0 ; variable_counter < project_variable_list.length ; variable_counter++)
-    {
-        var variable = project_variable_list[variable_counter];
-        if(variable.variable_type == "BOOLEAN")
+        //handle recursive call
+        if(current_action.text().trim().toLowerCase() === "if")
         {
-            code = code +"boolean "+variable.variable_name+" = "+variable.variable_value+";"+getLineBreakSequence();
-        }
-        else
-        {
-            code = code +"double "+variable.variable_name+" = "+variable.variable_value+";"+getLineBreakSequence();
-        }
-    }
-    $('#selectable').each(function()
-    {
-        $("li", $(this)).each(function ()
-        {
-            //removing the selected item before user selects generate -> code from menu item
-            $(this).attr("class",$(this).attr("class").replace(" ui-selected", "")); 
-            
-            if(!is_valid_code)
-                return;
-
-            var total_spaces = $(this).attr("id");
-            var counter = 0;
-            $("div", $(this)).each(function ()
+            var temp_action = current_action;   
+            var li_list = new Array();
+            var li_list_counter = 0;
+            li_list[li_list_counter++] = temp_action;  
+            temp_action = temp_action.next("li");
+            while(true)
             {
-                 var starting_space = "";
-                 for(var i = 0 ; i < total_spaces ; i++){
-                    starting_space = starting_space + " ";
-                 }
-
-                var is_action = 0;
-                //code = code + starting_space;
-                $("input", $(this)).each(function ()
+                if( temp_action.attr("id") == current_action_length && (temp_action.text().trim().toLowerCase() === "then" || temp_action.text().trim().toLowerCase() === "else"))
                 {
-                    if(counter == 0 && $(this).attr("name") == "action")
-                    {
-                        code = code+starting_space;
-                        is_action = 1;
-                    }
-                    code = code + $(this).attr("value");
-                    //alert($(this).attr("value"));
-                    //code_segment = code_segment + $(this).attr("value")+" ";
-                    counter++;
-                });
-                if(is_action == 1)
-                {
-                    code = code +";"+getLineBreakSequence();
+                    li_list[li_list_counter++] = temp_action;
                 }
-                
-            });
-            if(counter == 0)
-            {
-
-                if($(this).text().trim() == "Click here to edit block")
+                else if( parseInt(temp_action.attr("id")) > current_action_length )
                 {
-                    is_valid_code = false;
-                    error_message = "There is undefined item.";
-                    //focusing current item from left panel for which there is error while generating code
-                    $(this).attr("class",$(this).attr("class")+" ui-selected"); 
-                    //alert("text is : "+$(this).text().trim());
-                    return;
-                }
-                else if($(this).text().trim() == "Click here to edit action")
-                {
-                    is_valid_code = false;
-                    error_message = "Action is not defined.";
-                    //focusing current item from left panel for which there is error while generating code
-                    $(this).attr("class",$(this).attr("class")+" ui-selected");
-                    //alert("text is : "+$(this).text().trim());
-                    return;
-                }
-                else if($(this).text().trim() == "Click here to edit condition")
-                {
-                    is_valid_code = false;
-                    error_message = "Condition is not defined.";
-                    //focusing current item from left panel for which there is error while generating code
-                    $(this).attr("class",$(this).attr("class")+" ui-selected");
-                    //alert("text is : "+$(this).text().trim());
-                    return;
-                }
-
-
-                if($(this).text().trim().toLowerCase() == "if" )
-                {
-                    temp_text = $(this).text();
-                    temp_text = temp_text.replace($(this).text().trim(), "");
-                    while(totalSpacesForBracket[totalSpacesForBracketCounter] >= temp_text.length)
-                    {
-                        code = code +spacesForBracket[spacesForBracketCounter--]+"}"+getLineBreakSequence();
-                        totalSpacesForBracketCounter--;
-                    }
-
-
-                    if($(this).next("li").text().trim() != "(")
-                    {
-                        code = code + $(this).text().toLowerCase()+" ( ";
-                    }
-                    else{
-                        code = code + $(this).text().toLowerCase()+" ";
-                    }
-                    
-                }
-                else if($(this).text().trim() == "(" )
-                {
-                    code = code + $(this).text().trim();
-                }
-                else if( $(this).text().trim() == ")")
-                {
-                    code = code +$(this).text().trim();
-                }
-                else if( $(this).text().trim() == "}")
-                {
-                    code = code + getLineBreakSequence()+ $(this).text();
-                }
-                else if($(this).text().trim() == "THEN" )
-                {
-                    //if(code.lastIndexOf(")") != code.length-1)
-                    //{
-                        code = code + " ) "+getLineBreakSequence();
-                    //}
-                    //else{
-                    //    code = code + getLineBreakSequence();
-                    //}
-                    if($(this).next("li").text().trim() != "{")
-                    {
-                        temp_text = $(this).text();
-                        temp_text = temp_text.replace($(this).text().trim(), "");
-                        code = code + temp_text+"{ "+getLineBreakSequence();
-
-                        totalSpacesForBracket[++totalSpacesForBracketCounter] = temp_text.length;
-                        spacesForBracket[++spacesForBracketCounter] = temp_text;
-                    }
-                    //skipping then inside code
-                    //code = code + getLineBreakSequence();
-                }
-                else if($(this).text().trim().toLowerCase() == "else" )
-                {
-                    temp_text = $(this).text();
-                    temp_text = temp_text.replace($(this).text().trim(), "");
-                    while(totalSpacesForBracket[totalSpacesForBracketCounter] >= temp_text.length)
-                    {
-                        code = code +spacesForBracket[spacesForBracketCounter--]+"}"+getLineBreakSequence();
-                        totalSpacesForBracketCounter--;
-                    }
-
-                    //code = code + getLineBreakSequence()+$(this).text().toLowerCase()+getLineBreakSequence();
-                    code = code +$(this).text().toLowerCase()+getLineBreakSequence();
-                    if($(this).next("li").text().trim() != "{")
-                    {
-                        temp_text = $(this).text();
-                        temp_text = temp_text.replace($(this).text().trim(), "");
-                        code = code + temp_text+"{ "+getLineBreakSequence();
-
-                        totalSpacesForBracket[++totalSpacesForBracketCounter] = temp_text.length;
-                        spacesForBracket[++spacesForBracketCounter] = temp_text;
-                    }
+                    li_list[li_list_counter++] = temp_action;
                 }
                 else
                 {
-                    code = code + $(this).text()+getLineBreakSequence();
+                    break;
                 }
-            }
-
-        });
-    });
-    //alert(code);
-    while(spacesForBracketCounter > -1)
-    {
-        code = code +spacesForBracket[spacesForBracketCounter--]+"}"+getLineBreakSequence();
-        //alert(code);
-    }
-    //alert("code is : "+code);
-    if(is_valid_code){
-        $.blockUI({
-            message: '',
-            theme: false,
-            baseZ: 500
-        });
-        $.ajax({
-            type: "POST",
-            url: "../../CodeProcess/save_project_code",
-            data: {
-                code: code
-            },
-            success: function (ajaxReturnedData) {
-                if(ajaxReturnedData == "true")
+                if(temp_action.next('li').length <= 0)
                 {
-                    $('#generate_code_div_modal').dialog('open');
-                    document.getElementById("generated_code_text_area").value = code;
+                    break;
                 }
-                else
-                {
-                    alert("Server processing error. Please try again.");
-                }
-                $.unblockUI();
+                temp_action = temp_action.next("li");
             }
-        });        
+            return generate_if_blocks(li_list)[0];
+        }
     }
     else
     {
-        alert("Invalid expression to generate code."+error_message);
-    }
+        anchor_id_to_name = {};
+        anchor_id_to_value = {};
+        $("a", current_action).each(function ()
+        {
+            var anchor_id = 0;
+            if( $(this).attr("id") )
+            {
+                anchor_id = $(this).attr("id");
+            }
+            $("input", $(this)).each(function ()
+            {
+                if( $(this).attr("name") && $(this).attr("value") )
+                {
+                    action_type = $(this).attr("value");
+                    anchor_id_to_name[anchor_id] = $(this).attr("name");
+                    anchor_id_to_value[anchor_id] = $(this).attr("value");
+                }
 
-}*/
+            });                    
+        });
+        var action_block = new Block();
+        if( action_type === 'action')
+        {
+            $("div", current_action).each(function ()
+            {
+                $("input", $(this)).each(function ()
+                {
+                    var value = anchor_id_to_value[$(this).attr("id")];
+                    var name = anchor_id_to_name[$(this).attr("id")];
+                    action_block.s=(name);
+                    var result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
+                    action_block.l=(result_array[1]);                        
+                });
+            });
+        }
+        else if( action_type === 'variable')
+        {
+            $("div", current_action).each(function ()
+            {
+                $("input", $(this)).each(function ()
+                {
+                    if(variable_div_counter == 0)
+                    {
+                        variable_left_part_text = $(this).attr("value");
+                    }
+                    else if(variable_div_counter == 1)
+                    {
+                        variable_assignment_operator = $(this).attr("value").trim();
+                    }
+                    else if(variable_div_counter == 2)
+                    {
+                        variable_right_part_text = $(this).attr("value");
+                    }
+                    variable_div_counter++;
+                });
+            });
+            variable_text_array[0] = variable_left_part_text;
+            variable_text_array[1] = variable_right_part_text;
+            action_block.l=(variable_text_array);
+            action_block.s=(variable_assignment_operator);
+        }
+        return action_block;
+    }    
+}
 
 function getLineBreakSequence()
 {
@@ -2240,19 +1728,7 @@ function delete_bracket()
             {
                 $(this).remove(); 
             }
-        });
-        $("a", $("#code_stmt")).each(function () 
-        {
-            if ($(this).attr("id") == start_bracket_id) 
-            {
-                $(this).remove();            
-            }
-            else if ($(this).attr("id") == end_bracket_id) 
-            {
-                $(this).remove(); 
-            }
-
-        });
+        });        
         $("a", $("#selectable .ui-selected")).each(function ()
         {
             if ($(this).attr("id") == start_bracket_id) 
@@ -2279,6 +1755,9 @@ function delete_bracket()
             });
 
         });
+        //updating code panel
+        generate_selected_item_code(); 
+        
         $('#label_alert_message').text("Your selected bracket is removed.");
         $('#div_alert_message').dialog('open');
         //alert("Your selected bracket is removed.");

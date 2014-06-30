@@ -1,3 +1,6 @@
-if (((Age[0] > 0) && (AdvancedAge(USA, White, 1960) > 0)) || (Height(5.1) > 0.0)) {
+NUMBER i1 = 51;
+BOOLEAN b1 = TRUE;
+if (Age[0] > (0 + 5)) {
+    i1 = 57;
     run(Mon);
 }

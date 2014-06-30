@@ -89,7 +89,6 @@ function process_operator(selected_operator, name,value,language,code, is_arithm
     }
     //retrieving selected anchor of the changing_stmt div i.e. below of condition in natural language div
     var $changing_stmt_anchor_list = "";
-    var $code_stmt_anchor_list = "";
     var $left_panel_anchor_list = "";
     var $left_panel_code_list = "";
     var id1 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -97,7 +96,6 @@ function process_operator(selected_operator, name,value,language,code, is_arithm
     var selected_id = "";
     var changing_stmt_selected_id = "";
     var changing_stmt_title = "";
-    var code_stmt_title = "";
     var left_panel_anchor_title = "";
     var left_panel_code_title = "";
     var title_attribute = "";
@@ -134,34 +132,6 @@ function process_operator(selected_operator, name,value,language,code, is_arithm
         }
     });
     $("#changing_stmt").html($changing_stmt_anchor_list);
-    //updating code_stmt i.e. code panel
-    title_attribute = "";
-    $("a", $("#code_stmt")).each(function () 
-    {
-        selected_id = $(this).attr("id");
-        if(selected_id == changing_stmt_selected_id)
-        {
-            if($(this).attr("title") !== undefined)
-            {
-                code_stmt_title = $(this).attr("title");
-            }
-            
-            if(code_stmt_title.indexOf("end") > 0)
-            {
-                title_attribute = "title="+code_stmt_title;
-                $(this).removeAttr("title");                
-            }
-            $code_stmt_anchor_list = $code_stmt_anchor_list + $(this).prop('outerHTML');        
-            $code_stmt_anchor_list = $code_stmt_anchor_list + "<a id="+id1+"> "+selected_operator_code+" </a>";
-            $code_stmt_anchor_list = $code_stmt_anchor_list + "<a "+title_attribute+" id="+id2+"> "+code+" </a>";            
-        }
-        else
-        {
-            $code_stmt_anchor_list = $code_stmt_anchor_list + $(this).prop('outerHTML'); 
-        }
-        
-    });
-    $("#code_stmt").html($code_stmt_anchor_list);
     
     //updating left panel anchors
     title_attribute = "";
@@ -218,5 +188,7 @@ function process_operator(selected_operator, name,value,language,code, is_arithm
     });
     $left_panel_anchor_list = $left_panel_anchor_list +"<div id='code'>"+$left_panel_code_list+"</div>";
     $("#selectable .ui-selected").html($left_panel_anchor_list);    
+    //updating code panel
+    generate_selected_item_code();
 }
 

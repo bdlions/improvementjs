@@ -1,3 +1,6 @@
+var left_panel_selected_item_type = "";
+var service_url = "";
+
 var project_variable_list = new Array();
 var server_base_url = "";
 var indentation_space_length = 5;

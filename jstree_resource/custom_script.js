@@ -313,27 +313,20 @@ $(function ()
                         });
                     }
                 });
-                //updating code panel
-                $("a", $("#code_stmt")).each(function ()
+                //updating code on left panel
+                $("div",  $('#selectable .ui-selected')).each(function ()
                 {
-                    if ($(this).attr("id") == selected_id)
-                    {
-                        $(this).text(id);                               
-                        //updating code on left panel
-                        $("div",  $('#selectable .ui-selected')).each(function ()
-                        {
-                            $("input", $(this)).each(function () {
-                                if($(this).attr("id") == selected_id){
-                                    $(this).removeAttr("value");
-                                    $(this).attr("value",id);
-                                }
-                            });
-                        });
-                        //updating parameters table
-                        document.getElementById("parameters_table").innerHTML = "";
-
-                    }
-                }); 
+                    $("input", $(this)).each(function () {
+                        if($(this).attr("id") == selected_id){
+                            $(this).removeAttr("value");
+                            $(this).attr("value",id);
+                        }
+                    });
+                });
+                //updating parameters table
+                document.getElementById("parameters_table").innerHTML = "";
+                //updating code panel
+                generate_selected_item_code();  
                 //updating variable default value
                 if(is_action_selected)
                 {
@@ -406,56 +399,51 @@ $(function ()
                         });
                     }
                 });
-                //updating code panel
-                $("a", $("#code_stmt")).each(function ()
+                //updating code on left panel
+                $("div",  $('#selectable .ui-selected')).each(function ()
                 {
-                    if ($(this).attr("id") == selected_id)
-                    {
-                        $(this).text(selectedDisplayCode);                               
-                        //updating code on left panel
-                        $("div",  $('#selectable .ui-selected')).each(function ()
-                        {
-                            $("input", $(this)).each(function () {
-                                if($(this).attr("id") == selected_id){
-                                    $(this).removeAttr("value");
-                                    $(this).attr("value",selectedDisplayCode);
-                                }
-                            });
-                        });
-                        //updating parameters table
-                        document.getElementById("parameters_table").innerHTML = tableContent;
-
-                    }
+                    $("input", $(this)).each(function () {
+                        if($(this).attr("id") === selected_id){
+                            $(this).removeAttr("value");
+                            $(this).attr("value",selectedDisplayCode);
+                        }
+                    });
                 });
+                //updating parameters table
+                document.getElementById("parameters_table").innerHTML = tableContent;
+                //updating code panel
+                generate_selected_item_code();  
             }            
             return;
         }
 
-        if(selectedParent == "variable" && is_action_selected)
+        if(selectedParent === "variable" && is_action_selected)
         {
             var var_name = "";
             var var_value = "";
-            var var_type = "NUMBER";
+            var var_type = "NUMBER";           
+            
             var anchor_counter = 1;
-            $("a", $("#code_stmt")).each(function () 
-            {
-                if(anchor_counter == 3)
-                {
-                    var_value = $(this).text().trim();
-                }
-                anchor_counter++;        
+            $("div", $("#selectable .ui-selected")).each(function (){
+                $("input", $(this)).each(function (){
+                    if(anchor_counter === 3){
+                        var_value = $(this).attr("value");
+                    }
+                    anchor_counter++;  
+                });
             });
+            
             if(var_value == "TRUE" || var_value == "FALSE")
             {
                 var_type = "BOOLEAN";
             }
             var table_content = "<table width='100%'  border='1' style='border-collapse:collapse;'>";
             table_content = table_content+"<tr><td width='50%' align='center'>Variable Value</td><td width='50%' align='center'>";
-            if(var_type == "NUMBER")
+            if(var_type === "NUMBER")
             {                        
                 table_content = table_content+"<input type='text' id='textinput_variable' name = 'textinput_variable' value = '"+var_value+"' onchange='updateNumberVariableValue(\""+var_name+"\")'></input></td></tr>";                    
             }
-            else if(var_type == "BOOLEAN")
+            else if(var_type === "BOOLEAN")
             {
                 table_content = table_content+"<select name='combo_variable' id='combo_variable' onchange='comboVariableChange(\""+var_name+"\")'>";
                 if(var_value == "TRUE")
@@ -482,10 +470,12 @@ $(function ()
             }
         });
         //code of current selected statement
-        $("a", $("#code_stmt")).each(function () {
-            if ($(this).attr("id") == selected_id) {
-                selected_code = $(this).text();
-            }
+        $("div", $("#selectable .ui-selected")).each(function (){
+            $("input", $(this)).each(function (){
+                if($(this).attr("id") === selected_id){
+                    selected_code = $(this).attr("value");
+                }
+            });
         });
         //generating parameters table
         //resetting parameters table content
@@ -1887,7 +1877,7 @@ function button_add_bracket_in_condition_ok_pressed()
         return;
     }
     // this type of syntax is not allowed "a+(b>5)"
-    if((previous_item_value == "arithmeticoperator" || next_item_value == "arithmeticoperator") && has_inside_comparison == true)
+    if((previous_item_value === "arithmeticoperator" || next_item_value === "arithmeticoperator") && has_inside_comparison == true)
     {
         $('#label_alert_message').text("You are not allowed to add bracket here.");
         $('#div_alert_message').dialog('open');
@@ -1903,73 +1893,21 @@ function button_add_bracket_in_condition_ok_pressed()
         return;
     }
     
-    var $changing_stmt_anchor_list = "";
-    var $code_stmt_anchor_list = "";
     var $left_panel_anchor_list = "";
     var $left_panel_code_list = "";
     
     var id1 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
     var id2 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    var selected_id = "";
-    var changing_stmt_selected_id = "";
-    var left_panel_anchor_title = "";
-    var left_panel_code_title = "";
-    var title_attribute = "";
-    //adding two anchors in natural language panel. title attribute is used to identify start anchor and end anchor of bracket
-    $("a", $("#changing_stmt")).each(function () 
-    {
-        
-        if ($(this).attr("id") == first_anchor_id) 
-        {
-            $changing_stmt_anchor_list = $changing_stmt_anchor_list + "<a style='cursor:pointer;' id="+id1+" title='"+id1+"-"+id2+"-startbracket'  onclick = 'manageExpression(this)' > <input style='' value='bracket' name='(' type='hidden' > ( </a>";
-            $changing_stmt_anchor_list = $changing_stmt_anchor_list + $(this).prop('outerHTML');            
-        }
-        else if ($(this).attr("id") == second_anchor_id) 
-        {
-            $changing_stmt_anchor_list = $changing_stmt_anchor_list + $(this).prop('outerHTML'); 
-            $changing_stmt_anchor_list = $changing_stmt_anchor_list + "<a style='cursor:pointer;' id="+id2+" title='"+id1+"-"+id2+"-endbracket'  onclick = 'manageExpression(this)' > <input style='' value='bracket' name=')' type='hidden'> ) </a>";                       
-        }
-        else
-        {
-            $changing_stmt_anchor_list = $changing_stmt_anchor_list + $(this).prop('outerHTML');
-        
-        }
-    });
-    //we have generated html block after adding brackets. So, we are assigning the block to natural language panel
-    $("#changing_stmt").html($changing_stmt_anchor_list);
-    
-    //updating code_stmt i.e. code panel
-    //adding two anchors in code panel. title attribute is used to identify start anchor and end anchor of bracket
-    $("a", $("#code_stmt")).each(function () 
-    {
-        if($(this).attr("id") == first_anchor_id)
-        {
-            $code_stmt_anchor_list = $code_stmt_anchor_list + "<a id="+id1+" title='"+id1+"-"+id2+"-startbracket'> ( </a>";
-            $code_stmt_anchor_list = $code_stmt_anchor_list + $(this).prop('outerHTML');
-        }
-        else if($(this).attr("id") == second_anchor_id)
-        {
-            $code_stmt_anchor_list = $code_stmt_anchor_list + $(this).prop('outerHTML');
-            $code_stmt_anchor_list = $code_stmt_anchor_list + "<a id="+id2+" title='"+id1+"-"+id2+"-endbracket'> ) </a>";            
-        }
-        else
-        {
-            $code_stmt_anchor_list = $code_stmt_anchor_list + $(this).prop('outerHTML'); 
-        }
-        
-    });
-    $("#code_stmt").html($code_stmt_anchor_list);
     
     //updating left panel anchors
     //adding two anchors in left panel. title attribute is used to identify start anchor and end anchor of bracket
-    title_attribute = "";
     $("a", $("#selectable .ui-selected")).each(function ()
     {
-        if($(this).attr("id") == first_anchor_id){
+        if($(this).attr("id") === first_anchor_id){
             $left_panel_anchor_list = $left_panel_anchor_list + "<a style='cursor:pointer;' id="+id1+" title='"+id1+"-"+id2+"-startbracket'> <input style='' value='bracket' name='(' type='hidden'> ( </a>";            
             $left_panel_anchor_list = $left_panel_anchor_list + $(this).prop('outerHTML');
         }
-        else if($(this).attr("id") == second_anchor_id){
+        else if($(this).attr("id") === second_anchor_id){
             $left_panel_anchor_list = $left_panel_anchor_list + $(this).prop('outerHTML');        
             $left_panel_anchor_list = $left_panel_anchor_list + "<a style='cursor:pointer;' id="+id2+" title='"+id1+"-"+id2+"-endbracket'> <input style='' value='bracket' name=')' type='hidden'> ) </a>";            
         }
@@ -1979,16 +1917,15 @@ function button_add_bracket_in_condition_ok_pressed()
         }
     });
     //adding two anchors in code of left panel. title attribute is used to identify start anchor and end anchor of bracket
-    title_attribute = "";
     $("div", $("#selectable .ui-selected")).each(function ()
     {
         $("input", $(this)).each(function ()
         {
-            if($(this).attr("id") == first_anchor_id){
+            if($(this).attr("id") === first_anchor_id){
                 $left_panel_code_list = $left_panel_code_list + "<input style='' id="+id1+" title='"+id1+"-"+id2+"-startbracket' type='hidden' name='bracket' value='('></input>";                
                 $left_panel_code_list = $left_panel_code_list + $(this).prop('outerHTML');
             }
-            else if($(this).attr("id") == second_anchor_id){
+            else if($(this).attr("id") === second_anchor_id){
                 $left_panel_code_list = $left_panel_code_list + $(this).prop('outerHTML');
                 $left_panel_code_list = $left_panel_code_list + "<input style='' id="+id2+" title='"+id1+"-"+id2+"-endbracket' type='hidden' name='bracket' value=')'></input>";
             }
@@ -2027,39 +1964,25 @@ function left_panel_condition_or_action_selected()
         var selection_for_label = "";
         $("a", $(this)).each(function ()
         {
-            if($(this).attr("id") == "ssaid")
+            if($(this).attr("id") === "ssaid")
             {
                 //updating label in code panel and above code panel
-                if($(this).attr("title") == "start_space_anchor_condition")
+                if($(this).attr("title") === "start_space_anchor_condition")
                 {
                     selection_for_label = "condition";
                     $('#condition_action_label').html("Condition in natural Language");
                 }
-                else if($(this).attr("title") == "start_space_anchor_action")
+                else if($(this).attr("title") === "start_space_anchor_action")
                 {
                     selection_for_label = "action";
                     $('#condition_action_label').html("Action in natural Language");
                 } 
-                else if($(this).attr("title") == "start_space_anchor_action_variable")
+                else if($(this).attr("title") === "start_space_anchor_action_variable")
                 {
                     selection_for_label = "action_variable";
                     $('#condition_action_label').html("Action in natural Language");
                 }
-            }
-            /*$("input", $(this)).each(function ()
-            {
-                //updating label in code panel and above code panel
-                selection_for_label = $(this).attr("value");
-                if(selection_for_label == "action")
-                {
-                    $('#condition_action_label').html("Action in natural Language");
-                }
-                else
-                {
-                    selection_for_label = "condition";
-                    $('#condition_action_label').html("Condition in natural Language");
-                }
-            });*/
+            }            
         });
 
         $("li", $("#demo1")).each(function ()
@@ -2073,17 +1996,17 @@ function left_panel_condition_or_action_selected()
             var selected_id = $(this).attr("id");
             var selected_name = $(this).attr("name");
             
-            if(selection_for_label == "condition"){
-                if(selected_id == "action")
+            if(selection_for_label === "condition"){
+                if(selected_id === "action")
                 {
                     $(this).hide();
                 }
             }
-            else if(selection_for_label == "action"){
-                if(selected_id != "action")
+            else if(selection_for_label === "action"){
+                if(selected_id !== "action")
                 {
                     if(selected_name){
-                        if(selected_name != "action"){
+                        if(selected_name !== "action"){
                             $(this).hide();
                         }
                     }
@@ -2092,11 +2015,11 @@ function left_panel_condition_or_action_selected()
                     }
                 }
             } 
-            else if(selection_for_label == "action_variable"){
-                if(selected_id != "variable")
+            else if(selection_for_label === "action_variable"){
+                if(selected_id !== "variable")
                 {
                     if(selected_name){
-                        if(selected_name != "variable"){
+                        if(selected_name !== "variable"){
                             $(this).hide();
                         }
                     }
@@ -2123,7 +2046,7 @@ function left_panel_condition_or_action_selected()
             $(this).attr('onclick', 'manageExpression(this)');
             //in left panel we have an anchor which contains initial spaces, 
             //we are removing that anchor for natural language panel
-            if($(this).attr("id") == "ssaid")
+            if($(this).attr("id") === "ssaid")
             {
                 $(this).remove();
             }
@@ -2132,52 +2055,10 @@ function left_panel_condition_or_action_selected()
         {
             $(this).remove();
         });
+        
         //updating code panel
-        $('#code_stmt').html($(this).html());
-        var counter = 0;
-        var id_array = new Array();
-        var code_value_array = new Array();
-        $("div", $("#code_stmt")).each(function ()
-        {
-            $("input", $(this)).each(function ()
-            {
-                id_array[counter] = $(this).attr("id");
-                code_value_array[counter] = $(this).attr("value");
-                counter++;
-            });
-        });
-        $("div", $("#code_stmt")).each(function ()
-        {
-            $(this).remove();
-        });
-        counter = 0;
-        $("a", $("#code_stmt")).each(function () {
-            //in left panel we have an anchor which contains initial spaces, 
-            //we are removing that anchor for code panel
-            if($(this).attr("id") == "ssaid")
-            {
-                $(this).remove();
-            }
-            else{
-                $(this).removeAttr("onclick");
-                $(this).removeAttr("style");
-                $(this).removeAttr("class");
-                var $custom_anchor = $(this);
-                $("input", $(this)).each(function () {
-                    for(counter = 0 ; counter < id_array.length ; counter ++){
-                        if(id_array[counter] == $custom_anchor.attr("id")){
-                            $custom_anchor.text("");
-                            var html_text = $custom_anchor.html();
-                            //var text_content = $custom_anchor.text();
-                            //html_text = html_text.trim().replace(text_content.trim(), "");
-                            $custom_anchor.html(html_text + code_value_array[counter]);
-                        }
-                    }
-                });
-            }
-
-        });
-    });
+        generate_selected_item_code();
+    }); 
 }
 
 /*
@@ -2265,26 +2146,20 @@ function updateConditionBooleanVariableMiddleOrRightPart()
             });
         }
     });
-    //updating code panel
-    $("a", $("#code_stmt")).each(function ()
+    //updating code on left panel
+    $("div",  $('#selectable .ui-selected')).each(function ()
     {
-        if ($(this).attr("id") == selected_id)
-        {
-            $(this).text(current_anchor_updated_code);                               
-            //updating code on left panel
-            $("div",  $('#selectable .ui-selected')).each(function ()
-            {
-                $("input", $(this)).each(function () {
-                    if($(this).attr("id") == selected_id){
-                        $(this).removeAttr("value");
-                        $(this).attr("value",current_anchor_updated_code);
-                    }
-                });
-            });
-            //updating parameters table
-            document.getElementById("parameters_table").innerHTML = "";
-        }
+        $("input", $(this)).each(function () {
+            if($(this).attr("id") == selected_id){
+                $(this).removeAttr("value");
+                $(this).attr("value",current_anchor_updated_code);
+            }
+        });
     });
+    //updating parameters table
+    document.getElementById("parameters_table").innerHTML = "";
+    //updating code panel
+    generate_selected_item_code();  
 }
 
 function changeLogicalOperator(selectedItem)
@@ -2326,35 +2201,29 @@ function changeLogicalOperator(selectedItem)
             });
         }
     });
-    //updating code panel
-    $("a", $("#code_stmt")).each(function ()
+    //updating code on left panel
+    $("div",  $('#selectable .ui-selected')).each(function ()
     {
-        if ($(this).attr("id") == selected_id)
-        {
-            $(this).text(current_anchor_updated_code);                               
-            //updating code on left panel
-            $("div",  $('#selectable .ui-selected')).each(function ()
-            {
-                $("input", $(this)).each(function () {
-                    if($(this).attr("id") == selected_id){
-                        $(this).removeAttr("value");
-                        $(this).removeAttr("title");
-                        $(this).attr("value",current_anchor_updated_code);
-                        if(selectedItem == "OR")
-                        {
-                            $(this).attr("title", 'logical_connector_or');
-                        }
-                        else if(selectedItem == "AND")
-                        {
-                            $(this).attr("title", 'logical_connector_and');
-                        }
-                    }
-                });
-            });
-            //updating parameters table
-            document.getElementById("parameters_table").innerHTML = "";
-        }
+        $("input", $(this)).each(function () {
+            if($(this).attr("id") == selected_id){
+                $(this).removeAttr("value");
+                $(this).removeAttr("title");
+                $(this).attr("value",current_anchor_updated_code);
+                if(selectedItem == "OR")
+                {
+                    $(this).attr("title", 'logical_connector_or');
+                }
+                else if(selectedItem == "AND")
+                {
+                    $(this).attr("title", 'logical_connector_and');
+                }
+            }
+        });
     });
+    //updating parameters table
+    document.getElementById("parameters_table").innerHTML = "";
+    //updating code panel
+    generate_selected_item_code();  
 }
 
 function changeArithmeticOperator(selectedItem)
@@ -2404,24 +2273,19 @@ function changeArithmeticOperator(selectedItem)
             });
         }
     });
-    //updating code panel
-    $("a", $("#code_stmt")).each(function ()
+    //updating code on left panel
+    $("div",  $('#selectable .ui-selected')).each(function ()
     {
-        if ($(this).attr("id") == selected_id)
-        {
-            $(this).text(current_anchor_updated_code);                               
-            //updating code on left panel
-            $("div",  $('#selectable .ui-selected')).each(function ()
-            {
-                $("input", $(this)).each(function () {
-                    if($(this).attr("id") == selected_id){
-                        $(this).removeAttr("value");
-                        $(this).attr("value",current_anchor_updated_code);
-                    }
-                });
-            });
-            //updating parameters table
-            document.getElementById("parameters_table").innerHTML = "";
-        }
+        $("input", $(this)).each(function () {
+            if($(this).attr("id") === selected_id){
+                $(this).removeAttr("value");
+                $(this).attr("value",current_anchor_updated_code);
+            }
+        });
     });
+    //updating parameters table
+    document.getElementById("parameters_table").innerHTML = "";
+    
+    //updating code panel
+    generate_selected_item_code();  
 }

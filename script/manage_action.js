@@ -23,7 +23,7 @@ function update_variable_value_in_action(variable_name, booleanVariableValue)
     //updating expression on natural language panel
     $("a", $("#changing_stmt")).each(function () 
     {
-        if(anchor_counter == 3)
+        if(anchor_counter === 3)
         {
             $(this).text(booleanVariableValue);
         }
@@ -33,34 +33,27 @@ function update_variable_value_in_action(variable_name, booleanVariableValue)
     //updating expression on left panel
     $("a", $("#selectable .ui-selected")).each(function ()
     {
-        if(anchor_counter == 4)
+        if(anchor_counter === 4)
         {
             $(this).text(booleanVariableValue);
         }
         anchor_counter++;
     });
-    //updating code panel
-    anchor_counter = 1;
-    $("a", $("#code_stmt")).each(function () 
-    {
-        if(anchor_counter == 3)
-        {
-            $(this).text(booleanVariableValue);
-        }
-        anchor_counter++;        
-    });
-    //updating code on left panel
+    
+    //updating code structure in left panel
     $("div",  $('#selectable .ui-selected')).each(function ()
     {
         var input_counter = 1;
         $("input", $(this)).each(function () {
-            if(input_counter == 3)
+            if(input_counter === 3)
             {
                 $(this).attr("value",booleanVariableValue);
             }
             input_counter++;
         });
-    });    
+    }); 
+    //updating code panel
+    generate_selected_item_code(); 
 }
 
 function action_variable_modal_ok_pressed()

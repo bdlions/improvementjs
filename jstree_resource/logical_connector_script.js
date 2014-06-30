@@ -343,30 +343,7 @@ function button_logical_connector_removing_condition_delete_pressed()
                 anchor_delete_flag = "false";  
             }
         });
-        $("a", $("#code_stmt")).each(function () 
-        {
-            //removing selected logical connector id
-            if ($(this).attr("id") == selected_logical_connector_anchor_id) 
-            {
-                $(this).remove(); 
-            }
-            //setting the flag to start deleting condition
-            if ($(this).attr("id") == start_anchor_id) 
-            {
-                anchor_delete_flag = "true";            
-            }
-            //removing anchor of selected condition
-            if(anchor_delete_flag == "true")
-            {
-                $(this).remove();
-            }
-            //since deletion is completed, so we need to reset the flag
-            if ($(this).attr("id") == end_anchor_id) 
-            {
-                anchor_delete_flag = "false";  
-            }
-
-        });
+        
         $("a", $("#selectable .ui-selected")).each(function ()
         {
             //removing selected logical connector id
@@ -417,6 +394,9 @@ function button_logical_connector_removing_condition_delete_pressed()
             });
 
         });
+        
+        //updating code panel
+        generate_selected_item_code();  
     }
     //closing logical connector removing condition modal window
     $('#logical_connector_removing_condition_div').dialog('close');
