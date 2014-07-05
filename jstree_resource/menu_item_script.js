@@ -238,7 +238,7 @@ function generate_selected_item_code()
     {
         $("div input", $(this)).each(function ()
         {
-            if(name === "")
+            if(name !== "condition" && name !== "action")
             {
                 name = $(this).attr("name");
             }
@@ -255,8 +255,14 @@ function generate_selected_item_code()
         }
         
     });
-    if(name !== "")
+    if(name === "condition" || name === "action")
     {
+        $("#code_stmt").html(""); 
+        $.blockUI({
+            message: '',
+            theme: false,
+            baseZ: 500
+        });
         $.get('../../json/blockMap.json', function(mapping){
             $.ajax({
                 type: "POST",
@@ -264,10 +270,16 @@ function generate_selected_item_code()
                 dataType: "json",
                 data: {project_xml : block, mapping:mapping},
                 complete:function(data){
+                    $.unblockUI();
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
                     generated_code = beautify(generated_code.trim());
+                    if(name === "condition")
+                    {
+                        generated_code = generated_code.substring(1, generated_code.length-1);
+                    }
                     //alert(generated_code);
                     $("#code_stmt").html(generated_code); 
+                    
                 }
             });
         });
@@ -293,6 +305,7 @@ function generate_code()
         });
     });
     parentBlock = generate_if_blocks(li_list);
+    console.log(parentBlock);
     
     var parentScript = new Script();
     parentScript.block=(parentBlock);
@@ -883,6 +896,10 @@ function check_high_priority_operator(first_operator, second_operator)
     
 }
 
+/*
+ * This method will return all action blocks under then or else clause
+ * 
+ */
 function generate_action_block(action)
 {
     var then_length = parseInt(action.attr("id"));
@@ -902,7 +919,30 @@ function generate_action_block(action)
         }
         if( current_action_length == parseInt(then_length) + parseInt(indentation_space_length) )
         {
-            action_block_array[action_counter++] = process_action_statement(current_action);            
+            action_block_array[action_counter++] = process_action_statement(current_action);
+            if(current_action.text().trim().toLowerCase() === "if")
+            {
+                current_action = current_action.next("li");
+                while(true)
+                {
+                    if(current_action.next('li').length <= 0)
+                    {
+                        break;
+                    }
+                    if( current_action.attr("id") == current_action_length && (current_action.text().trim().toLowerCase() === "then" || current_action.text().trim().toLowerCase() === "else"))
+                    {
+                        current_action = current_action.next("li");
+                    }
+                    else if( parseInt(current_action.attr("id")) > current_action_length )
+                    {
+                        current_action = current_action.next("li");
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
         }        
         if(current_action.next('li').length <= 0)
         {
@@ -912,6 +952,11 @@ function generate_action_block(action)
     return action_block_array;
 }
 
+/*
+ * This method will generate a block for an action under then or else clause
+ * Action can be a nested if block or a statement
+ * 
+ */
 function process_action_statement(current_action)
 {
     var current_action_length = 0;    
