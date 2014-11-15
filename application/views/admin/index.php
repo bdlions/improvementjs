@@ -1,7 +1,12 @@
-<div class='mainInfo'>
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Projects</h1>
+    </div>
+    
+    <?php if( isset($message) && ($message != NULL) ):?>
+    <div class="alert alert-info alert-dismissible"><?php echo $message; ?></div>
+    <?php endif;?>
 
-    <h1>Users</h1>
-    <div id="infoMessage"><?php echo $message; ?></div>
     <table align="right" border="1" style="border-collapse:collapse" >
         <tr align="right" style="color:green">
             <td>
@@ -63,7 +68,12 @@
             echo $pagination; 
         }
     ?>
-    <?php echo anchor('admin/user_render_pagination/0',"All")?><br />
-    <p><a href="<?php echo site_url('admin/create_user'); ?>">Create a new user</a></p>
-
+    <ul class="list-group">
+        <li class="list-group-item">
+            <?php echo anchor('admin/user_render_pagination/0',"All")?>
+        </li>
+        <li class="list-group-item">
+            <?php echo anchor('admin/create_user',"Create a new user")?>
+        </li>
+    </ul>
 </div>

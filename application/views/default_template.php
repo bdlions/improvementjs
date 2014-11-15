@@ -6,8 +6,9 @@
             Language Processing
         </title>        
         <!-- Bootstrap -->
-        <link href="<?php echo base_url(); ?>resources/css/bootstrap.min.css" rel="stylesheet">
-        <link href="<?php echo base_url(); ?>resources/css/template.css" rel="stylesheet">
+        <link rel="stylesheet" type='text/css' href="<?php echo base_url(); ?>resources/css/bootstrap.min.css">
+        <link rel='stylesheet' type='text/css' href='<?php echo base_url(); ?>resources/css/styles.css'/>
+        <link rel="stylesheet" type='text/css' href="<?php echo base_url(); ?>resources/css/template.css">
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="<?php echo base_url();?>resources/js/jquery-1.11.1.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->

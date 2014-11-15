@@ -1,47 +1,90 @@
-<div class='box'>
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><?php echo $title; ?></h2>
+    </div>
+    <?php if (isset($message) && ($message != NULL)): ?>
+        <div class="alert alert-danger alert-dismissible"><?php echo $message; ?></div>
+    <?php endif; ?>
 
-    <h1><?php echo $title; ?></h1>
-    <div id="infoMessage"><?php echo $message; ?></div>
-    <?php echo form_open('admin'); ?>
-    <fieldset>
-        <legend>User information</legend>
-        <table border="0" width="100%" >
-            <tr>
-                <td><label>User Name:</label></td>
-                <td><?php echo form_input($user_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>First Name:</label></td>
-                <td><?php echo form_input($first_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>Last Name: </label></td>
-                <td><?php echo form_input($last_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>Email: </label></td>
-                <td><?php echo form_input($email); ?></td>
-            </tr>
-            <tr>
-                <td><label>Registration Date: </label></td>
-                <td><?php echo form_input($created_date); ?></td>
-            </tr>
-            <tr>
-                <td><label>IP Address: </label></td>
-                <td><?php echo form_input($ip_address); ?></td>
-            </tr>
-            <tr>
-                <td><label>Browser: </label></td>
-                <td><?php echo form_input($browser); ?></td>
-            </tr>
-            <tr>
-                <td><label>Country:</label></td>
-                <td><?php echo form_dropdown('countries', $countries, $selected_country, 'disabled="disabled"'); ?></td>
-            </tr>
-        </table>
-        <?php echo form_submit('submit', 'Ok'); ?>
-    </fieldset>
-    <?php echo form_close(); ?>
-
+    <div class="">
+        <?php echo form_open('admin', 'class="form-horizontal" role="form"'); ?>
+        <div class="row">
+            <div class="col-md-offset-1 col-md-8">
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        User Name
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_input($user_name + array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        First Name
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_input($first_name + array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        Last Name
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_input($last_name + array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        Email Address
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_input($email + array('class' => 'form-control', 'type' => 'email')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        Registration Date
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_input($created_date + array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        IP Address
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_input($ip_address + array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        Browser
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_input($browser + array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+                <div class="padding_horiz_thin"></div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">
+                        Country
+                    </label>
+                    <div class="col-md-8">
+                        <?php echo form_dropdown('countries', $countries, $selected_country, 'class="form-control" disabled="disabled"'); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right col-md-4">
+                        <?php echo form_submit('submit', 'Submit', 'class="form-control btn-success"'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="padding_horiz_thin"></div>
+        <div class="padding_horiz_thin"></div>
+        <div class="padding_horiz_thin"></div>
+        <?php echo form_close(); ?>
+    </div>
 </div>
-

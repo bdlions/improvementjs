@@ -1,97 +1,51 @@
-<style type="text/css">
-    #outer
-    {
-        height:100%;
-        width:100%;
-        display:table;
-        vertical-align:middle;
-    }
-    #container
-    {
-        text-align:center;
-        position:relative;
-        vertical-align:middle;
-        display:table-cell;
-        height:468px;
-        width:300px;
-    }
-
-    #inner
-    {
-        background: none repeat scroll 0 0 lightgray;
-        border: 0px solid #000000;
-        height: 210px;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-        width: 380px;
-        padding-top: 20px;
-    }
-
-    div .tabular
-    {
-        display: table; 
-        border:#505050 solid 0px;
-        padding: 5px;
-        width:100%;
-    }
-    div .tabular-row
-    {
-        display: table-row;
-        width:100%;
-    }
-    div .tabular-cell
-    {
-        display: table-cell; 
-        border:#737373 solid 0px;
-        padding: 5px;
-        vertical-align: top;
-        text-align: left;
-    }
-    label
-    {
-        float:right;
-    }
-
-</style>
-
-<div id="outer">
-    <div id="container">
-        <div style="color:red"><?php echo $message; ?></div>
-        <div id="inner">
-            <?php echo form_open("admin/login"); ?>
-            <div class ="tabular">
-                <div class="tabular-row">
-                    <div class="tabular-cell"><label for="identity">Email/Username:</label></div>
-                    <div class="tabular-cell"><?php echo form_input($identity); ?></div>
-                </div>
-                <div class="tabular-row">
-                    <div class="tabular-cell"><label for="password">Password:</label></div>
-                    <div class="tabular-cell"><?php echo form_input($password); ?></div>
-                </div>
-                <div class="tabular-row">
-                    <div class="tabular-cell"><label for="remember">Remember Me:</label></div>
-                    <div class="tabular-cell"><?php echo form_checkbox('remember', 'remember', $remember); ?></div>
-                </div>
-
-                <div class="tabular-row">
-                    <div class="tabular-cell"></div>
-                    <div class="tabular-cell"><?php echo form_submit('submit', 'Login'); ?></div>
-                </div>
-                <div class="tabular-row">
-                    <div class="tabular-cell"></div>
-                    <div class="tabular-cell"><?php echo anchor('auth/create_user', 'Create an account', 'title="Create an account"');?></div>
-                </div>
-                <div class="tabular-row">
-                    <div class="tabular-cell"></div>
-                    <div class="tabular-cell"><?php echo anchor('auth/forgot_password', 'Forgot password', 'title="Forgot password"');?></div>
-                </div>
-                <div class="tabular-row">
-                    <div class="tabular-cell"></div>
-                    <div class="tabular-cell"><?php echo anchor('auth/forgot_user_name', 'Forgot user name', 'title="Forgot user name"');?></div>
+<div class="row" style="padding-top: 40px;">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <strong class="">Admin Login</strong>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <?php echo form_open("admin/login", "class='form-horizontal' role='form'"); ?>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-md-4 control-label">Email/Username</label>
+                            <div class="col-md-8">
+                                <?php echo form_input($identity + array('class' => 'form-control', 'placeholder' => 'Email', 'type' => 'email')); ?>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-md-4 control-label">Password</label>
+                            <div class="col-md-8">
+                                <?php echo form_input($password + array('class' => 'form-control', 'placeholder' => 'Password', 'type' => 'password')); ?>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-4 col-md-4">
+                                <div class="checkbox">
+                                    <label style="float: left;"><?php echo form_checkbox('remember', 'remember', $remember); ?>Remember me</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button style="width: 100%" type="submit" class="btn btn-success btn-md" name="submit">Login</button>
+                            </div>
+                        </div>
+                        <?php echo form_close(); ?>
+                        <div class="form-group">
+                            <div class="col-md-offset-4 col-md-8">
+                                <?php echo anchor('auth/forgot_password', 'Forgot password?', 'title="Forgot password"');?> &nbsp; or &nbsp; <?php echo anchor('auth/forgot_user_name', 'Forgot user name?', 'title="Forgot user name"');?>
+                            </div>
+                        </div>                        
+                    </div>
                 </div>
             </div>
-            <?php echo form_close(); ?>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-offset-5 col-md-7">
+                        <a href="#" class=""><?php echo anchor('auth/create_user', 'Create an account', 'title="Create an account"');?></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
