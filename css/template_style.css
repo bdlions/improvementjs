@@ -156,9 +156,9 @@ background-image:url(images/BorderCenter.png);
 
 .Header {
 position:relative;
-background-image:url(images/Header.png);
-background-repeat:no-repeat;
-height:200px;
+background-image:url(images/header1.png);
+background-repeat :repeat-x;
+height:196px;
 color:#FFF;
 padding:0;
 }

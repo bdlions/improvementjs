@@ -122,7 +122,7 @@ class Admin extends CI_Controller {
         $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
         $this->template->set('css', $css);
         $this->template->set('menu_bar', 'design/menu_bar_admin');
-        $this->template->load("default_template", "admin/index", $this->data);
+        $this->template->load("admin/templates/admin_tmpl", "admin/index", $this->data);
     }
 
     /*
@@ -164,7 +164,7 @@ class Admin extends CI_Controller {
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
             $this->data['message'] = "User account successfully created. An email has been sent to you to activate the account.";
-            $this->template->load("default_template", 'admin/create_user_complete', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/create_user_complete', $this->data);
         } else {
             //set the flash data error message if there is one
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -211,7 +211,7 @@ class Admin extends CI_Controller {
             $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />";
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", 'admin/create_user', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/create_user', $this->data);
         }
     }*/
     
@@ -256,7 +256,7 @@ class Admin extends CI_Controller {
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
             $this->data['message'] = "User account successfully created. An email has been sent to you to activate your account.";
-            $this->template->load("default_template", 'admin/create_user_complete', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/create_user_complete', $this->data);
         } 
         else 
         { //display the create user form
@@ -310,7 +310,7 @@ class Admin extends CI_Controller {
             $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />";
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", 'admin/create_user', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/create_user', $this->data);
         }
     }
 
@@ -392,7 +392,7 @@ class Admin extends CI_Controller {
         $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/form_design.css' />";
         $this->template->set('css', $css);
         $this->template->set('menu_bar', 'design/menu_bar_admin');
-        $this->template->load("default_template", 'admin/show_user', $this->data);
+        $this->template->load("admin/templates/admin_tmpl", 'admin/show_user', $this->data);
     }
 
     /*
@@ -458,7 +458,7 @@ class Admin extends CI_Controller {
             ;
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", "admin/edit_user_successful", $this->data);
+            $this->template->load("admin/templates/admin_tmpl", "admin/edit_user_successful", $this->data);
         } else {
             //set the flash data error message if there is one
             $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -501,7 +501,7 @@ class Admin extends CI_Controller {
             $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />";
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", 'admin/edit_user', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/edit_user', $this->data);
         }
     }
 
@@ -527,7 +527,7 @@ class Admin extends CI_Controller {
             ;
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", "admin/delete_user_successful", $this->data);
+            $this->template->load("admin/templates/admin_tmpl", "admin/delete_user_successful", $this->data);
         } else if ($this->input->post('delete_user_no')) {
             //loading admin dashboard
             redirect("admin", 'refresh');
@@ -549,7 +549,7 @@ class Admin extends CI_Controller {
             ;
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", "admin/delete_user_confirmation", $this->data);
+            $this->template->load("admin/templates/admin_tmpl", "admin/delete_user_confirmation", $this->data);
         }
     }
 
@@ -582,7 +582,7 @@ class Admin extends CI_Controller {
             ;
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", "admin/active_successful", $this->data);
+            $this->template->load("admin/templates/admin_tmpl", "admin/active_successful", $this->data);
         } else {
             $this->session->set_flashdata('message', $this->ion_auth->errors());
             redirect('admin', 'refresh');
@@ -623,7 +623,7 @@ class Admin extends CI_Controller {
             ;
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", 'admin/deactivate_user', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/deactivate_user', $this->data);
         } else {
             // do we really want to deactivate?
             if ($this->input->post('confirm') == 'yes') {
@@ -643,7 +643,7 @@ class Admin extends CI_Controller {
                     ;
                     $this->template->set('css', $css);
                     $this->template->set('menu_bar', 'design/menu_bar_admin');
-                    $this->template->load("default_template", "admin/deactive_successful", $this->data);
+                    $this->template->load("admin/templates/admin_tmpl", "admin/deactive_successful", $this->data);
                 }
             } else {
                 redirect('admin', 'refresh');
@@ -704,7 +704,7 @@ class Admin extends CI_Controller {
             $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";                
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", "admin/show_searched_user", $this->data);
+            $this->template->load("admin/templates/admin_tmpl", "admin/show_searched_user", $this->data);
         } 
         else 
         { 
@@ -721,7 +721,7 @@ class Admin extends CI_Controller {
             $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />";
             $this->template->set('css', $css);
             $this->template->set('menu_bar', 'design/menu_bar_admin');
-            $this->template->load("default_template", 'admin/search_user', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/search_user', $this->data);
         }
     }
 
@@ -762,7 +762,7 @@ class Admin extends CI_Controller {
         $this->template->set('css', $css);
         $this->template->set('js', $js);
         $this->template->set('base', $base);
-        $this->template->load("default_template", "admin/admin_login", $this->data);
+        $this->template->load("admin/templates/admin_tmpl", "admin/admin_login", $this->data);
     }
 
     /*
@@ -830,7 +830,7 @@ class Admin extends CI_Controller {
                 'value' => $password,
             );
             $this->data['remember'] = $remember;
-            $this->template->load("default_template", 'admin/admin_login', $this->data);
+            $this->template->load("admin/templates/admin_tmpl", 'admin/admin_login', $this->data);
         }
     }
 

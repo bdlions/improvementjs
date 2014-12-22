@@ -53,7 +53,7 @@
         <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/stage.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/sprites.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>script/impjs/program/sprite.js"></script>
-            <?php
+        <?php
         //adding extra css if needs to load
         //a specific view
         if (!empty($css)) {
@@ -71,7 +71,7 @@
         <div class="container">
             <div class="row header">
                         <?php 
-            $this->load->view("templates/sections/header");
+            $this->load->view("admin/templates/sections/header");
             ?>
                     </div>
                     <div clas="row">
@@ -109,7 +109,7 @@
                 </div>
             </div>   
             <?php 
-            $this->load->view("templates/sections/footer");
+            $this->load->view("admin/templates/sections/footer");
             ?>
             
         </div>
