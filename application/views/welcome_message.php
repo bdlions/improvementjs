@@ -84,19 +84,19 @@ $(document).ready(function()
     trackUserOperation();
 });
 </script>
-<table width="610px" border="1" style="border-collapse:collapse" >
+<table class="table-responsive table" >
     <tr align="right" style="color:green">
         <td><div id="project_name_label"><b>Project Name&nbsp;:&nbsp;</b> <?php echo $selected_project->project_name?> <b>&nbsp;Type&nbsp;:&nbsp;</b> <?php echo$project_type;?> <b>&nbsp;Welcome&nbsp;:&nbsp;</b><?php echo $user_info['username']?></div></td>
     </tr>
 </table>
 
-<table width="610px" border="1" style="border-collapse:collapse" >
+<table class="table-responsive table" >
         <tr>
             <td><div id="condition_action_label">Condition in natural Language</div></td>
         </tr>
         <tr>
             <td>
-                <table width="100%" border="1" style="border-collapse:collapse">
+                <table class="table-responsive table" >
                     <tr>
                         <td colspan="2" bgcolor="#999999"><p id="changing_stmt" class="modify"></p></td>
                     </tr>
