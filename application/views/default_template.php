@@ -93,7 +93,7 @@
                         <?php $this->load->view($left_side_bar);?>
                       </div>
                 </div>
-                <div class="col-md-8" style="border: 1px solid black;">
+                <div class="col-md-8" style="border: 1px solid #5cb85c;">
                     <?php
                     if (empty($main_content)) {
                         $this->load->view("design/main_content");
