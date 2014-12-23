@@ -76,13 +76,17 @@
         </ul>
     </div>
     <div class="btn-group">    
-        <button onclick="alert('hi')" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" style="border: 0px">
-            Logout
-        </button>      
+        <a href="<?php echo base_url()?>auth/logout">
+            <button type="button" class="btn btn-success" data-hover="dropdown" style="border: 0px">
+                Logout
+            </button> 
+        </a>             
     </div>
     <div class="btn-group">    
-        <button onclick="alert('hi')" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" style="border: 0px">
-            Help
-        </button>      
+        <a href="http://www.help.com" target="_blank" title="Help">
+            <button type="button" class="btn btn-success" data-hover="dropdown" style="border: 0px">
+                Help
+            </button> 
+        </a>             
     </div>
 </div>

@@ -15,7 +15,7 @@
 */
 
 // Account Creation
-$lang['account_creation_successful'] 	  	 = 'Account Successfully Created';
+$lang['account_creation_successful'] 	  	 = 'User account successfully created.';
 $lang['account_creation_unsuccessful'] 	 	 = 'Unable to Create Account';
 $lang['account_creation_duplicate_email'] 	 = 'Email Already Used or Invalid';
 $lang['account_creation_duplicate_username'] = 'Username Already Used or Invalid';
@@ -23,17 +23,17 @@ $lang['account_creation_duplicate_username'] = 'Username Already Used or Invalid
 // Password
 $lang['password_change_successful'] 	 	 = 'A new password has been sent to you by email';
 $lang['password_change_unsuccessful'] 	  	 = 'Unable to Change Password';
-$lang['forgot_password_successful'] 	 	 = 'Password Reset Email Sent';
-$lang['forgot_user_name_successful'] 	 	 = 'User name is sent to your email.';
+$lang['forgot_password_successful'] 	 	 = 'Password reset email is sent to your email address ';
+$lang['forgot_user_name_successful'] 	 	 = 'User Name is successfully sent to your email address ';
 $lang['forgot_password_unsuccessful'] 	 	 = 'Unable to Reset Password';
 $lang['forgot_user_name_unsuccessful'] 	 	 = 'Unable to Send User Name';
 
 // Activation
-$lang['activate_successful'] 		  	     = 'Account Activated';
-$lang['activate_unsuccessful'] 		 	     = 'Unable to Activate Account';
-$lang['deactivate_successful'] 		  	     = 'Account De-Activated';
-$lang['deactivate_unsuccessful'] 	  	     = 'Unable to De-Activate Account';
-$lang['activation_email_successful'] 	  	 = 'Activation Email Sent';
+$lang['activate_successful'] 		  	 = 'Account Activated';
+$lang['activate_unsuccessful'] 		 	 = 'Unable to Activate Account';
+$lang['deactivate_successful'] 		  	 = 'Account De-Activated';
+$lang['deactivate_unsuccessful'] 	  	 = 'Unable to De-Activate Account';
+$lang['activation_email_successful'] 	  	 = 'An email has been sent to you to activate your account.';
 $lang['activation_email_unsuccessful']   	 = 'Unable to Send Activation Email';
 
 // Login / Logout
@@ -52,3 +52,11 @@ $lang['delete_unsuccessful'] 		 	     = 'Unable to Delete User';
 
 $lang['program_name_exist'] 		 	     = 'There is a program with that name. Please use a different name.';
 $lang['script_name_exist'] 		 	     = 'There is a script with that name. Please use a different name.';
+
+// Program
+$lang['program_creation_successful'] 	  	 = 'Program successfully created.';
+$lang['program_creation_unsuccessful'] 	 	 = 'Unable to create program';
+
+// Script
+$lang['script_creation_successful'] 	  	 = 'Script successfully created.';
+$lang['script_creation_unsuccessful'] 	 	 = 'Unable to create script';

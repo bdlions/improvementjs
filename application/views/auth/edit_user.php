@@ -1,36 +1,52 @@
-<div class='box'>
-
-    <h1><?php echo $title; ?></h1>
-    <p>Please enter the user information below to update</p>
-    <div id="infoMessage"><?php echo $message; ?></div>
-    <?php echo form_open('auth/edit_user/'.$user_id); ?>
-
-    <fieldset>
-        <legend>User update information</legend>
-        <table border="0" width="100%" >
-            <tr>
-                <td><label>First Name:</label></td>
-                <td><?php echo form_input($first_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>Last Name: </label></td>
-                <td><?php echo form_input($last_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>Password:</label></td>
-                <td><?php echo form_input($password); ?></td>
-            </tr>
-            <tr>
-                <td><label>Confirm Password: </label></td>
-                <td><?php echo form_input($password_confirm); ?></td>
-            </tr>
-            <tr>
-                <td><label>Country:</label></td>
-                <td><?php echo form_dropdown('countries', $countries, $selected_country); ?></td>
-            </tr>
-        </table>
-        <?php echo form_submit('submit', 'Update User'); ?>
-    </fieldset>
+<div class="container-fluid">
+    <h1>Edit User</h1>
+    <?php if ($message != NULL): ?>
+        <div class="alert alert-danger alert-dismissible"><?php echo $message; ?></div>
+    <?php endif; ?>
+    <?php echo form_open('auth/edit_user', "class='form-horizontal' role='form'"); ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Update user information
+        </div>
+        <div class="panel-body">
+            <div class="row form-group">
+                <label class="col-md-4 control-label">First Name:</label>
+                <div class="col-md-5">
+                    <?php echo form_input($first_name + array('class' => 'form-control')); ?>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-4 control-label">Last Name:</label>
+                <div class="col-md-5">
+                    <?php echo form_input($last_name + array('class' => 'form-control')); ?>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-4 control-label">Password:</label>
+                <div class="col-md-5">
+                    <?php echo form_input($password + array('class' => 'form-control')); ?>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-4 control-label">Confirm Password:</label>
+                <div class="col-md-5">
+                    <?php echo form_input($password_confirm + array('class' => 'form-control')); ?>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-4 control-label">Country:</label>
+                <div class="col-md-5">
+                    <?php echo form_dropdown('countries', $countries, $selected_country, 'class="form-control"'); ?>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-7"></div>
+                <div class="col-md-2">
+                    <?php echo form_input($submit_update_user+array('class'=>'form-control btn-success'));?>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
     <?php echo form_close(); ?>
-
 </div>

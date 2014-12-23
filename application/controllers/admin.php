@@ -573,7 +573,7 @@ class Admin extends CI_Controller {
         if ($user_info == null) {
             redirect('admin', 'refresh');
         }
-        $activation = $this->ion_auth->activate($user_id);
+        $activation = $this->ion_auth->activate_by_admin($user_id);
         if ($activation) {
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             $this->data['username'] = $user_info['username'];
@@ -634,7 +634,7 @@ class Admin extends CI_Controller {
 
                 // do we have the right userlevel?
                 if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin()) {
-                    $this->ion_auth->deactivate($user_id);
+                    $this->ion_auth->deactivate_by_admin($user_id);
 
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
                     $this->data['username'] = $user_info['username'];
@@ -754,15 +754,7 @@ class Admin extends CI_Controller {
             'value' => $password,
         );
         $this->data['remember'] = $remember;
-
-        $base = base_url();
-        $css = "<link type='text/css' media='screen' rel='stylesheet' href='{$base}css/main.css' />" . "<link type='text/css' media='screen' rel='stylesheet' href='{$base}css/carousel-style.css' />" . "<link type='text/css' media='screen' rel='stylesheet' href='{$base}css/custom_common.css' />";
-        $css = $css . "<link type='text/css' media='screen' rel='stylesheet' href='{$base}css/jquery-ui.css'/>";
-        $js = "<script data-main='{$base}scripts/main_home' src='{$base}scripts/require-jquery.js'></script>";
-        $this->template->set('css', $css);
-        $this->template->set('js', $js);
-        $this->template->set('base', $base);
-        $this->template->load("admin/templates/admin_tmpl", "admin/admin_login", $this->data);
+        $this->template->load(LOGIN_TEMPLATE, "admin/admin_login", $this->data);
     }
 
     /*
@@ -830,7 +822,7 @@ class Admin extends CI_Controller {
                 'value' => $password,
             );
             $this->data['remember'] = $remember;
-            $this->template->load("admin/templates/admin_tmpl", 'admin/admin_login', $this->data);
+            $this->template->load(LOGIN_TEMPLATE, 'admin/admin_login', $this->data);
         }
     }
 

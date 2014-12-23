@@ -6,6 +6,9 @@
             </div>
             <div class="panel-body">
                 <div class="row">
+                    <?php if ($message != NULL): ?>
+                        <div class="alert alert-danger alert-dismissible"><?php echo $message; ?></div>
+                    <?php endif; ?>
                     <div class="col-md-10 col-md-offset-1">
                         <?php echo form_open("auth/login", "class='form-horizontal' role='form'"); ?>
                         <div class="form-group">
@@ -26,14 +29,14 @@
                                     <label style="float: left;"><?php echo form_checkbox('remember', 'remember', $remember); ?>Remember me</label>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2 pull-right">
                                 <button style="width: 100%" type="submit" class="btn btn-success btn-md" name="submit">Login</button>
                             </div>
                         </div>
                         <?php echo form_close(); ?>
                         <div class="form-group">
                             <div class="col-md-offset-4 col-md-8">
-                                <?php echo anchor('auth/forgot_password', 'Forgot password?', 'title="Forgot password"'); ?> &nbsp; or &nbsp; <?php echo anchor('auth/forgot_user_name', 'Forgot email?', 'title="Forgot email"'); ?>
+                                <?php echo anchor('auth/forgot_password', 'Forgot password?', 'title="Forgot password"'); ?> &nbsp; or &nbsp; <?php echo anchor('auth/forgot_user_name', 'Forgot username?', 'title="Forgot username"'); ?>
                             </div>
                         </div>                        
                     </div>

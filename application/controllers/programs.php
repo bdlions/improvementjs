@@ -18,7 +18,7 @@ class Programs extends CI_Controller {
         $this->load->helper('url');
         $this->load->helper('file');
         if (!$this->ion_auth->logged_in()) {
-            //redirect('auth/login', 'refresh');
+            redirect('auth/login', 'refresh');
         }
     }
 
@@ -26,129 +26,27 @@ class Programs extends CI_Controller {
         
     }
 
-    function create_program() {
-        $this->data['message'] = '';
-        $this->data['title'] = "Create Program";
-        $user_id = $this->session->userdata('user_id');
-        $this->form_validation->set_rules('program_name', 'Program Name', 'required|xss_clean');
-
-        if ($this->form_validation->run() == true) {
-            if ( $this->project_library->is_project_exists($this->input->post('program_name')) ) {
-                $this->data['message'] = $this->project_library->errors();
-            } 
-            else 
-            {
-                $additional_data = array(
-                    'project_name' => $this->input->post('program_name'),
-                    'user_id' => $user_id,
-                    'project_type_id' => $this->project_types_list['program_id'],
-                    'project_content' => '<li class="ui-widget-content" id="0">Click here to edit block</li>',
-                    'project_content_backup' => '<li class="ui-widget-content" id="0">Click here to edit block</li>',
-                );
-                $project_id = $this->program->create_program($additional_data);
-                if( $project_id !== FALSE )
-                {
-                    $configuration_file_path = "./xml/program.xml";
-                    $project_configuration = "";
-                    if (file_exists($configuration_file_path)) {
-                        $project_configuration = file_get_contents($configuration_file_path);  
-                        //storing feature xml file for this project
-                        $file_path = "./xml/".$project_id.".xml";
-                        if ( ! write_file($file_path, $project_configuration))
-                        {
-                            $this->data['message'] = 'Unable to create configuration file after project creation';
-                        }
-                        else
-                        {
-                            $redirect_path = "programs/load_program/".$project_id;
-                            redirect($redirect_path, 'refresh');
-                        }
-                    }
-                    else
-                    {
-                        $this->data['message'] = 'Unable to load configuration file after project creation';
-                    }
-                }
-                else
-                {
-                    $this->data['message'] = $this->program->errors();
-                }
-            }
-        } 
-        else 
-        {
-            $this->data['message'] = validation_errors();
-        }
-        $this->data['program_name'] = array(
-            'name' => 'program_name',
-            'id' => 'program_name',
-            'type' => 'text',
-            'value' => $this->form_validation->set_value('program_name'),
-        );
-
-        $base = base_url();
-        $css = "<link rel='stylesheet' href='{$base}css/form_design.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />" . "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />";
-        $this->template->set('css', $css);
-        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-        $this->template->load("default_template", 'project/js/program/create_program', $this->data);
-    }
-
-    function all_programs() {
-        $this->data['message'] = "";
-        $user_id = $this->session->userdata('user_id');
-        $where = array(
-            'user_id' => $user_id,
-            'project_type_id' => $this->project_types_list['program_id']
-        );
-        $this->data['programs'] = $this->program->where($where)->get_all_programs()->result();
-        $base = base_url();
-        $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-        $this->template->set('css', $css);
-        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-        $this->template->load("default_template", "project/js/program/program", $this->data);
-    }
-    
-    function delete_program($project_id) {
-        $this->data['submit_button_yes'] = array(
-            'name' => 'delete_program_yes',
-            'id' => 'delete_program_yes',
-            'type' => 'submit',
-            'value' => 'Yes'
-        );
-        $this->data['submit_button_no'] = array(
-            'name' => 'delete_program_no',
-            'id' => 'delete_program_no',
-            'type' => 'submit',
-            'value' => 'No'
-        );
-        if ($this->input->post('delete_program_yes')) 
-        {
-            $this->program->where('project_id', $project_id)->delete_program();
-            //after deleting program delete all program related files---------------------------
-            $base = base_url();
-            $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-            $this->template->set('css', $css);
-            $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-            $this->template->load("default_template", "project/js/program/delete_program_successful");
-        } 
-        else if ($this->input->post('delete_program_no')) {
-            //loading admin dashboard
-            redirect("auth", 'refresh');
-        } 
-        else {
-            //loading user deletion confirmation page
-            $this->data['project_id'] = $project_id;
-            $base = base_url();
-            $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-            $this->template->set('css', $css);
-            $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-            $this->template->load("default_template", "project/js/program/delete_program_confirmation", $this->data);
-        }
-    }
-    
     function load_program($project_id)
     {
-        
+        $user_id = $this->session->userdata('user_id');
+        $this->data['message'] = "";
+        $project_info_array = $this->project_library->get_project_info($project_id)->result_array();
+        if(!empty($project_info_array))
+        {
+            $project_info = $project_info_array[0];
+            if($project_info['user_id'] != $user_id)
+            {
+                $this->data['message'] = "You don't have permission to view this project."; 
+                $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+                return;
+            }
+        }
+        else
+        {
+            $this->data['message'] = "No such project to view."; 
+            $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+            return;
+        }
         $session_data = array(
             'current_project_type_id' => $this->project_types_list['program_id']
         );

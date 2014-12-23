@@ -266,7 +266,7 @@ class Ion_auth
 				$this->set_error('account_creation_unsuccessful');
 				return FALSE;
 			}
-
+                        $this->set_message('account_creation_successful');
 			$deactivate = $this->ci->ion_auth_model->deactivate($id);
 
 			if (!$deactivate)

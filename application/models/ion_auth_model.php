@@ -321,6 +321,59 @@ class Ion_auth_model extends CI_Model {
 
         return $return;
     }
+    
+    public function activate_by_admin($id, $code = false) {
+        $this->trigger_events('pre_activate');
+
+        if ($code !== FALSE) {
+            $query = $this->db->select($this->identity_column)
+                    ->where('activation_code', $code)
+                    ->limit(1)
+                    ->get($this->tables['users']);
+
+            $result = $query->row();
+
+            if ($query->num_rows() !== 1) {
+                $this->trigger_events(array('post_activate', 'post_activate_unsuccessful'));
+                $this->set_error('activate_unsuccessful');
+                return FALSE;
+            }
+
+            $identity = $result->{$this->identity_column};
+
+            $data = array(
+                'activation_code' => NULL,
+                'active' => 1,
+                'is_inactivated_by_admin' => 0
+            );
+
+            $this->trigger_events('extra_where');
+            $this->db->update($this->tables['users'], $data, array($this->identity_column => $identity));
+        } else {
+            $data = array(
+                'activation_code' => NULL,
+                'active' => 1,
+                'is_inactivated_by_admin' => 0
+            );
+
+
+            $this->trigger_events('extra_where');
+            $this->db->update($this->tables['users'], $data, array('id' => $id));
+        }
+
+
+        $return = $this->db->affected_rows() == 1;
+        if ($return) {
+            $this->trigger_events(array('post_activate', 'post_activate_successful'));
+            $this->set_message('activate_successful');
+        } else {
+            $this->trigger_events(array('post_activate', 'post_activate_unsuccessful'));
+            $this->set_error('activate_unsuccessful');
+        }
+
+
+        return $return;
+    }
 
     /**
      * Deactivate
@@ -341,7 +394,36 @@ class Ion_auth_model extends CI_Model {
 
         $data = array(
             'activation_code' => $activation_code,
-            'is_inactivated_by_admin' => false,
+            'is_inactivated_by_admin' => 0,
+            'active' => 0
+        );
+
+        $this->trigger_events('extra_where');
+        $this->db->update($this->tables['users'], $data, array('id' => $id));
+
+        $return = $this->db->affected_rows() == 1;
+        if ($return)
+            $this->set_message('deactivate_successful');
+        else
+            $this->set_error('deactivate_unsuccessful');
+
+        return $return;
+    }
+    
+    public function deactivate_by_admin($id = NULL) {
+        $this->trigger_events('deactivate');
+
+        if (!isset($id)) {
+            $this->set_error('deactivate_unsuccessful');
+            return FALSE;
+        }
+
+        $activation_code = sha1(md5(microtime()));
+        $this->activation_code = $activation_code;
+
+        $data = array(
+            'activation_code' => $activation_code,
+            'is_inactivated_by_admin' => 1,
             'active' => 0
         );
 
@@ -534,24 +616,32 @@ class Ion_auth_model extends CI_Model {
      * */
     public function register($username, $password, $email, $additional_data = array(), $groups = array()) {
         $this->trigger_events('pre_register');
-
-        if ($this->identity_column == 'email' && $this->email_check($email)) {
+        /*if ($this->identity_column == 'email' && $this->email_check($email)) {
             $this->set_error('account_creation_duplicate_email');
             return FALSE;
         } elseif ($this->identity_column == 'username' && $this->username_check($username)) {
             $this->set_error('account_creation_duplicate_username');
             return FALSE;
+        }*/
+        //user name and email must be unique 
+        if ($this->email_check($email)) {
+            $this->set_error('account_creation_duplicate_email');
+            return FALSE;
+        } 
+        if ($this->username_check($username)) {
+            $this->set_error('account_creation_duplicate_username');
+            return FALSE;
         }
 
         // If username is taken, use username1 or username2, etc.
-        if ($this->identity_column != 'username') {
+        /*if ($this->identity_column != 'username') {
             $original_username = $username;
             for ($i = 0; $this->username_check($username); $i++) {
                 if ($i > 0) {
                     $username = $original_username . $i;
                 }
             }
-        }
+        }*/
 
         // IP Address
         $ip_address = $this->input->ip_address();

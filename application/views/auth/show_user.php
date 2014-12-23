@@ -1,39 +1,40 @@
-<div class='box'>
-
-    <h1><?php echo $title; ?></h1>
-    <div id="infoMessage"><?php echo $message; ?></div>
-    <?php echo form_open('auth'); ?>
-    <fieldset>
-        <legend>User information</legend>
-        <table border="0" width="100%" >
-            <tr>
-                <td><label>User Name:</label></td>
-                <td><?php echo form_input($user_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>First Name:</label></td>
-                <td><?php echo form_input($first_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>Last Name: </label></td>
-                <td><?php echo form_input($last_name); ?></td>
-            </tr>
-            <tr>
-                <td><label>Email: </label></td>
-                <td><?php echo form_input($email); ?></td>
-            </tr>
-            <tr>
-                <td><label>Registration Date: </label></td>
-                <td><?php echo form_input($created_date); ?></td>
-            </tr>            
-            <tr>
-                <td><label>Country:</label></td>
-                <td><?php echo form_dropdown('countries', $countries, $selected_country, 'disabled="disabled"'); ?></td>
-            </tr>
-        </table>
-        <?php echo form_submit('submit', 'Ok'); ?>
-    </fieldset>
+<div class="container-fluid">
+    <h1>User profile</h1>
+    <?php if ($message != NULL): ?>
+        <div class="alert alert-danger alert-dismissible"><?php echo $message; ?></div>
+    <?php endif; ?>
+    <?php echo form_open('auth', "class='form-horizontal' role='form'"); ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            User information
+        </div>
+        <div class="panel-body">
+            <div class="row form-group">
+                <label class="col-md-3 control-label">User Name:</label>
+                <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['username']?></label>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-3 control-label">First Name:</label>
+                <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['first_name']?></label>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-3 control-label">Last Name:</label>
+                <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['last_name']?></label>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-3 control-label">Email:</label>
+                <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['email']?></label>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-3 control-label">Registration Date:</label>
+                <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['created_date']?></label>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-3 control-label">Country:</label>
+                <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['country']?></label>
+            </div>
+        </div>
+    </div>
     <?php echo form_close(); ?>
-
 </div>
 

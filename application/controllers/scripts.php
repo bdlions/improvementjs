@@ -28,132 +28,28 @@ class Scripts extends CI_Controller
        
     }
     
-    function create_script()
-    {
-        $this->data['message'] = '';
-        $this->data['title'] = "Create Script";
-        $user_id = $this->session->userdata('user_id');
-        $this->form_validation->set_rules('script_name', 'Script Name', 'required|xss_clean');
-        
-        if ($this->form_validation->run() == true)
-        {            
-            if ( $this->project_library->is_project_exists($this->input->post('script_name')) ) {
-                $this->data['message'] = $this->project_library->errors();
-            }
-            else 
-            {
-                $additional_data = array(
-                    'project_name' => $this->input->post('script_name'),
-                    'user_id' => $user_id,
-                    'project_type_id' => $this->project_types_list['script_id'],
-                    'project_content' => '<li class="ui-widget-content" id="0">Click here to edit block</li>',
-                    'project_content_backup' => '<li class="ui-widget-content" id="0">Click here to edit block</li>',
-                );
-                $project_id = $this->script->create_script($additional_data);
-                if( $project_id !== FALSE )
-                {
-                    $configuration_file_path = "./xml/script.xml";
-                    $project_configuration = "";
-                    if (file_exists($configuration_file_path)) {
-                        $project_configuration = file_get_contents($configuration_file_path);  
-                        //storing feature xml file for this project
-                        $file_path = "./xml/".$project_id.".xml";
-                        if ( ! write_file($file_path, $project_configuration))
-                        {
-                            $this->data['message'] = 'Unable to create configuration file after project creation';
-                        }
-                        else
-                        {
-                            $redirect_path = "scripts/load_script/".$project_id;
-                            redirect($redirect_path, 'refresh');
-                        }
-                    }
-                    else
-                    {
-                        $this->data['message'] = 'Unable to load configuration file after project creation';
-                    }
-                }
-                else
-                {
-                    $this->data['message'] = $this->script->errors();
-                }
-            }
-        }  
-        else
-        {
-            $this->data['message'] = validation_errors();
-        }        
-        $this->data['script_name'] = array(
-            'name' => 'script_name',
-            'id' => 'script_name',
-            'type' => 'text',
-            'value' => $this->form_validation->set_value('script_name'),
-        );
-
-        $base = base_url();
-        $css = "<link rel='stylesheet' href='{$base}css/form_design.css' />"."<link rel='stylesheet' href='{$base}css/bluedream.css' />"."<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />";
-        $this->template->set('css', $css);
-        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-        $this->template->load("default_template", 'project/js/script/create_script', $this->data);
-    }
-    
-    function all_scripts()
-    {
-        $this->data['message'] = "";
-        $user_id = $this->session->userdata('user_id');
-        $where = array(
-            'user_id' => $user_id,
-            'project_type_id' => $this->project_types_list['script_id']
-        );
-        $this->data['scripts'] = $this->script->where($where)->get_all_scripts()->result();
-        $base = base_url();
-        $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-        $this->template->set('css', $css);
-        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-        $this->template->load("default_template", "project/js/script/script", $this->data);
-    }
-    
-    function delete_script($project_id) {
-        $this->data['submit_button_yes'] = array(
-            'name' => 'delete_script_yes',
-            'id' => 'delete_script_yes',
-            'type' => 'submit',
-            'value' => 'Yes'
-        );
-        $this->data['submit_button_no'] = array(
-            'name' => 'delete_script_no',
-            'id' => 'delete_script_no',
-            'type' => 'submit',
-            'value' => 'No'
-        );
-        if ($this->input->post('delete_script_yes')) 
-        {
-            $this->script->where('project_id', $project_id)->delete_script();
-            //after deleting script delete all script related files---------------------------
-            $base = base_url();
-            $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-            $this->template->set('css', $css);
-            $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-            $this->template->load("default_template", "project/js/script/delete_script_successful");
-        } 
-        else if ($this->input->post('delete_script_no')) {
-            //loading admin dashboard
-            redirect("auth", 'refresh');
-        } 
-        else {
-            //loading user deletion confirmation page
-            $this->data['project_id'] = $project_id;
-            $base = base_url();
-            $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-            $this->template->set('css', $css);
-            $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-            $this->template->load("default_template", "project/js/script/delete_script_confirmation", $this->data);
-        }
-    }
-    
     function load_script($project_id)
     {
         
+        $user_id = $this->session->userdata('user_id');
+        $this->data['message'] = "";
+        $project_info_array = $this->project_library->get_project_info($project_id)->result_array();
+        if(!empty($project_info_array))
+        {
+            $project_info = $project_info_array[0];
+            if($project_info['user_id'] != $user_id)
+            {
+                $this->data['message'] = "You don't have permission to view this project."; 
+                $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+                return;
+            }
+        }
+        else
+        {
+            $this->data['message'] = "No such project to view."; 
+            $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+            return;
+        }
         $session_data = array(
             'current_project_type_id' => $this->project_types_list['script_id']
         );

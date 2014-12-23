@@ -70,49 +70,23 @@
         
         <div class="container">
             <div class="row header">
-                        <?php 
-            $this->load->view("admin/templates/sections/header");
+            <?php 
+                $this->load->view("admin/templates/sections/header");
             ?>
-                    </div>
-                    <div clas="row">
-                        <?php
-                            if(!empty($menu_bar))
-                            {
-                                $this->load->view($menu_bar);
-                            }
-                            ?>
-                    </div>
-<!--                    <div style="clear: both"/>-->
-                    
-                    
-            
+            </div>
+            <div clas="row" style="padding-top: 2px; padding-bottom: 5px;">
+            <?php
+                $this->load->view("design/menu_bar_admin");
+            ?>
+            </div>
             <div class="row">
-                <div class="col-md-4">
-                <?php
-                                if(!empty($left_side_bar))
-                                {
-                                    $this->load->view($left_side_bar);
-                                }
-                              ?>
-                </div>
-                <div class="col-md-8">
-                    <?php
-                                if(empty($main_content))
-                                {
-                                    $this->load->view("design/main_content");
-                                }
-                                else
-                                {
-                                    $this->load->view($main_content);
-                                }
-                              ?>
-                </div>
+                <div class="col-md-12">
+                    <?php echo $contents; ?>
+                </div>                
             </div>   
             <?php 
-            $this->load->view("admin/templates/sections/footer");
-            ?>
-            
-        </div>
-        
+                $this->load->view("admin/templates/sections/footer");
+            ?>            
+        </div>        
     </body>
 </html>
