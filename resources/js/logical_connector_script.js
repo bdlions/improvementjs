@@ -401,7 +401,7 @@ function button_logical_connector_removing_condition_delete_pressed()
     //closing logical connector removing condition modal window
     $('#logical_connector_removing_condition_div').dialog('close');
     //unblocking the user interface
-    $.unblockUI();
+    //$.unblockUI();
     $('#label_alert_message').text("Successfully deleted.");
     $('#div_alert_message').dialog('open');
     //alert("Successfully deleted.");
@@ -687,7 +687,7 @@ function button_logical_connector_cancel_pressed()
     //closing logical connector modal window
     $('#logical_connector_div').dialog("close");
     //unblocking the user interface
-    $.unblockUI();
+    //$.unblockUI();
 }
 
 function button_logical_connector_removing_condition_cancel_pressed()
@@ -696,7 +696,7 @@ function button_logical_connector_removing_condition_cancel_pressed()
     //closing logical connector removing condition modal window
     $('#logical_connector_removing_condition_div').dialog("close");
     //unblocking the user interface
-    $.unblockUI();
+    //$.unblockUI();
 }
 
 

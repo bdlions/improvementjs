@@ -221,7 +221,7 @@ function save()
             project_content: left_panel_content
         },
         success: function (data) {            
-            $.unblockUI();
+            //$.unblockUI();
             $('#label_alert_message').text(data);
             $('#div_alert_message').dialog('open');
             //alert(data);                       
@@ -270,7 +270,7 @@ function generate_selected_item_code()
                 dataType: "json",
                 data: {project_xml : block, mapping:mapping},
                 complete:function(data){
-                    $.unblockUI();
+                    //$.unblockUI();
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
                     generated_code = beautify(generated_code.trim());
                     if(name === "condition")
@@ -359,7 +359,7 @@ function generate_code()
                                 $('#div_alert_message').dialog('open');
                                 //alert("Server processing error. Please try again.");
                             }
-                            $.unblockUI();
+                            //$.unblockUI();
                         }
                     });
                     
@@ -1703,7 +1703,7 @@ function download_project()
                 $('#div_alert_message').dialog('open');
                 //alert("Server processing error. Please try again.");
             }
-            $.unblockUI();
+            //$.unblockUI();
         }
     }); 
 }

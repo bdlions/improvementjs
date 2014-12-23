@@ -181,7 +181,7 @@ $(function ()
     {
         updateClientEndOperationCounter();
         if(external_variable_values != "") {
-            $.unblockUI();
+            //$.unblockUI();
             $('#label_alert_message').text("Processing completed.");
             $('#div_alert_message').dialog('open');
             //alert("Processing completed.");
@@ -593,7 +593,7 @@ $(function ()
         title: 'Select condition to delete.'
     });
     $('div#logical_connector_removing_condition_div').bind('dialogclose', function(event) {
-        $.unblockUI();
+        //$.unblockUI();
     });
     
     $( "#action_variable_modal" ).dialog(
@@ -1460,7 +1460,7 @@ function checkContidionButton() {
     else
     {
         //unblocking the user interface
-        $.unblockUI();
+        //$.unblockUI();
         //total number of characters of the selected string in left panel
         var left_panel_selected_string_length = $("#selectable .ui-selected").text().length;
         //total number of characters of the selected trimmed string in left panel
@@ -1947,7 +1947,7 @@ function button_add_bracket_in_condition_ok_pressed()
 function button_add_bracket_in_condition_cancel_pressed()
 {
     updateClientEndOperationCounter();
-    $.unblockUI();
+    //$.unblockUI();
     $('#add_bracket_in_condition_div').dialog('close');
 }
 
