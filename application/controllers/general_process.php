@@ -29,32 +29,6 @@ class General_process extends CI_Controller
        
     }
     
-    public function load_project_list_project_panel()
-    {
-        if (!$this->ion_auth->logged_in())
-        {
-            redirect('auth/login', 'refresh');
-        }
-        if(isset($_POST['button_pre_load_project_ok']) && isset($_POST['pre_load_project_left_panel_content']) && $_POST['pre_load_project_left_panel_content'] != "")
-        {            
-            $project_left_panel_content = $_POST['pre_load_project_left_panel_content'];
-            $data = array(
-                'project_content_backup' => $project_left_panel_content,
-                'project_content' => $project_left_panel_content
-            );
-            $project_type_id = $this->session->userdata('current_project_type_id');
-            $project_id = $this->session->userdata('project_id');
-            if( $project_type_id == $this->project_types_list['program_id'])
-            {
-                $this->program->where('project_id',$project_id)->update_program($data);
-            }
-            else if( $project_type_id == $this->project_types_list['script_id'])
-            {
-                $this->script->where('project_id',$project_id)->update_script($data);
-            }            
-        }
-        redirect("auth", 'refresh');
-    }
     /*
      * This method will create a new program/script based on current selected program/script
      */
@@ -214,158 +188,7 @@ class General_process extends CI_Controller
             echo $content;
         }
     }
-    /*
-     * User wants to upload a project
-     */
-    function upload_project()
-    {
-        if (!$this->ion_auth->logged_in())
-        {
-            redirect('auth/login', 'refresh');
-        }
-        $project_id = $this->session->userdata('project_id');
-        if(isset($_POST['upload_project_project_left_panel_content']) && $_POST['upload_project_project_left_panel_content'] != "")
-        {
-            $project_left_panel_content = $_POST['upload_project_project_left_panel_content'];
-            $data = array(
-                'project_content_backup' => $project_left_panel_content
-            );
-            $project_type_id = $this->session->userdata('current_project_type_id');
-            if( $project_type_id == $this->project_types_list['program_id'])
-            {
-                $this->program->where('project_id',$project_id)->update_program($data);
-            }
-            else if( $project_type_id == $this->project_types_list['script_id'])
-            {
-                $this->script->where('project_id',$project_id)->update_script($data);
-            }
-        }
-        
-        $this->data['project_id'] = $project_id;
-        $base = base_url();        
-        $css ="<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-        $this->template->set('css', $css);
-        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-        $this->template->load("default_template", "upload/upload_project", $this->data);    
-    }
-    /*
-     * Processing uploaded file content of a project
-     */
-    function post_upload_project()
-    {
-        
-        if (!$this->ion_auth->logged_in())
-        {
-            redirect('auth/login', 'refresh');
-        }
-        $redirected_path = "";
-        $project_type_id = $this->session->userdata('current_project_type_id');
-        $project_id = $this->session->userdata('project_id'); 
-        if($this->input->post('upload'))
-        {
-            $config['upload_path'] = './project/';
-            $config['allowed_types'] = 'xml';
-            $config['max_size'] = '5000';
-            $config['file_name'] = $project_id. ".xml";
-            $config['overwrite'] = TRUE;
-
-            $this->load->library('upload', $config);
-
-            if (!$this->upload->do_upload()) 
-            {
-                $error = array('error' => $this->upload->display_errors());
-                $this->data['error'] = $error;
-                $this->data['project_id'] = $this->session->userdata('project_id');
-                $base = base_url();        
-                $css ="<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-                $this->template->set('css', $css);
-                $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-                $this->template->load("default_template", "upload/upload_project", $this->data); 
-                return;
-            } 
-            else 
-            {
-                $this->load->library('projectxmlparser');
-                $project_xml_object = $this->projectxmlparser->readXML();
-                //user uploads a wrong project/file
-                if($project_xml_object == null)
-                {
-                    $error = array('error' => 'Please upload correct project.');
-                    $this->data['error'] = $error;
-                    $this->data['project_id'] = $this->session->userdata('project_id');
-                    $base = base_url();        
-                    $css ="<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-                    $this->template->set('css', $css);
-                    $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-                    $this->template->load("default_template", "upload/upload_project", $this->data);
-                }
-                else
-                {
-                    $properties = $project_xml_object->properties;
-                    if($project_type_id != $properties->project_type_id)
-                    {
-                        $error = array('error' => 'Please upload correct project.');
-                        $this->data['error'] = $error;
-                        $this->data['project_id'] = $this->session->userdata('project_id');
-                        $base = base_url();        
-                        $css ="<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-                        $this->template->set('css', $css);
-                        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-                        $this->template->load("default_template", "upload/upload_project", $this->data);
-                        return;
-                    }
-                    $project_content = $project_xml_object->code;
-                    if($project_content != false){
-                        $data = array(
-                            'project_content' => $project_content,
-                            'project_content_backup' => $project_content
-                        );
-                        $this->ion_auth->where('project_id',$this->session->userdata('project_id'))->update_project($data);
-                    }
-                    //deleting current variables of this project
-                    $current_variable_ids = array();
-                    $variable_counter = 0;
-                    $custom_variables = $this->ion_auth->where('project_id',$this->session->userdata('project_id'))->get_project_variables()->result();
-                    foreach ($custom_variables as $custom_variable):
-                        $current_variable_ids[$variable_counter++] = $custom_variable->variable_id;
-                    endforeach;
-                    if($variable_counter > 0)
-                    {
-                        $this->ion_auth->where_in('variable_id',$current_variable_ids)->delete_project_variables();
-                        $this->ion_auth->where_in('variable_id',$current_variable_ids)->delete_variables();
-                    }
-
-                    //adding variables of uploaded file into this project
-                    $custom_variables = $project_xml_object->variables;
-                    foreach ($custom_variables as $custom_variable):
-                        $additional_variable_data = array(
-                            'variable_name' => $custom_variable->name,
-                            'variable_type' => $custom_variable->type,
-                            'variable_value' => $custom_variable->value,
-                        );
-                        $additional_project_data = array(
-                            'project_id' => $this->session->userdata('project_id'),
-                        );
-                        $this->variable_library->create_variable($additional_variable_data, $additional_project_data);
-                    endforeach;
-                    
-                    if( $properties->project_type_id != null && $properties->project_type_id != "")
-                    {
-                        $project_type_id = $properties->project_type_id;
-                    }               
-                }                
-            }
-        }
-        if( $project_type_id == $this->project_types_list['program_id'])
-        {
-            $redirected_path = "programs/load_program/".$project_id;
-        }
-        else if( $project_type_id == $this->project_types_list['script_id'])
-        {
-            $redirected_path = "scripts/load_script/".$project_id;
-        }
-        redirect($redirected_path, 'refresh');
-    }
+    
     function upload_external_variable()
     {
         if(isset($_POST['external_variable_upload_project_left_panel_content']) && $_POST['external_variable_upload_project_left_panel_content'] != "")
@@ -392,11 +215,7 @@ class General_process extends CI_Controller
                 $this->script->where('project_id',$project_id)->update_script($data);
             }
         }
-        $base = base_url();        
-        $css ="<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-        $this->template->set('css', $css);
-        $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-        $this->template->load("default_template", "upload/upload_external_variables");
+        $this->template->load(MEMBER_HOME_TEMPLATE, "upload/upload_external_variables");
     }
     function upload_external_variables_post_processing()
     {
@@ -508,40 +327,6 @@ class General_process extends CI_Controller
         }
     } 
     //--------------------------------- Ajax calling related methods-----------------------------
-    /*
-     * This method will update project left panel content
-     */
-    function update_project() 
-    {
-        if ( !$this->ion_auth->logged_in() ) 
-        {
-            redirect('auth/login', 'refresh');
-        } 
-        if( isset($_POST['project_content']) && $_POST['project_content'] != "" )
-        {
-            $project_content = $_POST['project_content'];
-            $data = array(
-                'project_content' => $project_content,
-                'project_content_backup' => $project_content
-            );
-            $project_type_id = $this->session->userdata('current_project_type_id');
-            $project_id = $this->session->userdata('project_id');
-            if( $project_type_id == $this->project_types_list['program_id'])
-            {
-                $this->program->where('project_id',$project_id)->update_program($data);
-            }
-            else if( $project_type_id == $this->project_types_list['script_id'])
-            {
-                $this->script->where('project_id',$project_id)->update_script($data);
-            }
-            echo "Project is saved successfully.";
-        }
-        else
-        {
-            echo "Error while saving project. Please try again later.";
-        }
-    }
-    
     /*
      * Before downloading project info we are generating xml file with project content and variables in server
      */

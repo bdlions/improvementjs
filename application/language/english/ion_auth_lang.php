@@ -53,6 +53,10 @@ $lang['delete_unsuccessful'] 		 	     = 'Unable to Delete User';
 $lang['program_name_exist'] 		 	     = 'There is a program with that name. Please use a different name.';
 $lang['script_name_exist'] 		 	     = 'There is a script with that name. Please use a different name.';
 
+// Project
+$lang['project_update_successful'] 	  	 = 'Project successfully updated.';
+$lang['project_update_unsuccessful'] 	 	 = 'Unable to update project';
+
 // Program
 $lang['program_creation_successful'] 	  	 = 'Program successfully created.';
 $lang['program_creation_unsuccessful'] 	 	 = 'Unable to create program';

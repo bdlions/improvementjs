@@ -346,27 +346,12 @@ class Ion_auth
 	 * @return bool
 	 * @author Mathew
 	 **/
-	/*public function logged_in()
+	public function logged_in()
 	{
-            //checking user session id
-            //$user_infos = $this->ci->ion_auth_model->where('users.id',$this->ci->session->userdata('user_id'))->get_session_id()->result();
-            $query = $this->ci->ion_auth_model->where('users.id',$this->ci->session->userdata('user_id'))->get_session_id();
-            if($query->num_rows() == 0)
-            {
-                return false;
-            }
-            $user_infos = $query->result();
-            $session_id = $user_infos[0]->session_id;
-            if($this->ci->session->userdata('session_id') != $session_id)
-            {
-                $this->set_error('login_unsuccessful');
-                return false;
-            }
-            
             $this->ci->ion_auth_model->trigger_events('logged_in');
             $identity = $this->ci->config->item('identity', 'ion_auth');
             return (bool) $this->ci->session->userdata($identity);
-	}*/
+	}
 
 	/**
 	 * is_admin

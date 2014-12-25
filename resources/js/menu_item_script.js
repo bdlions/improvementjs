@@ -205,30 +205,6 @@ if(typeof String.prototype.trim !== 'function') {
     }
 }
 
-function save()
-{
-    updateClientEndOperationCounter();
-    var left_panel_content = $("#selectable").html();
-    $.blockUI({
-        message: 'Saving Project...',
-        theme: false,
-        baseZ: 500
-    });
-    $.ajax({
-        type: "POST",
-        url: "../../general_process/update_project",
-        data: {
-            project_content: left_panel_content
-        },
-        success: function (data) {            
-            //$.unblockUI();
-            $('#label_alert_message').text(data);
-            $('#div_alert_message').dialog('open');
-            //alert(data);                       
-        }
-    });
-}
-
 function generate_selected_item_code()
 {
     var block = new Block();
@@ -246,23 +222,23 @@ function generate_selected_item_code()
         if(name === "condition")
         {
             block = generate_condition_block($(this));
-            service_url = server_base_url+'../smartycode/code_condition_service.php';
+            service_url = template_service_condition_url;
         }
         else if(name === "action")
         {
             block = process_action_statement($(this));
-            service_url = server_base_url+'../smartycode/code_action_service.php';
+            service_url = template_service_action_url;
         }
         
     });
     if(name === "condition" || name === "action")
     {
         $("#code_stmt").html(""); 
-        $.blockUI({
-            message: '',
-            theme: false,
-            baseZ: 500
-        });
+//        $.blockUI({
+//            message: '',
+//            theme: false,
+//            baseZ: 101
+//        });
         $.get('../../json/blockMap.json', function(mapping){
             $.ajax({
                 type: "POST",
@@ -326,11 +302,11 @@ function generate_code()
     project.stage=(stage);
     //console.log('project');
     //console.log(project);
-    $.blockUI({
-        message: '',
-        theme: false,
-        baseZ: 500
-    });
+//    $.blockUI({
+//        message: '',
+//        theme: false,
+//        baseZ: 500
+//    });
     $.get('../../json/blockMap.json', function(mapping){
         $.get('../../json/sample.xml', function(xml) {
             var jsonObj = $.xml2json(xml);
@@ -1678,11 +1654,6 @@ function download_project()
     updateClientEndOperationCounter();
     //project left panel content
     var left_panel_content = $("#selectable").html();
-    $.blockUI({
-        message: '',
-        theme: false,
-        baseZ: 500
-    });
     //saving project left panel into server
     $.ajax({
         type: "POST",
@@ -1707,22 +1678,6 @@ function download_project()
         }
     }); 
 }
-
-function upload_project()
-{
-    $('#upload_project_div').dialog('open');
-}
-function button_yes_clicked_upload_project()
-{
-    $('#upload_project_project_left_panel_content').val($("#selectable").html());
-    return true;
-}
-function button_no_clicked_upload_project()
-{
-    $('#upload_project_project_left_panel_content').val("");
-    return true;
-}
-
 /*
  * User wants to add a new variable from menu item 
  **/
@@ -1861,18 +1816,6 @@ function delete_bracket()
     $('#div_alert_message').dialog('open');
     //alert("Please select a bracket to delete.");
     return;
-}
-
-function load_project_list()
-{
-    updateClientEndOperationCounter();
-    $('#load_projects_confirmation_window_div_modal').dialog('open');
-}
-function button_pre_load_project_ok_pressed()
-{
-    updateClientEndOperationCounter();
-    document.getElementById('pre_load_project_left_panel_content').value = $("#selectable").html();        
-    return true;
 }
 
 function save_as()

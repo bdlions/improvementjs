@@ -480,8 +480,12 @@ $(function ()
         //generating parameters table
         //resetting parameters table content
         document.getElementById("parameters_table").innerHTML = "";
+        console.log(name);
+        console.log(id);
+        console.log(selected_code.trim());
         
         var returned_array = reverse_code_process(name, id, selected_code.trim());
+        console.log(returned_array);
         nameArray = returned_array[0];
         valueArray = returned_array[1];
         
@@ -832,26 +836,7 @@ $(function ()
             updateClientEndOperationCounter();
             //closing the dialog            
         }
-    });
-    
-    $( "#load_projects_confirmation_window_div_modal" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 420,
-        modal: true,
-        title: 'Confirmation Dialog',
-        //setting buttons
-        buttons:
-        {
-            
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();
-            //closing the dialog            
-        }
-    });
+    });    
     $( "#save_as_project_div_modal" ).dialog(
     {
         //setting some properties
@@ -1217,21 +1202,7 @@ $(function ()
         {
             updateClientEndOperationCounter();       
         }
-    });
-    
-    $( "#upload_project_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 300,
-        modal: true,
-        title: 'Warning',
-        close: function()
-        {
-            updateClientEndOperationCounter();       
-        }
-    });
-    
+    });    
 });
 
 //user clicks anchor from expression from above code panel

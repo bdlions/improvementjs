@@ -117,6 +117,23 @@ class Project_model extends Ion_Auth_Model {
         return TRUE;
     }
     
+    /*
+     * This method will update project info
+     * @param $project_id, project id
+     * @param $additional_data, project data to be updated
+     */
+    public function update_project($project_id, $additional_data)
+    {
+        $data = $this->_filter_data($this->tables['project_info'], $additional_data);
+        $this->db->update($this->tables['project_info'], $data, array('project_id' => $project_id));
+        if ($this->db->trans_status() === FALSE) {
+            $this->set_error('project_update_unsuccessful');
+            return FALSE;
+        }
+        $this->set_message('project_update_successful');
+        return TRUE;
+    }
+    
     public function is_project_exists($name)
     {
         if (empty($name))

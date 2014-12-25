@@ -16,8 +16,8 @@
             Profile<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><?php echo anchor('auth/show_user', 'Show'); ?></li>
-            <li><?php echo anchor('auth/edit_user', 'Edit'); ?></li> 
+            <li><?php echo anchor('user/show_user', 'Show'); ?></li>
+            <li><?php echo anchor('user/edit_user', 'Edit'); ?></li> 
             <li><?php echo anchor('auth/logout', 'Logout'); ?></li> 
         </ul>
     </div>

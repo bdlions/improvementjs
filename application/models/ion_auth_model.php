@@ -1458,6 +1458,16 @@ class Ion_auth_model extends CI_Model {
 
         return $_output;
     }
+    
+    public function messages_alert() {
+        $_output = '';
+        foreach ($this->messages as $message) {
+            $messageLang = $this->lang->line($message) ? $this->lang->line($message) : '##' . $message . '##';
+            $_output .= $messageLang;
+        }
+
+        return $_output;
+    }
 
     /**
      * set_error
@@ -1486,6 +1496,16 @@ class Ion_auth_model extends CI_Model {
         foreach ($this->errors as $error) {
             $errorLang = $this->lang->line($error) ? $this->lang->line($error) : '##' . $error . '##';
             $_output .= $this->error_start_delimiter . $errorLang . $this->error_end_delimiter;
+        }
+
+        return $_output;
+    }
+    
+    public function errors_alert() {
+        $_output = '';
+        foreach ($this->errors as $error) {
+            $errorLang = $this->lang->line($error) ? $this->lang->line($error) : '##' . $error . '##';
+            $_output .= $errorLang;
         }
 
         return $_output;
@@ -1797,13 +1817,10 @@ class Ion_auth_model extends CI_Model {
     }
     //---------------------- project variable related queries end ------------------------------
     
-    /**
-        * logged_in
-        *
-        * @return bool
-        * @author Mathew
-        **/
-    public function logged_in()
+    /*
+     * checking valid session
+     */
+    public function valid_session()
     {
         //checking user session id
         //$user_infos = $this->ci->ion_auth_model->where('users.id',$this->ci->session->userdata('user_id'))->get_session_id()->result();

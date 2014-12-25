@@ -20,9 +20,9 @@ class Auth extends CI_Controller {
     function index() {
 
         if (!$this->ion_auth->logged_in()) {
-            //redirect to the login page
             redirect('auth/login', 'refresh');
-        } else {
+        }
+        else {
             if ($this->ion_auth->is_member()) {
                 redirect('projects/show_all_projects', 'refresh');                
             } else if ($this->ion_auth->is_demo()) {
@@ -96,6 +96,7 @@ class Auth extends CI_Controller {
             //$this->session->set_flashdata('message', $this->ion_auth_model->errors());
             //$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
             $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+            $this->session->set_flashdata('message', "");
             //$this->ion_auth_model->clear_errors();
             $this->data['identity'] = array('name' => 'identity',
                 'id' => 'identity',
@@ -190,21 +191,6 @@ class Auth extends CI_Controller {
         }
     }    
 
-    //call back function to check whether email exists or not
-    function is_email_exists($email) {
-        $email_exists = false;
-        $total_users = count($this->ion_auth->where('users.email', $email)->users()->result());
-        if ($total_users > 0) {
-            $email_exists = true;
-        }
-        if (!$email_exists) {
-            $this->form_validation->set_message('is_email_exists', 'Error - There is no account associated to that email');
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     //reset password - final step for forgotten password
     public function reset_password($code) {
         $reset = $this->ion_auth->forgotten_password_complete($code);
@@ -218,9 +204,12 @@ class Auth extends CI_Controller {
         }
     }
 
-    //activate the user
+    /*
+     * activate the user
+     */
     function activate($id, $code = false) 
     {
+        $message = "";
         if ($code !== false)
         {
             //checking whether this user is already active or not        
@@ -230,40 +219,36 @@ class Auth extends CI_Controller {
                 $user_info = $user_infos[0];
                 if($user_info['active'] == 1)
                 {
-                    $this->data['message'] = "Account is already active.";
+                    $message = "Account is already active.";
                 }
                 else
                 {
                     $activation = $this->ion_auth->activate($id, $code);
                     if ($activation)
                     {
-                    $this->data['message'] = "Account is now active.";
+                        $message = "Account is now active.";
                     }
                     else
                     {
-                        $this->data['message'] = "Incorrect activation code.";
+                        $message = "Incorrect activation code.";
                     }
                 }
             }
             else
             {
-                $this->data['message'] = "You are not allowed to activate this user.";            
+                $message = "You are not allowed to activate this user.";            
             }            
         }            
         else
         {
-            $this->data['message'] = "You are not allowed to activate this user.";            
+            $message = "You are not allowed to activate this user.";            
         }
-        
-        $base = base_url(); 
-        $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />";
-        $this->template->set('css', $css);
-        $this->template->set('menu_bar', 'design/menu_bar_external_user');
-        $this->template->load("default_template", 'auth/activation_message_user', $this->data);
+        $this->messages = $message;
+        $this->show_messages();
     }
 
     //deactivate the user
-    function deactivate($id = NULL) {
+    /*function deactivate($id = NULL) {
         // no funny business, force to integer
         $id = (int) $id;
 
@@ -297,17 +282,7 @@ class Auth extends CI_Controller {
             //redirect them back to the auth page
             redirect('auth', 'refresh');
         }
-    }
-
-    //call back function to check password for one char in caps and one number
-    function password_check($password) {
-        if (!(preg_match("/[A-Z]/", $password) && preg_match("/[0-9]/", $password))) {
-            $this->form_validation->set_message('password_check', 'Password should contain at least 1 char in caps and 1 number');
-            return false;
-        } else {
-            return true;
-        }
-    }
+    }*/
 
     function _get_csrf_nonce() {
         $this->load->helper('string');
@@ -336,34 +311,6 @@ class Auth extends CI_Controller {
         $this->data['project_id'] = $this->session->userdata('project_id');
         $this->template->set('menu_bar', 'design/configuration_menubar');
         $this->template->load("default_template", "program/upload_configuration_file", $this->data);
-    }
-
-    function delete_project($project_id) {
-        if (!$this->ion_auth->logged_in()) {
-            redirect('auth/login', 'refresh');
-        }
-
-        if ($this->input->post('delete_project_yes')) {
-            $this->ion_auth->where('project_id', $project_id)->delete_project();
-            $this->ion_auth->where('project_id', $project_id)->delete_user_project();
-            $base = base_url();
-            $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-            $this->template->set('css', $css);
-            $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-            //loading user deletion confirmation page
-            $this->template->load("default_template", "auth/delete_project_successful");
-        } else if ($this->input->post('delete_project_no')) {
-            //loading admin dashboard
-            redirect("auth", 'refresh');
-        } else {
-            //loading user deletion confirmation page
-            $this->data['project_id'] = $project_id;
-            $base = base_url();
-            $css = "<link rel='stylesheet' href='{$base}jstree_resource/menu_style.css' />" . "<link rel='stylesheet' href='{$base}css/bluedream.css' />";
-            $this->template->set('css', $css);
-            $this->template->set('menu_bar', 'design/menu_bar_member_demo');
-            $this->template->load("default_template", "auth/delete_project_confirmation", $this->data);
-        }
     }
 
     function load_search() {
@@ -471,6 +418,34 @@ class Auth extends CI_Controller {
     }
     
     /*
+     * call back function to check whether email exists or not
+     */
+    function is_email_exists($email) {
+        $email_exists = false;
+        $total_users = count($this->ion_auth->where('users.email', $email)->users()->result());
+        if ($total_users > 0) {
+            $email_exists = true;
+        }
+        if (!$email_exists) {
+            $this->form_validation->set_message('is_email_exists', 'Error - There is no account associated to that email');
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    /*
+     * call back function to check password for one char in caps and one number
+     */
+    function password_check($password) {
+        if (!(preg_match("/[A-Z]/", $password) && preg_match("/[0-9]/", $password))) {
+            $this->form_validation->set_message('password_check', 'Password should contain at least 1 char in caps and 1 number');
+            return false;
+        } else {
+            return true;
+        }
+    }
+    /*
      * This method will create a new user
      */
     function create_user() 
@@ -567,135 +542,6 @@ class Auth extends CI_Controller {
             'value' => 'Create User'
         );
         $this->template->load(NON_MEMBER_TEMPLATE, 'auth/create_user', $this->data);
-    }
-    
-    /*
-     * This method will show user info
-     */
-    function show_user()
-    {
-        if (!$this->ion_auth->logged_in())
-        {
-            redirect('auth', 'refresh');
-        }
-        $this->data['message'] = "";
-        $user_info = array();
-        $user_info_array = $this->ion_auth->where('users.id',$this->session->userdata('user_id'))->users()->result_array();
-        if(empty($user_info_array))
-        {
-            redirect('auth', 'refresh');
-        }
-        else
-        {
-            $user_info = $user_info_array[0];
-        }
-        $countries = $this->ion_auth->order_by('printable_name','asc')->get_all_countries()->result_array();
-        foreach ($countries as $country)
-        {
-            if($user_info['country'] == $country['iso'])
-            {
-                $user_info['country'] = $country['printable_name'];
-                break;
-            }
-        }
-        $this->data['user_info'] = $user_info;
-        $this->template->load(MEMBER_HOME_TEMPLATE, "auth/show_user", $this->data);    
-    }
-    
-    /*
-     * This method will update user information
-     */
-    function edit_user()
-    {
-        if (!$this->ion_auth->logged_in())
-        {
-            redirect('auth', 'refresh');
-        }        
-        $user_id = $this->session->userdata('user_id');        
-        //validate form input
-        $this->form_validation->set_error_delimiters("<div style='color:red'>", '</div>');
-        $this->form_validation->set_rules('first_name', 'First Name', 'required|xss_clean');
-        $this->form_validation->set_rules('last_name', 'Last Name', 'required|xss_clean');
-        $this->form_validation->set_rules('countries', 'Country', 'required|xss_clean');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]|callback_password_check');
-        $this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'required');
-        if($this->input->post('submit_update_user'))
-        {
-            if ($this->form_validation->run() == true) 
-            {
-               $additional_data = array(
-                    'first_name' => $this->input->post('first_name'),
-                    'last_name' => $this->input->post('last_name'),
-                    'country' => $this->input->post('countries'),
-                );            
-                //user changes password field, so we need to update password
-                if($this->input->post('password') != $this->config->item('samply_dummy_password', 'ion_auth'))
-                {
-                    $additional_data['password'] = $this->input->post('password');
-                }
-                if($this->ion_auth->update_user($user_id, $additional_data))
-                {
-                    $this->session->set_flashdata('message', $this->ion_auth->messages());
-                    redirect('auth/edit_user', 'refresh');
-                }
-                else
-                {
-                    $this->data['message'] = $this->ion_auth->errors();
-                }
-            }
-            else
-            {
-                $this->data['message'] = (validation_errors() ? validation_errors() : '');
-            }
-        }
-        else
-        {
-            $this->data['message'] = $this->session->flashdata('message'); 
-        }
-        $user_info = array();
-        $user_info_array = $this->ion_auth->where('users.id',$user_id)->users()->result_array();
-        if(empty($user_info_array))
-        {
-            redirect('auth', 'refresh');
-        }   
-        else
-        {
-            $user_info = $user_info_array[0];
-        }        
-        $this->data['first_name'] = array('name' => 'first_name',
-            'id' => 'first_name',
-            'type' => 'text',
-            'value' => $user_info['first_name'],
-        );
-        $this->data['last_name'] = array('name' => 'last_name',
-            'id' => 'last_name',
-            'type' => 'text',
-            'value' => $user_info['last_name'],
-        );
-        $this->data['password'] = array('name' => 'password',
-            'id' => 'password',
-            'type' => 'password',
-            'value' => $this->config->item('samply_dummy_password', 'ion_auth'),
-        );
-        $this->data['password_confirm'] = array('name' => 'password_confirm',
-            'id' => 'password_confirm',
-            'type' => 'password',
-            'value' => $this->config->item('samply_dummy_password', 'ion_auth'),
-        );
-        $countries = $this->ion_auth->order_by('printable_name','asc')->get_all_countries()->result_array();
-        $this->data['countries'] = array();
-        foreach ($countries as $country)
-        {
-            $this->data['countries'][$country['iso']] = $country['printable_name'];
-        }
-        $this->data['selected_country'] = $user_info['country'];
-        $this->data['submit_update_user'] = array(
-            'name' => 'submit_update_user',
-            'id' => 'submit_update_user',
-            'type' => 'submit',
-            'value' => 'Update User'
-        );
-        $this->template->load(MEMBER_HOME_TEMPLATE, "auth/edit_user", $this->data);
     }
     
     /*
@@ -840,7 +686,7 @@ class Auth extends CI_Controller {
         }
         else
         {
-            redirect('auth', refresh);
+            redirect('auth/login', refresh);
         }
     }
     /*

@@ -17,7 +17,7 @@ class Scripts extends CI_Controller
         $this->load->database();
         $this->load->helper('url');
         $this->load->helper('file');
-        if( !$this->ion_auth->logged_in() )
+        if( !$this->ion_auth->valid_session() )
         {
             redirect('auth/login','refresh');
         }
@@ -50,6 +50,7 @@ class Scripts extends CI_Controller
             $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
             return;
         }
+        $this->data['project_id'] = $project_id;
         $session_data = array(
             'current_project_type_id' => $this->project_types_list['script_id']
         );

@@ -1,12 +1,13 @@
 <script type="text/javascript">
-$(document).ready(function()
-{
-    xml_path = '<?php 
-                    $CI = &get_instance();
-                    $project_id = $CI->session->userdata('project_id');
-                    echo '../../xml/'.$project_id.'.xml';
-                ?>';
+$(function() {
+    template_service_url = '<?php echo base_url()?>'+'../smartycode/service.php';
+    template_service_condition_url = '<?php echo base_url()?>'+'../smartycode/code_condition_service.php';
+    template_service_action_url = '<?php echo base_url()?>'+'../smartycode/code_action_service.php';
+        
+    project_xml_path = '<?php echo '../../xml/'.$project_id.'.xml'; ?>';
     load_xml();
+    console.log(feature_list);
+    console.log(feature_list.length);
     //filtering left panel content
     reset_left_panel_content();
     var user_projects_name_string = '<?php echo $user_project_name_list?>';
@@ -83,6 +84,22 @@ $(document).ready(function()
     
     trackUserOperation();
 });
+function save_project() {
+    updateClientEndOperationCounter();
+    $.ajax({
+        dataType: 'json',
+        type: "POST",
+        url: '<?php echo base_url(); ?>' + "projects/update_project_left_panel",
+        data: {
+            project_id: '<?php echo $project_id;?>',
+            left_panel_content: $("#selectable").html()
+        },
+        success: function(data) {
+            $("#label_show_messages_content").html(data.message);
+            $("#modal_show_messages").modal('show');
+        }
+    });
+}
 </script>
 <table class="table-responsive table" >
     <tr align="right" style="color:green">
@@ -799,23 +816,6 @@ $(document).ready(function()
 </div>
 <!-- end of logical connector boolean variable div modal -->
 
-<div id="load_projects_confirmation_window_div_modal" >
-    <?php echo form_open("general_process/load_project_list_project_panel");?>    
-    <table>
-        
-        <tr>
-           <td>
-               <label> Do you want to save your current project?</label>
-           </td>
-        </tr>        
-    </table>
-    <input type = "hidden" value="" name="pre_load_project_left_panel_content" id="pre_load_project_left_panel_content" />
-    <input type="submit" id="button_pre_load_project_ok" name="button_pre_load_project_ok" onclick="return button_pre_load_project_ok_pressed()" value="Save"/>
-    <input type="submit" id="button_pre_load_project_no" name="button_pre_load_project_no" value="No"/>
-    <?php echo form_close();?>
-    
-</div>
-
 <div id="save_as_project_div_modal" >
     <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
         <tr>
@@ -977,28 +977,6 @@ $(document).ready(function()
         </tr>              
     </table> 
 </div>
-
-<div id="upload_project_div" >
-    <table>        
-        <?php echo form_open("general_process/upload_project");?>
-        <tr>
-            <td>                
-                <label >Do you want to keep your current changes?</label><br/>
-                <input type="hidden" id="upload_project_project_left_panel_content" name="upload_project_project_left_panel_content" value=""/>
-            </td>
-        </tr>
-        <tr>
-            <td style="float:right;">
-                <input type="submit" id="button_no_upload_project" value="No" onclick="return button_no_clicked_upload_project()"/>
-            </td>
-            <td style="float:right;">
-                <input type="submit" id="button_yes_upload_project" value="Yes" onclick="return button_yes_clicked_upload_project()"/>                    
-            </td>            
-        </tr>
-        <?php echo form_close();?>
-    </table> 
-</div>
-
 <div id="div_alert_message" >
     <table>
         <tr>
@@ -1006,3 +984,6 @@ $(document).ready(function()
         </tr>
     </table>
 </div>
+<?php $this->load->view('project/modal/my_projects_confirmation');
+      $this->load->view('project/modal/upload_project_confirmation');
+      $this->load->view('project/modal/show_messages');

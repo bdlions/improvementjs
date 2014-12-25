@@ -1,0 +1,8 @@
+external bool var1 = true;
+external bool Use = true;
+external bool isOK = false;
+external int Check = 1; 
+external bool Allow=false;
+external int Slip = 3;  
+external int Number = 5432101;
+external string a="asdas";

@@ -3,7 +3,7 @@
     <?php if ($message != NULL): ?>
         <div class="alert alert-danger alert-dismissible"><?php echo $message; ?></div>
     <?php endif; ?>
-    <?php echo form_open('auth/edit_user', "class='form-horizontal' role='form'"); ?>
+    <?php echo form_open('user/edit_user', "class='form-horizontal' role='form'"); ?>
     <div class="panel panel-default">
         <div class="panel-heading">
             Update user information

@@ -13,7 +13,7 @@ function load_xml()
     updateClientEndOperationCounter();
     feature_list = new Array();
     feature_list_counter = 0;
-    $.get(xml_path, {}, function(xml)
+    $.get(project_xml_path, {}, function(xml)
     {
         $('feature', xml).each(function(i)
         {
@@ -70,26 +70,8 @@ function load_xml()
             });
             feature_object.setParameterList(parameter_list);
             feature_list[feature_list_counter++] = feature_object;
-            //feature_list_counter++;
-            //alert("featre list length:"+feature_list.length+" and feature object parameter list length:"+parameter_list.length);
-            //alert(feature_object.getOptions()+feature_object.getOptionsType()+feature_object.getNatural()+feature_object.getCode()+feature_object.getHelp());
-            
-        });
-        //displaying feature list for debugging
-        /*var counter;
-        var parameter_counter;
-        for( counter = 0; counter < feature_list.length ; counter++)
-        {
-            alert(feature_list[counter].getOptions()+feature_list[counter].getOptionsType()+feature_list[counter].getNatural()+feature_list[counter].getCode()+feature_list[counter].getHelp());
-            parameter_counter = 0;
-            for(parameter_counter = 0;parameter_counter<feature_list[counter].getParameterList().length; parameter_counter++)
-            {
-                alert(feature_list[counter].getParameterList()[parameter_counter].getName()+feature_list[counter].getParameterList()[parameter_counter].getType()+feature_list[counter].getParameterList()[parameter_counter].getDefaultValue());
-            }
-        }*/
-        
+        });        
     });
-    
 }
 var project_name_list = new Array();
 function set_project_name_list(pnl)

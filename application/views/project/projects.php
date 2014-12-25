@@ -40,4 +40,4 @@
         </table>
     </div>
 </div>
-<?php $this->load->view('project/modal_delete_project_confirmation');?>
+<?php $this->load->view('project/modal/delete_project_confirmation');?>

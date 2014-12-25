@@ -4,11 +4,11 @@
             Projects<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a onclick="load_project_list()">My Projects</a></li>
-            <li><a onclick="save()">Save</a></li>
+            <li><a onclick="my_projects_confirmation()">My Projects</a></li>
+            <li><a onclick="save_project()">Save</a></li>
             <li><a onclick="save_as()">Save As</a></li>
             <li><a onclick="download_project()">Download Project</a></li>
-            <li><a onclick="upload_project()">Upload Project</a></li>        
+            <li><a onclick="upload_project_confirmation()">Upload Project</a></li>        
         </ul>
     </div>
     <div class="btn-group">

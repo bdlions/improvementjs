@@ -9,7 +9,7 @@ class Projects extends CI_Controller {
         $this->load->library('form_validation');
         $this->load->library('ion_auth');
         $this->load->library('project/project_library');
-        if (!$this->ion_auth->logged_in()) {
+        if (!$this->ion_auth->valid_session()) {
             redirect('auth/login', 'refresh');
         }
     }
@@ -186,7 +186,130 @@ class Projects extends CI_Controller {
         }        
         $this->data['projects'] = $this->project_library->get_all_scripts($user_id)->result();
         $this->template->load(MEMBER_HOME_TEMPLATE, "project/projects", $this->data); 
-    }    
+    }   
+    
+    /*
+     * This method will upload project
+     */
+    public function upload_project($project_id = 0)
+    {
+        $this->data['message'] = "";
+        $this->data['project_id'] = $project_id;
+        $user_id = $this->session->userdata('user_id');
+        $project_info = array();
+        $project_info_array = $this->project_library->get_project_info($project_id)->result_array();
+        if(!empty($project_info_array))
+        {
+            $project_info = $project_info_array[0];
+            if($project_info['user_id'] != $user_id)
+            {
+                $this->data['message'] = "You don't have permission to view this project."; 
+                $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+                return;
+            }
+        }
+        else
+        {
+            $this->data['message'] = "No such project to upload."; 
+            $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+            return;
+        }
+        $project_type_id = $project_info['project_type_id'];
+        if($this->input->post('upload'))
+        {
+            $config['upload_path'] = './project/';
+            $config['allowed_types'] = 'xml';
+            $config['max_size'] = '5000';
+            $config['file_name'] = $project_id. ".xml";
+            $config['overwrite'] = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload()) 
+            {
+                $this->data['message'] = $this->upload->display_errors(); 
+                $this->template->load(MEMBER_HOME_TEMPLATE, "project/upload_project", $this->data); 
+                return;
+            } 
+            else 
+            {
+                $this->load->library('projectxmlparser');
+                $project_xml_object = $this->projectxmlparser->readXML();
+                //user uploads a wrong project/file
+                if($project_xml_object == null)
+                {
+                    $this->data['message'] = "Invalid file content. Please upload correct project."; 
+                    $this->template->load(MEMBER_HOME_TEMPLATE, "project/upload_project", $this->data); 
+                    return;
+                }
+                else
+                {
+                    $properties = $project_xml_object->properties;
+                    if($project_type_id != $properties->project_type_id)
+                    {                        
+                        if( $project_type_id == PROJECT_TYPE_ID_PROGRAM)
+                        {
+                            $this->data['message'] = "Please upload a program."; 
+                        }
+                        else if( $project_type_id == PROJECT_TYPE_ID_SCRIPT)
+                        {
+                            $this->data['message'] = "Please upload a script."; 
+                        }
+                        $this->template->load(MEMBER_HOME_TEMPLATE, "project/upload_project", $this->data); 
+                        return;
+                    }
+                    $project_content = $project_xml_object->code;
+                    if($project_content != false){
+                        $data = array(
+                            'project_content' => $project_content,
+                            'project_content_backup' => $project_content
+                        );
+                        $this->ion_auth->where('project_id',$this->session->userdata('project_id'))->update_project($data);
+                    }
+                    //deleting current variables of this project
+                    $current_variable_ids = array();
+                    $variable_counter = 0;
+                    $custom_variables = $this->ion_auth->where('project_id',$this->session->userdata('project_id'))->get_project_variables()->result();
+                    foreach ($custom_variables as $custom_variable):
+                        $current_variable_ids[$variable_counter++] = $custom_variable->variable_id;
+                    endforeach;
+                    if($variable_counter > 0)
+                    {
+                        $this->ion_auth->where_in('variable_id',$current_variable_ids)->delete_project_variables();
+                        $this->ion_auth->where_in('variable_id',$current_variable_ids)->delete_variables();
+                    }
+                    //adding variables of uploaded file into this project
+                    $custom_variables = $project_xml_object->variables;
+                    foreach ($custom_variables as $custom_variable){
+                        $additional_variable_data = array(
+                            'variable_name' => $custom_variable->name,
+                            'variable_type' => $custom_variable->type,
+                            'variable_value' => $custom_variable->value,
+                        );
+                        $additional_project_data = array(
+                            'project_id' => $this->session->userdata('project_id'),
+                        );
+                        $this->variable_library->create_variable($additional_variable_data, $additional_project_data);
+                    }
+                    
+                    if( $project_type_id == PROJECT_TYPE_ID_PROGRAM)
+                    {
+                        redirect("programs/load_program/".$project_id, 'refresh');
+                    }
+                    else if( $project_type_id == PROJECT_TYPE_ID_SCRIPT)
+                    {
+                        redirect("scripts/load_script/".$project_id, 'refresh');
+                    }
+                    else
+                    {
+                        redirect('auth', 'refresh');     
+                    }                              
+                }                
+            }
+        }
+        $this->template->load(MEMBER_HOME_TEMPLATE, "project/upload_project", $this->data); 
+    }
+    
     /*
      * Ajax call to delete a project
      */
@@ -218,6 +341,39 @@ class Projects extends CI_Controller {
         else
         {
             $response['message'] = "No such project to delete."; 
+        }
+        echo json_encode($response);
+    }
+    
+    /*
+     * Ajax call to update project left panel
+     */
+    public function update_project_left_panel()
+    {
+        $response = array();
+        $project_id = $this->input->post('project_id');
+        $left_panel_content = $this->input->post('left_panel_content');
+        if($project_id > 0)
+        {
+            $additional_data = array(
+                'project_content_backup' => $left_panel_content,
+                'project_content' => $left_panel_content
+            );
+            if($this->project_library->update_project($project_id, $additional_data))
+            {
+                $response['status'] = 1;
+                $response['message'] = $this->project_library->messages_alert();
+            }
+            else
+            {
+                $response['status'] = 0;
+                $response['message'] = $this->project_library->errors_alert();
+            }
+        }
+        else
+        {
+            $response['status'] = 0;
+            $response['message'] = "Invalid project to update.";
         }
         echo json_encode($response);
     }

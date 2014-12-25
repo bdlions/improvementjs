@@ -1,3 +1,11 @@
+var template_service_url = "";
+var template_service_condition_url = "";
+var template_service_action_url = "";
+
+var project_xml_path = "";
+
+
+
 var left_panel_selected_item_type = "";
 var service_url = "";
 

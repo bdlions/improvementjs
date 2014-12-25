@@ -231,6 +231,8 @@ function reverse_code_process(parentNode, childNode, selectedCode)
     var nameArray = Array();
     var valueArray = Array();
     var array_index_counter = 0;
+    console.log(feature_list);
+    console.log(feature_list.length);
     for(var j = 0 ; j < feature_list.length ; j++)
     {
         var feature_object = feature_list[j];
