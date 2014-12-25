@@ -101,87 +101,79 @@ function save_project() {
     });
 }
 </script>
+
+
 <table class="table-responsive table" >
     <tr align="right" style="color:green">
-        <td><div id="project_name_label"><b>Project Name&nbsp;:&nbsp;</b> <?php echo $selected_project->project_name?> <b>&nbsp;Type&nbsp;:&nbsp;</b> <?php echo$project_type;?> <b>&nbsp;Welcome&nbsp;:&nbsp;</b><?php echo $user_info['username']?></div></td>
+        <td colspan="2">
+            <div id="project_name_label"><b>Project Name&nbsp;:&nbsp;</b> <?php echo $selected_project->project_name ?> <b>&nbsp;Type&nbsp;:&nbsp;</b> <?php echo$project_type; ?> <b>&nbsp;Welcome&nbsp;:&nbsp;</b><?php echo $user_info['username'] ?></div>
+        </td>
     </tr>
-</table>
+    <tr>
+        <td colspan="2"><div id="condition_action_label">Condition in natural Language</div></td>
+    </tr>
 
-<table class="table-responsive table" >
-        <tr>
-            <td><div id="condition_action_label">Condition in natural Language</div></td>
-        </tr>
-        <tr>
-            <td>
-                <table class="table-responsive table" >
-                    <tr>
-                        <td colspan="2" bgcolor="#999999"><p id="changing_stmt" class="modify"></p></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Code</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" bgcolor="#999999"><p id="code_stmt" class="modify"></p></td>
-                    </tr>
-                    <tr>
-                        <td align="center" height="30px">Options</td>
-                        <td align="center" height="30px">Parameters</td>
-                    </tr>
-                    <tr >
+                <tr>
+                    <td colspan="2" bgcolor="#999999"><p id="changing_stmt" class="modify"></p></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Code</td>
+                </tr>
+                <tr>
+                    <td colspan="2" bgcolor="#999999"><p id="code_stmt" class="modify"></p></td>
+                </tr>
+                <tr>
+                    <td align="center" height="30px">Options</td>
+                    <td align="center" height="30px">Parameters</td>
+                </tr>
+                <tr >
 
-                        <td class="list_style" width="50%" valign="top">
-                            <div id="demo1" class="demo" style="height:300px; width:100%;">
-                                
-                                <?php
-                               
-                                foreach ($fObjectArray as $key => $objectList) 
-                                {
+                    <td class="list_style" width="50%" valign="top">
+                        <div id="demo1" class="demo" style="height:300px; width:100%; overflow: scroll; overflow-x: hidden">
+
+                            <?php
+                            foreach ($fObjectArray as $key => $objectList) {
                                 ?>
-                                    <ul>
-                                        <li id="<?php echo $key ?>" rel="folder">
-                                            <a href="#"><?php echo $key; ?></a>
-                                            <ul>
-                                        <?php
-                                                foreach ($objectList as $customObj)
-                                                {
-                                                    echo "<li id='{$customObj->optionstype}' name='{$key}' rel='default'><a href='#' >";
-                                                    echo $customObj->optionstype;
-                                                    echo "</a></li>";
-                                                }
-                                        ?>
-
-                                            </ul>
-                                        </li>                                  
-
-                                    </ul>
-<?php
-                                }
-?>
                                 <ul>
-                                    <li id="<?php echo "variable" ?>" rel="folder">
-                                        <a href="#"><?php echo "variable"; ?></a>
+                                    <li id="<?php echo $key ?>" rel="folder">
+                                        <a href="#"><?php echo $key; ?></a>
                                         <ul>
-                                        <?php
-                                            foreach ($custom_variables as $cv)
-                                            {
-                                                echo "<li title='{$cv->variable_type}' id='{$cv->variable_name}' name='variable' rel='default'><a href='#' >";
-                                                echo $cv->variable_name;
-                                                echo "</a></li>";
-                                            }
-                                        ?>
+    <?php
+    foreach ($objectList as $customObj) {
+        echo "<li id='{$customObj->optionstype}' name='{$key}' rel='default'><a href='#' >";
+        echo $customObj->optionstype;
+        echo "</a></li>";
+    }
+    ?>
 
                                         </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                        <td valign="top"><p id="parameters_table"></p></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+                                    </li>                                  
 
-    </table>
+                                </ul>
+    <?php
+}
+?>
+                            <ul>
+                                <li id="<?php echo "variable" ?>" rel="folder">
+                                    <a href="#"><?php echo "variable"; ?></a>
+                                    <ul>
+<?php
+foreach ($custom_variables as $cv) {
+    echo "<li title='{$cv->variable_type}' id='{$cv->variable_name}' name='variable' rel='default'><a href='#' >";
+    echo $cv->variable_name;
+    echo "</a></li>";
+}
+?>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td valign="top"><p id="parameters_table"></p></td>
+                </tr>
+
+</table>
 
         <!-- start of action_variable_modal -->
         <div id="action_variable_modal" >
