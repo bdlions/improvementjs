@@ -70,7 +70,7 @@ function load_xml()
             });
             feature_object.setParameterList(parameter_list);
             feature_list[feature_list_counter++] = feature_object;
-        });        
+        });   console.log(feature_list);     
     });
 }
 var project_name_list = new Array();

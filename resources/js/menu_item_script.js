@@ -307,6 +307,8 @@ function generate_code()
 //        theme: false,
 //        baseZ: 500
 //    });
+
+    waitScreen.show();
     $.get('../../json/blockMap.json', function(mapping){
         $.get('../../json/sample.xml', function(xml) {
             var jsonObj = $.xml2json(xml);
@@ -335,6 +337,7 @@ function generate_code()
                                 $('#div_alert_message').dialog('open');
                                 //alert("Server processing error. Please try again.");
                             }
+                            waitScreen.hide();
                             //$.unblockUI();
                         }
                     });

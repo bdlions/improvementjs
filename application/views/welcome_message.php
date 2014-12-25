@@ -987,3 +987,5 @@ function save_project() {
 <?php $this->load->view('project/modal/my_projects_confirmation');
       $this->load->view('project/modal/upload_project_confirmation');
       $this->load->view('project/modal/show_messages');
+      $this->load->view('project/modal/wait_screen');
+      ?>
