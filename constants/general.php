@@ -3,6 +3,7 @@
     define("LOGIN_TEMPLATE",                           "templates/login_tmpl");
     define("NON_MEMBER_TEMPLATE",                      "templates/non_member_tmpl");
     define("MEMBER_HOME_TEMPLATE",                     "templates/member_home_tmpl");
+    define("MEMBER_PROJECT_TEMPLATE",                  "templates/member_project_tmpl");
 
     define("PROJECT_TYPE_ID_PROGRAM",                  "1");
     define("PROJECT_TYPE_ID_SCRIPT",                   "2");

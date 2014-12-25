@@ -14,6 +14,13 @@
         
         <link rel='stylesheet' type='text/css' href='<?php echo base_url(); ?>jstree_resource/_docs/syntax/!style.css'/>
 
+        <style type="text/css">
+            .ui-dialog
+            {
+                z-index: 101;
+            }
+        </style>
+
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-2.1.3.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-ui.min.js"></script>
@@ -60,13 +67,18 @@
             </div>
             <div clas="row" style="padding-top: 2px; padding-bottom: 5px;">
             <?php
-                $this->load->view("design/menu_bar_member_home");
+                $this->load->view("design/menu_bar");
             ?>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
+                      <div style="margin-left:-18px">
+                        <?php $this->load->view("templates/sections/left_side_bar");?>
+                      </div>
+                </div>
+                <div class="col-md-8" style="border: 1px solid #5cb85c;">
                     <?php echo $contents; ?>
-                </div>                
+                </div>
             </div>   
             <?php
                 $this->load->view("templates/sections/footer");

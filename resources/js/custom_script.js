@@ -480,12 +480,7 @@ $(function ()
         //generating parameters table
         //resetting parameters table content
         document.getElementById("parameters_table").innerHTML = "";
-        console.log(name);
-        console.log(id);
-        console.log(selected_code.trim());
-        
         var returned_array = reverse_code_process(name, id, selected_code.trim());
-        console.log(returned_array);
         nameArray = returned_array[0];
         valueArray = returned_array[1];
         

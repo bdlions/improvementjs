@@ -311,6 +311,120 @@ class Projects extends CI_Controller {
     }
     
     /*
+     * This method will upload external variables
+     */
+    function upload_external_variables($project_id)
+    {
+        $this->data['project_id'] = $project_id;
+        $user_id = $this->session->userdata('user_id');
+        $project_info = array();
+        $project_info_array = $this->project_library->get_project_info($project_id)->result_array();
+        if(!empty($project_info_array))
+        {
+            $project_info = $project_info_array[0];
+            if($project_info['user_id'] != $user_id)
+            {
+                $this->data['message'] = "You don't have permission to view this project."; 
+                $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+                return;
+            }
+        }
+        else
+        {
+            $this->data['message'] = "No such project to upload."; 
+            $this->template->load(MEMBER_HOME_TEMPLATE, 'auth/show_messages', $this->data);
+            return;
+        }
+        $project_type_id = $project_info['project_type_id'];  
+        if($this->input->post())
+        {
+            if($this->input->post('upload'))
+            {
+                $config['upload_path'] = './external_variables/';
+                $config['allowed_types'] = 'txt';
+                $config['max_size'] = '5000';
+                $config['overwrite'] = TRUE;
+
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload()) {
+                    $this->data['message'] = $this->upload->display_errors(); 
+                    $this->template->load(MEMBER_HOME_TEMPLATE, "project/upload_external_variables", $this->data); 
+                    return;                    
+                } else {
+                    $data = $this->upload->data();
+                    $uploaded_file_name = $data['raw_name'];
+                    $uploaded_file_path = "./external_variables/".$uploaded_file_name.".txt";
+                    $external_file_content = "";
+                    if (file_exists($uploaded_file_path)) {
+                        $external_file_content = file_get_contents($uploaded_file_path);                
+                    }
+                    $external_variable_list = array();
+                    $variable_name = array();
+                    $external_variable_values = array();
+                    $external_variable_values[0] = "\"".$uploaded_file_name."\"";
+                    $file_content_array = explode("\n", $external_file_content);
+                    $total_lines = count($file_content_array);
+                    $variable_counter = 0;
+                    for($counter = 0 ; $counter < $total_lines ; $counter++)
+                    {
+                        $each_line_content = $file_content_array[$counter];
+                        $each_line_content = trim($each_line_content);
+                        $first_word = substr($each_line_content, 0, 8);
+                        //Step 1 finding all lines that start with external
+                        if($first_word == "external")
+                        {
+                            $external_variable_list[$variable_counter] = $each_line_content;
+                            //Step 2 removing stuff after ;
+                            $temp_string  =  explode(";", $each_line_content);
+
+                            if(count($temp_string) > 1)
+                            {
+                                $comment_string = $temp_string[1];
+                                $comment_string = trim($comment_string);
+                                $comment_first_word = substr($comment_string, 0, 8);
+                                if($comment_first_word == "external")
+                                {
+                                    $this->session->set_userdata('external_file_content_error', "true");
+                                    $redirect_path = "welcome/load_project/".$project_id;
+                                    redirect($redirect_path, 'refresh');
+                                    return;
+                                }
+                            }
+
+                            $each_line_content = $temp_string[0];
+                            $temp_string  =  explode("=", $each_line_content);
+                            //storing variable value
+                            $external_variable_values[$variable_counter+1] = " ".trim($temp_string[1]);
+                            $temp_string = explode(" ", trim($temp_string[0]));
+                            //Step 3 getting the variable names
+                            $variable_name[$variable_counter] = $temp_string[count($temp_string)-1];
+                            //print_r("variable->".$variable_name[$variable_counter].":".$external_variable_values[$variable_counter]."--");
+                            $variable_counter++;
+                        }                
+                    }
+                    $this->session->set_userdata('external_variable_list', $external_variable_list);
+                    $this->session->set_userdata('external_variable_values', $external_variable_values);                    
+                }
+            }
+            else if($this->input->post('cancel'))
+            {
+                $this->session->set_userdata('is_cancel_pressed_external_variable_upload', "true");
+            } 
+            $redirected_path = "";
+            if( $project_type_id == PROJECT_TYPE_ID_PROGRAM)
+            {
+                $redirected_path = "programs/load_program/".$project_id;
+            }
+            else if( $project_type_id == PROJECT_TYPE_ID_SCRIPT)
+            {
+                $redirected_path = "scripts/load_script/".$project_id;
+            }
+            redirect($redirected_path, 'refresh');
+        }
+        $this->template->load(MEMBER_HOME_TEMPLATE, "project/upload_external_variables", $this->data);        
+    }
+    
+    /*
      * Ajax call to delete a project
      */
     public function delete_project()
@@ -358,6 +472,40 @@ class Projects extends CI_Controller {
             $additional_data = array(
                 'project_content_backup' => $left_panel_content,
                 'project_content' => $left_panel_content
+            );
+            if($this->project_library->update_project($project_id, $additional_data))
+            {
+                $response['status'] = 1;
+                $response['message'] = $this->project_library->messages_alert();
+            }
+            else
+            {
+                $response['status'] = 0;
+                $response['message'] = $this->project_library->errors_alert();
+            }
+        }
+        else
+        {
+            $response['status'] = 0;
+            $response['message'] = "Invalid project to update.";
+        }
+        echo json_encode($response);
+    }
+    
+    /*
+     * Ajax call to update project left panel backup
+     */
+    public function update_project_left_panel_backup()
+    {
+        $response = array();
+        $project_id = $this->input->post('project_id');
+        $left_panel_content = $this->input->post('left_panel_content');
+        //verify that current user is owner of this project id
+        if($project_id > 0)
+        {
+            $this->session->set_userdata('selected_anchor_id', $this->input->post('selected_anchor_id'));
+            $additional_data = array(
+                'project_content_backup' => $left_panel_content
             );
             if($this->project_library->update_project($project_id, $additional_data))
             {

@@ -1,13 +1,14 @@
 <script type="text/javascript">
 $(function() {
+    //configuraing smarty urls to generate code
     template_service_url = '<?php echo base_url()?>'+'../smartycode/service.php';
     template_service_condition_url = '<?php echo base_url()?>'+'../smartycode/code_condition_service.php';
     template_service_action_url = '<?php echo base_url()?>'+'../smartycode/code_action_service.php';
-        
+    //storing previously selected anchor in natural language panel
+    natural_language_panel_selected_anchor_id = '<?php echo $selected_anchor_id?>';
     project_xml_path = '<?php echo '../../xml/'.$project_id.'.xml'; ?>';
+    //loading project xml
     load_xml();
-    console.log(feature_list);
-    console.log(feature_list.length);
     //filtering left panel content
     reset_left_panel_content();
     var user_projects_name_string = '<?php echo $user_project_name_list?>';
@@ -37,15 +38,6 @@ $(function() {
     var external_variable_length = '<?php echo count($external_variable_values)?>';
     if(external_variable_length > 0 || is_cancel_pressed_external_variable_upload == 'true' || external_file_content_error == 'true')
     {
-        //retrieving previously selected anchor id in natural language panel to select this expression after page reload
-        var naturalLanguagePanelSelectedAnchorId = '<?php echo $selected_anchor_id?>';
-        left_panel_condition_or_action_selected();
-        $("a", $("#changing_stmt")).each(function () 
-        {
-             if(naturalLanguagePanelSelectedAnchorId == $(this).attr("id")) {
-                manageExpression(this);   
-             }    
-        });
         if(is_cancel_pressed_external_variable_upload == 'true')
         {
             $('#label_alert_message').text("Press upload button again to load external variables.");
@@ -83,6 +75,32 @@ $(function() {
     set_server_base_url(base_url);
     
     trackUserOperation();
+    
+    $("#parameters_table").on("click", '#button_external_variable_upload',function() {
+        var selected_anchor_id = "";
+        $("a", $('#changing_stmt')).each(function () {
+            //selected expression anchor id in natural language panel
+            if($(this).attr("class") == "selected_expression")
+            {
+                selected_anchor_id = $(this).attr("id");
+            }
+        });
+        //document.cookie= "selected_anchor_id" + "=" + selected_anchor_id;
+        updateClientEndOperationCounter();
+        $.ajax({
+            dataType: 'json',
+            type: "POST",
+            url: '<?php echo base_url(); ?>' + "projects/update_project_left_panel_backup",
+            data: {
+                project_id: '<?php echo $project_id;?>',
+                left_panel_content: $("#selectable").html(),
+                selected_anchor_id: selected_anchor_id
+            },
+            success: function(data) {
+                window.location = '<?php echo base_url().'projects/upload_external_variables/'.$project_id;?>';
+            }
+        });
+    });
 });
 function save_project() {
     updateClientEndOperationCounter();

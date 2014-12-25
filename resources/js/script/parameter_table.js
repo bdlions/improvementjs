@@ -147,6 +147,7 @@ function customTextChange(childNodeName, parentNodeName, hasLimit, lowerLimit, u
                         //thats why we are returning back if we store parameter value
                         if(isParameterValueStored == true)
                             return;
+                        $(this).attr('value', $(this).val());
                         valueArray[counter] = $(this).attr("value");
                         isParameterValueStored = true;
                         //reading current text input id
@@ -325,23 +326,4 @@ function updateConditionAndCode(parentNodeName, childNodeName, nameArray, valueA
     });
     //updating code panel
     generate_selected_item_code();        
-}
-
-/*
- * User presses upload button in parameter table and the form is submitted
- **/
-function externalVariableFormSubmit()
-{
-    document.getElementById('external_variable_upload_project_left_panel_content').value = $("#selectable").html(); 
-    var naturalLanguagePanelSelectedAnchorId = "";
-    $("a", $('#changing_stmt')).each(function () {
-        //selected expression anchor id in natural language panel
-        if($(this).attr("class") == "selected_expression")
-        {
-            naturalLanguagePanelSelectedAnchorId = $(this).attr("id");
-        }
-    });
-    //storing selected expression anchor id in natural language panel and this id will be used to select expression after page reload
-    document.getElementById('ev_anchor_id').value = naturalLanguagePanelSelectedAnchorId; 
-    document.getElementById("external_variable_form_upload").submit();    
 }

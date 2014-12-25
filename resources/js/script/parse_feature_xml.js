@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 var feature_list = new Array();
-
+var natural_language_panel_selected_anchor_id = "";
 
 var feature_list_counter = 0;
 var parameter_list_counter = 0;
@@ -70,7 +70,18 @@ function load_xml()
             });
             feature_object.setParameterList(parameter_list);
             feature_list[feature_list_counter++] = feature_object;
-        });   console.log(feature_list);     
+        });
+        //after loading the xml if there is previously slected anchor id then it is loaded at tree
+        if(natural_language_panel_selected_anchor_id != "")
+        {
+            left_panel_condition_or_action_selected();
+            $("a", $("#changing_stmt")).each(function () 
+            {
+                 if(natural_language_panel_selected_anchor_id == $(this).attr("id")) {
+                    manageExpression(this);   
+                 }    
+            });
+        }
     });
 }
 var project_name_list = new Array();

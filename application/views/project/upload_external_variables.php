@@ -1,5 +1,5 @@
-<?php if(isset($error)) echo $error['error'] ?>
-<?php echo form_open_multipart('general_process/upload_external_variables_post_processing');?>
+<?php if(isset($message)) echo $message ?>
+<?php echo form_open_multipart('projects/upload_external_variables/'.$project_id);?>
     <table>
         <tr>
             <td >     

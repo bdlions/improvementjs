@@ -30,6 +30,7 @@ class Programs extends CI_Controller {
     {
         $user_id = $this->session->userdata('user_id');
         $this->data['message'] = "";
+        $project_info = array();
         $project_info_array = $this->project_library->get_project_info($project_id)->result_array();
         if(!empty($project_info_array))
         {
@@ -48,6 +49,8 @@ class Programs extends CI_Controller {
             return;
         }
         $this->data['project_id'] = $project_id;
+        $this->data['selected_project'] = $project_info;
+        
         $session_data = array(
             'current_project_type_id' => $this->project_types_list['program_id']
         );
@@ -57,21 +60,16 @@ class Programs extends CI_Controller {
         
         $this->session->set_userdata('project_id', $project_id);
         $base = base_url();
-        $this->template->set('title', 'Welcome');
-        //$this->template->set('main_content', 'test');
-        $this->template->set('main_content', 'welcome_message');
-        $this->template->set('menu_bar', 'design/menu_bar');
-        $this->template->set('left_side_bar', 'design/code_process/left_side_bar');
-
+        
         $this->load->library('xmlperser');
         $fObjectArray = $this->xmlperser->readXML();
         
         //$this->load->model('language_process_model');
         $custom_variables = $this->ion_auth->where('project_id',$this->session->userdata('project_id'))->get_project_variables()->result();
 
-        $this->template->set('custom_variables', $custom_variables);
+        $this->data['custom_variables'] = $custom_variables;
 
-        $this->template->set('fObjectArray', $fObjectArray);
+        $this->data['fObjectArray'] = $fObjectArray;
         
         //$selected_project = $this->ion_auth->where('project_info.project_id',$project_id)->projects()->result();
         $selected_project = $this->program->where('project_id',$project_id)->get_all_programs()->result();
@@ -138,16 +136,18 @@ class Programs extends CI_Controller {
             $this->session->set_userdata('external_file_content_error', "false");
         }
         
-        $user_infos = $this->ion_auth->where('users.id',$this->session->userdata('user_id'))->users()->result_array();
-        if(count($user_infos) <= 0)
+        //storing user info
+        $user_info = array();
+        $user_info_array = $this->ion_auth->where('users.id',$user_id)->users()->result_array();
+        if(!empty($user_info_array))
         {
-            $user_info['username'] = 'Guest';
+            $user_info = $user_info_array[0];
         }
-        $user_info = $user_infos[0];
         $this->data['user_info'] = $user_info;
+        
         $this->data['external_variable_list'] = $external_variable_list;
-        $this->data['external_variable_values'] = $external_variable_values;         
-        $this->template->load("default_template", 'welcome_message', $this->data);
+        $this->data['external_variable_values'] = $external_variable_values; 
+        $this->template->load(MEMBER_PROJECT_TEMPLATE, 'welcome_message', $this->data);
     }
 
 }
