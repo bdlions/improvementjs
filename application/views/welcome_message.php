@@ -1,7 +1,8 @@
 <script type="text/javascript">
 $(function() {
     //configuraing smarty urls to generate code
-    template_service_url = '<?php echo base_url()?>'+'../smartycode/service.php';
+    template_service_url_c = '<?php echo base_url()?>'+'../smartycode/service_c.php';
+    template_service_url_java = '<?php echo base_url()?>'+'../smartycode/service_java.php';
     template_service_condition_url = '<?php echo base_url()?>'+'../smartycode/code_condition_service.php';
     template_service_action_url = '<?php echo base_url()?>'+'../smartycode/code_action_service.php';
     //storing previously selected anchor in natural language panel
@@ -117,6 +118,15 @@ function save_project() {
             $("#modal_show_messages").modal('show');
         }
     });
+}
+function set_language_c()
+{
+    selected_language_id = language_id_c;
+}
+
+function set_language_java()
+{
+    selected_language_id = language_id_java;
 }
 </script>
 

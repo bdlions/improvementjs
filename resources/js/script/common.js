@@ -1,8 +1,13 @@
-var template_service_url = "";
+var template_service_url_c = "";
+var template_service_url_java = "";
 var template_service_condition_url = "";
 var template_service_action_url = "";
 
 var project_xml_path = "";
+
+var language_id_c = 1;
+var language_id_java = 2;
+var selected_language_id = 1;
 
 
 

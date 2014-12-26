@@ -268,7 +268,15 @@ function generate_code()
     {
         return;
     }
-        
+    var service_url = "";
+    if(selected_language_id == language_id_c)
+    {
+        service_url = template_service_url_c;
+    }
+    else if(selected_language_id == language_id_java)
+    {
+        service_url = template_service_url_java;
+    }
     var parentBlock = new Array();
     
     var li_list = new Array();
@@ -317,7 +325,7 @@ function generate_code()
             mapping['variables'] = get_project_variables();
             $.ajax({
                 type: "POST",
-                url: server_base_url+'../smartycode/service.php',
+                url: service_url,
                 dataType: "json",
                 data: {project_xml : project, mapping:mapping},
                 complete:function(data){

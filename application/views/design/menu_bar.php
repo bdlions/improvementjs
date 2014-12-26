@@ -69,6 +69,15 @@
     </div>
     <div class="btn-group">
         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" style="border: 0px">
+            Language<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a onclick="set_language_c()">C</a></li>
+            <li><a onclick="set_language_java()">Java</a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" style="border: 0px">
             Generate<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
