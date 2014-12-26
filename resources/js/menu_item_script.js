@@ -268,14 +268,14 @@ function generate_code()
     {
         return;
     }
-    var service_url = "";
+    var selected_language = 'c';
     if(selected_language_id == language_id_c)
     {
-        service_url = template_service_url_c;
+       selected_language = 'c';
     }
     else if(selected_language_id == language_id_java)
     {
-        service_url = template_service_url_java;
+        selected_language = 'java';
     }
     var parentBlock = new Array();
     
@@ -325,9 +325,9 @@ function generate_code()
             mapping['variables'] = get_project_variables();
             $.ajax({
                 type: "POST",
-                url: service_url,
+                url: template_service,
                 dataType: "json",
-                data: {project_xml : project, mapping:mapping},
+                data: {project_xml : project, mapping:mapping, language:selected_language},
                 complete:function(data){
                     $('#generate_code_div_modal').dialog('open');
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');

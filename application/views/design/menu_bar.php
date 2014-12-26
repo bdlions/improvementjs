@@ -1,3 +1,8 @@
+<style type="text/css">
+    ul.dropdown-menu li a.active{
+        background-color: #9d9d9d;
+    }
+</style>
 <div class="nav navbar-inverse row" style="background-color: #5cb85c;">
     <div class="btn-group">
         <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" style="border: 0px">
@@ -72,7 +77,7 @@
             Language<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a onclick="set_language_c()">C</a></li>
+            <li><a class="active" onclick="set_language_c()">C</a></li>
             <li><a onclick="set_language_java()">Java</a></li>
         </ul>
     </div>

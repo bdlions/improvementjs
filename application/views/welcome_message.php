@@ -1,8 +1,7 @@
 <script type="text/javascript">
 $(function() {
     //configuraing smarty urls to generate code
-    template_service_url_c = '<?php echo base_url()?>'+'../smartycode/service_c.php';
-    template_service_url_java = '<?php echo base_url()?>'+'../smartycode/service_java.php';
+    template_service = '<?php echo base_url()?>'+'../smartycode/service_language.php';
     template_service_condition_url = '<?php echo base_url()?>'+'../smartycode/code_condition_service.php';
     template_service_action_url = '<?php echo base_url()?>'+'../smartycode/code_action_service.php';
     //storing previously selected anchor in natural language panel
