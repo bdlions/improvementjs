@@ -9,6 +9,12 @@ var language_id_c = 1;
 var language_id_java = 2;
 var selected_language_id = 1;
 
+var current_user_type = "";
+var user_type_member = "";
+var user_type_demo = "";
+
+var maximum_if_per_project = 0;
+
 
 
 var left_panel_selected_item_type = "";

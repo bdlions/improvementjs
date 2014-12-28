@@ -47,15 +47,15 @@ function button_add_variable_ok_pressed()
     var variable_name = document.getElementById('add_variable_name').value;
     if(variable_name == "")
     {
-        $('#label_alert_message').text("Please assign variable name.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please assign variable name.");
+        $("#modal_show_messages").modal('show');
         return false;
     }
     //alpha numeric variable name is checking
     var pattern = /^[A-Za-z]{1}[A-Za-z0-9]+$/;
     if (!pattern.test(variable_name)) {
-        $('#label_alert_message').text("Name is not valid.Please input alphanumeric value!");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Name is not valid.Please input alphanumeric value!");
+        $("#modal_show_messages").modal('show');
         return false;
     } 
     
@@ -73,15 +73,15 @@ function button_add_variable_ok_pressed()
         //text is not valid as number value
         if(!isNumber(variable_value))
         {
-            $('#label_alert_message').text("Please assign number as variable value.");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Please assign number as variable value.");
+            $("#modal_show_messages").modal('show');
             return false;
         }
     }
     if(variable_value == "")
     {
-        $('#label_alert_message').text("Please assign variable value.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please assign variable value.");
+        $("#modal_show_messages").modal('show');
         return false;
     }
     var variable_exist = false;
@@ -93,8 +93,8 @@ function button_add_variable_ok_pressed()
     });
     if(variable_exist == true)
     {
-        $('#label_alert_message').text("Variable name already exists. Please use a different variable name.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Variable name already exists. Please use a different variable name.");
+        $("#modal_show_messages").modal('show');
         return false;
     }
     else{
@@ -144,8 +144,8 @@ function is_variable_used_delete_button_clicked(variable_id)
     });
     if(is_variable_used == true)
     {
-        $('#label_alert_message').text("You have used this variable. You will not be able to delete it.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You have used this variable. You will not be able to delete it.");
+        $("#modal_show_messages").modal('show');
         return false;
     }
     else

@@ -59,7 +59,6 @@ class Programs extends CI_Controller {
         $this->data['project_type'] = "Program"; 
         
         $this->session->set_userdata('project_id', $project_id);
-        $base = base_url();
         
         $this->load->library('xmlperser');
         $fObjectArray = $this->xmlperser->readXML();
@@ -146,7 +145,8 @@ class Programs extends CI_Controller {
         $this->data['user_info'] = $user_info;
         
         $this->data['external_variable_list'] = $external_variable_list;
-        $this->data['external_variable_values'] = $external_variable_values; 
+        $this->data['external_variable_values'] = $external_variable_values;
+        $this->data['user_type'] = $this->session->userdata('user_type'); 
         $this->template->load(MEMBER_PROJECT_TEMPLATE, 'welcome_message', $this->data);
     }
 

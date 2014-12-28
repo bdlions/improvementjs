@@ -4,8 +4,8 @@ function updateNumberVariableValue(variable_name)
     var reg_exp = /^-?\d+$/g;
     if(!reg_exp.test(document.getElementById("textinput_variable").value.trim()))
     {
-        $('#label_alert_message').text("Please assign number value.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please assign number value.");
+        $("#modal_show_messages").modal('show');
         return;
     }
     update_variable_value_in_action(variable_name, document.getElementById("textinput_variable").value);
@@ -59,6 +59,16 @@ function update_variable_value_in_action(variable_name, booleanVariableValue)
 function action_variable_modal_ok_pressed()
 {
     updateClientEndOperationCounter();
+    if(document.getElementById("actonSelectionCombo").selectedIndex == 0)
+    {
+        var total_if = get_total_if_left_panel();
+        if(total_if >= maximum_if_per_project && current_user_type === user_type_demo)
+        {
+            $("#label_show_messages_content").html("You have used maximum number of if block for this project.");
+            $("#modal_show_messages").modal('show');
+            return;
+        }
+    }
     if(document.getElementById("actonSelectionCombo").selectedIndex == 2)
     {
         //taking selected variable
@@ -66,8 +76,8 @@ function action_variable_modal_ok_pressed()
         var booleanVariableName = $("#action_variable_selection_part").text();
         //checking whether user selects a variable or not
         if (booleanVariablePart == "") {
-            $('#label_alert_message').text("Please select a variable.");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Please select a variable.");
+            $("#modal_show_messages").modal('show');
             return false;
         }
     }
@@ -94,8 +104,8 @@ function action_variable_modal_ok_pressed()
         li_value = $("#condition_modal_selected_item .ui-selected").text();
         if(li_value == "")
         {
-            $('#label_alert_message').text("Please select an item.");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Please select an item.");
+            $("#modal_show_messages").modal('show');
             return false;
         }
     }
@@ -104,8 +114,8 @@ function action_variable_modal_ok_pressed()
         li_value = $("#action_modal_selected_item .ui-selected").text();
         if(li_value == "")
         {
-            $('#label_alert_message').text("Please select an item.");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Please select an item.");
+            $("#modal_show_messages").modal('show');
             return false;
         }
     }

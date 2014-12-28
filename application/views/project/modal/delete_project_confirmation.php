@@ -9,7 +9,6 @@
                     project_id: $("#input_project_id").val()
                 },
                 success: function(data) {
-                    alert(data['message']);
                     $("#modal_delete_project_confirmation").modal('hide');
                     window.location.reload();
                 }

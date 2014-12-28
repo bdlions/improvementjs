@@ -41,15 +41,15 @@ function add_arithmetic_operators()
     });
     if(selected_part_anchor_id == "")
     {
-        $('#label_alert_message').text("Please select an item from condition.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select an item from condition.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select an item from condition.");
         return;
     }
     else if(valid_selection == "false")
     {
-        $('#label_alert_message').text(error_message);
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html(error_message);
+        $("#modal_show_messages").modal('show');
         //alert(error_message);
         return;
     }

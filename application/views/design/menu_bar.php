@@ -77,8 +77,8 @@
             Language<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a class="active" onclick="set_language_c()">C</a></li>
-            <li><a onclick="set_language_java()">Java</a></li>
+            <li><a id="anchor_language_c" name="anchor_language_c" class="active" onclick="set_language_c()">C</a></li>
+            <li><a id="anchor_language_java" name="anchor_language_java" onclick="set_language_java()">Java</a></li>
         </ul>
     </div>
     <div class="btn-group">

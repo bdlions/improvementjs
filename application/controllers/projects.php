@@ -8,6 +8,7 @@ class Projects extends CI_Controller {
         $this->load->helper('file');
         $this->load->library('form_validation');
         $this->load->library('ion_auth');
+        $this->load->library('project/js/variable/variable_library');
         $this->load->library('project/project_library');
         if (!$this->ion_auth->valid_session()) {
             redirect('auth/login', 'refresh');

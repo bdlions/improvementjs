@@ -45,14 +45,14 @@ $(function ()
             });
             if(total_selected_items == 1)
             {
-                $('#label_alert_message').text("'(' will be added before '"+first_selected_item_text+"'");
-                $('#div_alert_message').dialog('open');
+                $("#label_show_messages_content").html("'(' will be added before '"+first_selected_item_text+"'");
+                $("#modal_show_messages").modal('show');
                 //alert("'(' will be added before '"+first_selected_item_text+"'");
             }
             else if(total_selected_items == 2)
             {
-                $('#label_alert_message').text("'(' will be added before '"+first_selected_item_text+"' and ')' will be added after '"+second_selected_item_text+"'");
-                $('#div_alert_message').dialog('open');
+                $("#label_show_messages_content").html("'(' will be added before '"+first_selected_item_text+"' and ')' will be added after '"+second_selected_item_text+"'");
+                $("#modal_show_messages").modal('show');
                 //alert("'(' will be added before '"+first_selected_item_text+"' and ')' will be added after '"+second_selected_item_text+"'");
             }
         }
@@ -182,8 +182,8 @@ $(function ()
         updateClientEndOperationCounter();
         if(external_variable_values != "") {
             //$.unblockUI();
-            $('#label_alert_message').text("Processing completed.");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Processing completed.");
+            $("#modal_show_messages").modal('show');
             //alert("Processing completed.");
             $('#external_variable_list').dialog('open');
             has_external_variables = "false";
@@ -268,15 +268,15 @@ $(function ()
             });
             if(!is_action_selected && is_selected_item_boolean && data.rslt.obj.attr("title") != "BOOLEAN")
             {
-                $('#label_alert_message').text("You are not allowed to select this. Please select a boolean variable.");
-                $('#div_alert_message').dialog('open');
+                $("#label_show_messages_content").html("You are not allowed to select this. Please select a boolean variable.");
+                $("#modal_show_messages").modal('show');
                 //alert("You are not allowed to select this. Please select a boolean variable.");
                 return;
             }
             else if(!is_action_selected && !is_selected_item_boolean && data.rslt.obj.attr("title") == "BOOLEAN")
             {
-                $('#label_alert_message').text("You are not allowed to select this. Please select a number variable.");
-                $('#div_alert_message').dialog('open');
+                $("#label_show_messages_content").html("You are not allowed to select this. Please select a number variable.");
+                $("#modal_show_messages").modal('show');
                 //alert("You are not allowed to select this. Please select a number variable.");
                 return;
             }
@@ -699,8 +699,8 @@ $(function ()
                     //only number is allowed as constant value
                     if(right_part_value == "" || !isNumber(right_part_value))
                     {
-                        $('#label_alert_message').text("Please assign a number for the constant part.");
-                        $('#div_alert_message').dialog('open');
+                        $("#label_show_messages_content").html("Please assign a number for the constant part.");
+                        $("#modal_show_messages").modal('show');
                         //alert("Please assign a number for the constant part.");
                         return;
                     }
@@ -738,8 +738,8 @@ $(function ()
                 var leftP = $("#arithmetic_operator_condition_left_part").html(); 
 
                 if (leftP == "") {
-                    $('#label_alert_message').text("Please select a condition.");
-                    $('#div_alert_message').dialog('open');
+                    $("#label_show_messages_content").html("Please select a condition.");
+                    $("#modal_show_messages").modal('show');
                     //alert("Please select a condition.");
                     return;
                 }
@@ -949,19 +949,6 @@ $(function ()
             sessionRenewConfirmed = false;         
         }
     });
-    
-    $( "#div_alert_message" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        modal: true,
-        title: '',
-        close: function()
-        {
-            sessionRenewConfirmed = false;         
-        }
-    });
-    
     $( "#condition_boolean_middle_part_change_confirmation_div" ).dialog(
     {
         //setting some properties
@@ -1409,8 +1396,8 @@ function checkContidionButton() {
     
     if((left_part_type == "BOOLEAN" && right_part_type != "BOOLEAN") || (left_part_type != "BOOLEAN" && right_part_type == "BOOLEAN"))
     {
-        $('#label_alert_message').text("Boolean variable can't be compared to number/function");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Boolean variable can't be compared to number/function");
+        $("#modal_show_messages").modal('show');
         //alert("Boolean variable can't be compared to number/function");
         return;
     }
@@ -1418,8 +1405,8 @@ function checkContidionButton() {
     
     //checking whether user selects all of the three parts of a condition
     if (leftP == "" || cmpP == "" || rightP == "") {
-        $('#label_alert_message').text("Incomple condition.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Incomple condition.");
+        $("#modal_show_messages").modal('show');
         //alert("Incomple condition.");
         return;
     } 
@@ -1511,20 +1498,20 @@ function checkConditionBooleanButton()
     
     //checking whether user selects a boolean variable
     if (booleanVariableLeftPart == "") {
-        $('#label_alert_message').text("Please select a boolean variable.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select a boolean variable.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select a boolean variable.");
         return false;
     }
     else if (booleanVariableMiddlePart == "") {
-        $('#label_alert_message').text("Please select comparison for boolean variable.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select comparison for boolean variable.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select comparison for boolean variable.");
         return false;
     }
     else if (booleanVariableRightPart == "") {
-        $('#label_alert_message').text("Please select boolean variable comparison value.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select boolean variable comparison value.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select boolean variable comparison value.");
         return false;
     }
@@ -1599,11 +1586,11 @@ function checkConditionBooleanButton()
         for(var i = 0 ; i < code_array.length ; i++){
             if(i == 0)
                 div_part = div_part + "<input title = "+id_array[0]+"start type='hidden' id ="+id_array[i]+" value='"+code_array[i]+"' name='condition'/>";
-            div_part = div_part + "<input title = "+id_array[1]+"      type='hidden' id ="+id_array[1]+" value='"+booleanVariableMiddlePartCode+"' name='condition'/>";
+            div_part = div_part + "<input title = 'booleancomparison'      type='hidden' id ="+id_array[1]+" value='"+booleanVariableMiddlePartCode+"' name='condition'/>";
             div_part = div_part + "<input title = "+id_array[0]+"end   type='hidden' id ="+id_array[2]+" value='"+booleanVariableRightPartCode+"' name='condition'/>";
         }
         div_part = div_part + "</div>";
-        $('#selectable .ui-selected').html("<a title = start_space_anchor_condition style='cursor:pointer;' id=" + starting_space_anchor_id + "> <input id='natural' type='hidden'>" + starting_space +"</input></a><a title = "+id1+"start style='cursor:pointer;' id=" + id1 + "> " + booleanVariableLeftPart + "</a><a title = '"+id2+"' style='cursor:pointer;' id='" + id2 + "'> " + booleanVariableMiddlePart + "</a><a title = '"+id1+"end' style='cursor:pointer;' id='" + id3 + "'> " + booleanVariableRightPart + "</a>"+div_part);
+        $('#selectable .ui-selected').html("<a title = start_space_anchor_condition style='cursor:pointer;' id=" + starting_space_anchor_id + "> <input id='natural' type='hidden'>" + starting_space +"</input></a><a title = "+id1+"start style='cursor:pointer;' id=" + id1 + "> " + booleanVariableLeftPart + "</a><a title = '' style='cursor:pointer;' id='" + id2 + "'> " + booleanVariableMiddlePart + "</a><a title = '"+id1+"end' style='cursor:pointer;' id='" + id3 + "'> " + booleanVariableRightPart + "</a>"+div_part);
         //resetting selected boolean variable
         $("#condition_boolean_variables_left_part").html("");
         document.getElementById("condition_boolean_variables_left_part").style.border = "";
@@ -1821,15 +1808,15 @@ function button_add_bracket_in_condition_ok_pressed()
     });
     if(total_selected_items > 2)
     {
-        $('#label_alert_message').text("You are not allowed to select more than two items.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to select more than two items.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to select more than two items.");
         return;
     }
     else if(total_selected_items < 2)
     {
-        $('#label_alert_message').text("Please select two items.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select two items.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select two items.");
         return;
     }
@@ -1837,24 +1824,24 @@ function button_add_bracket_in_condition_ok_pressed()
     // this type of syntax is not allowed "a+b(>5)"    
     if(is_start_comparison == true || is_end_comparison == true)
     {
-        $('#label_alert_message').text("You are not allowed to add bracket here.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to add bracket here.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to add bracket here.");
         return;
     }
     // this type of syntax is not allowed "a+(b>5)"
     if((previous_item_value === "arithmeticoperator" || next_item_value === "arithmeticoperator") && has_inside_comparison == true)
     {
-        $('#label_alert_message').text("You are not allowed to add bracket here.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to add bracket here.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to add bracket here.");
         return;
     }
     
     if(inconsistent_brackets == "true" || stack_counter != 0)
     {
-        $('#label_alert_message').text("Your selection will make the condition inconsistent. Please select correctly.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Your selection will make the condition inconsistent. Please select correctly.");
+        $("#modal_show_messages").modal('show');
         //alert("Your selection will make the condition inconsistent. Please select correctly.");
         return;
     }

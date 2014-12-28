@@ -6,6 +6,12 @@ $(function() {
     template_service_action_url = '<?php echo base_url()?>'+'../smartycode/code_action_service.php';
     //storing previously selected anchor in natural language panel
     natural_language_panel_selected_anchor_id = '<?php echo $selected_anchor_id?>';
+    
+    current_user_type = '<?php echo $user_type ?>';
+    user_type_member = '<?php echo MEMBER ?>';
+    user_type_demo = '<?php echo DEMO ?>';
+    
+    maximum_if_per_project = '<?php echo MAXIMUM_IF_PER_PROJECT ?>';
     project_xml_path = '<?php echo '../../xml/'.$project_id.'.xml'; ?>';
     //loading project xml
     load_xml();
@@ -40,14 +46,14 @@ $(function() {
     {
         if(is_cancel_pressed_external_variable_upload == 'true')
         {
-            $('#label_alert_message').text("Press upload button again to load external variables.");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Press upload button again to load external variables.");
+            $("#modal_show_messages").modal('show');  
             //alert("Press upload button again to load external variables.");
         }
         else if(external_file_content_error == 'true')
         {
-            $('#label_alert_message').text("Each variable must be in a separated line");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Each variable must be in a separated line");
+            $("#modal_show_messages").modal('show');
             //alert("Each variable must be in a separated line");
         }
         else if(external_variable_length > 0) {
@@ -121,11 +127,15 @@ function save_project() {
 function set_language_c()
 {
     selected_language_id = language_id_c;
+    $("#anchor_language_c").attr('class', "active");
+    $("#anchor_language_java").attr('class', "");
 }
 
 function set_language_java()
 {
     selected_language_id = language_id_java;
+    $("#anchor_language_c").attr('class', "");
+    $("#anchor_language_java").attr('class', "active");
 }
 </script>
 
@@ -995,13 +1005,6 @@ foreach ($custom_variables as $cv) {
             </td>
         </tr>              
     </table> 
-</div>
-<div id="div_alert_message" >
-    <table>
-        <tr>
-            <td><label id="label_alert_message"></label></td>            
-        </tr>
-    </table>
 </div>
 <?php $this->load->view('project/modal/my_projects_confirmation');
       $this->load->view('project/modal/upload_project_confirmation');

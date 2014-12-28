@@ -5,8 +5,8 @@ function add_logical_operators()
     //to add logical connector operator user has to select if from left panel
     if($('#selectable .ui-selected').text().trim().toLowerCase() != "if")
     {
-        $('#label_alert_message').text("Please select if from left panel to add logical operator.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select if from left panel to add logical operator.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select if from left panel to add logical operator.");
         return;
     }
@@ -22,16 +22,16 @@ function add_logical_operators()
     //user didn't add proper condition
     if(currentItem.text().trim() == "Click here to edit condition")
     {
-        $('#label_alert_message').text("Please edit your incomplete condition first.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please edit your incomplete condition first.");
+        $("#modal_show_messages").modal('show');
         //alert("Please edit your incomplete condition first.");
         return;
     }
     //next item of if on left panel is assumed to be whole condition in one li
     if(currentItem.text().trim() == "" || currentItem.text().trim() == "(" || currentItem.text().trim() == ")" || currentItem.text().trim() == "{" || currentItem.text().trim() == "}")
     {
-        $('#label_alert_message').text("Incorrect condition.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Incorrect condition.");
+        $("#modal_show_messages").modal('show');
         //alert("Incorrect condition.");
         return;
     }
@@ -97,8 +97,8 @@ function delete_logical_operator()
     //alert("You are about to delete logical operator. Id:"+selected_logical_operator_id+" and title:"+selected_logical_operator_title);
     if(selected_logical_operator_id == "")
     {
-        $('#label_alert_message').text("Please select logical connector operator from condition to delete.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select logical connector operator from condition to delete.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select logical connector operator from condition to delete.");
         return;
     }
@@ -256,8 +256,8 @@ function delete_logical_operator()
     //alert("debugging message:"+debugging_message);
     if(remove_logical_operator_valid == "false")
     {
-        $('#label_alert_message').text(error_message);
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html(error_message);
+        $("#modal_show_messages").modal('show');
         //alert(error_message);
         return;
     }
@@ -284,8 +284,8 @@ function button_logical_connector_removing_condition_delete_pressed()
     //user presses delete button without selecting a condition from condition list
     if(currentItem.text() == "")
     {
-        $('#label_alert_message').text("Please select an item.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select an item.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select an item.");
         return;
     }
@@ -402,8 +402,8 @@ function button_logical_connector_removing_condition_delete_pressed()
     $('#logical_connector_removing_condition_div').dialog('close');
     //unblocking the user interface
     //$.unblockUI();
-    $('#label_alert_message').text("Successfully deleted.");
-    $('#div_alert_message').dialog('open');
+    $("#label_show_messages_content").html("Successfully deleted.");
+    $("#modal_show_messages").modal('show');
     //alert("Successfully deleted.");
 }
 
@@ -427,8 +427,8 @@ function button_logical_connector_ok_pressed()
     //user presses ok button without selecting a condition from condition list
     if(currentItem.text() == "")
     {
-        $('#label_alert_message').text("Please select an item.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select an item.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select an item.");
         return;
     }
@@ -585,8 +585,8 @@ function buttonLogicalConnectorConditionOkPressed()
     
     if((left_part_type == "BOOLEAN" && right_part_type != "BOOLEAN") || (left_part_type != "BOOLEAN" && right_part_type == "BOOLEAN"))
     {
-        $('#label_alert_message').text("Boolean variable can't be compared to number/function");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Boolean variable can't be compared to number/function");
+        $("#modal_show_messages").modal('show');
         //alert("Boolean variable can't be compared to number/function");
         return;
     }
@@ -594,8 +594,8 @@ function buttonLogicalConnectorConditionOkPressed()
 
     //checking whether user selects all of the three parts of a condition
     if (leftP == "" || cmpP == "" || rightP == "") {
-        $('#label_alert_message').text("Incomple condition.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Incomple condition.");
+        $("#modal_show_messages").modal('show');
         //alert("Incomple condition.");
         return;
     }
@@ -790,20 +790,20 @@ function logical_connector_boolean_variable_selected_ok_pressed()
     
     //checking whether user selects three parts of a boolean variable 
     if (booleanVariableLeftPart == "") {
-        $('#label_alert_message').text("Please select a boolean variable.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select a boolean variable.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select a boolean variable.");
         return false;
     }
     else if (booleanVariableMiddlePart == "") {
-        $('#label_alert_message').text("Please select comparison for boolean variable.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select comparison for boolean variable.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select comparison for boolean variable.");
         return false;
     }
     else if (booleanVariableRightPart == "") {
-        $('#label_alert_message').text("Please select boolean variable comparison value.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select boolean variable comparison value.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select boolean variable comparison value.");
         return false;
     }
@@ -867,19 +867,19 @@ function logical_connector_boolean_variable_selected_ok_pressed()
         for(var i = 0 ; i < code_array.length ; i++){
             if(i == 0)
                 div_part = div_part + "<input title = "+id_array[0]+"start type='hidden' id ="+id_array[i]+" value='"+code_array[i]+"' name='condition'/>";
-            div_part = div_part + "<input title = "+id_array[1]+"      type='hidden' id ="+id_array[1]+" value='"+booleanVariableMiddlePartCode+"' name='condition'/>";
+            div_part = div_part + "<input title = 'booleancomparison'      type='hidden' id ="+id_array[1]+" value='"+booleanVariableMiddlePartCode+"' name='condition'/>";
             div_part = div_part + "<input title = "+id_array[0]+"end   type='hidden' id ="+id_array[2]+" value='"+booleanVariableRightPartCode+"' name='condition'/>";
         }
         //adding logical connector AND operator
         if(selectedIndex == 0)
         {
-            currentAnchorList = "<a style='cursor:pointer;' id=" + logical_connector_id + " title = 'logical_connector_and'><input id='natural' type='hidden' name='AND' value='logicalconnector' style=''/>" + " AND " + "</a><a title = "+id1+"start style='cursor:pointer;' id=" + id1 + "> " + booleanVariableLeftPart + "</a><a title = '"+id2+"' style='cursor:pointer;' id='" + id2 + "'> " + booleanVariableMiddlePart + "</a><a title = '"+id1+"end' style='cursor:pointer;' id='" + id3 + "'> " + booleanVariableRightPart + "</a>";
+            currentAnchorList = "<a style='cursor:pointer;' id=" + logical_connector_id + " title = 'logical_connector_and'><input id='natural' type='hidden' name='AND' value='logicalconnector' style=''/>" + " AND " + "</a><a title = "+id1+"start style='cursor:pointer;' id=" + id1 + "> " + booleanVariableLeftPart + "</a><a title = '' style='cursor:pointer;' id='" + id2 + "'> " + booleanVariableMiddlePart + "</a><a title = '"+id1+"end' style='cursor:pointer;' id='" + id3 + "'> " + booleanVariableRightPart + "</a>";
             currentInputCodeList = "<input type='hidden' id ="+logical_connector_id+" value=' && ' name='condition' title = 'logical_connector_and' />" + div_part;
         }
         //adding logical connector OR operator
         else if(selectedIndex == 1)
         {
-            currentAnchorList = "<a style='cursor:pointer;' id=" + logical_connector_id + " title = 'logical_connector_or'><input id='natural' type='hidden' name='OR' value='logicalconnector' style=''/>" + " OR " + "</a><a title = "+id1+"start style='cursor:pointer;' id=" + id1 + "> " + booleanVariableLeftPart + "</a><a title = '"+id2+"' style='cursor:pointer;' id='" + id2 + "'> " + booleanVariableMiddlePart + "</a><a title = '"+id1+"end' style='cursor:pointer;' id='" + id3 + "'> " + booleanVariableRightPart + "</a>";
+            currentAnchorList = "<a style='cursor:pointer;' id=" + logical_connector_id + " title = 'logical_connector_or'><input id='natural' type='hidden' name='OR' value='logicalconnector' style=''/>" + " OR " + "</a><a title = "+id1+"start style='cursor:pointer;' id=" + id1 + "> " + booleanVariableLeftPart + "</a><a title = '' style='cursor:pointer;' id='" + id2 + "'> " + booleanVariableMiddlePart + "</a><a title = '"+id1+"end' style='cursor:pointer;' id='" + id3 + "'> " + booleanVariableRightPart + "</a>";
             currentInputCodeList = "<input type='hidden' id ="+logical_connector_id+" value=' || ' name='condition' title = 'logical_connector_or' />" + div_part;
         }
         //updating left panel with new added condition

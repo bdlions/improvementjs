@@ -1,4 +1,8 @@
 <?php
+    define('ADMIN', 'admin');
+    define('MEMBER', 'member');
+    define('DEMO', 'demo');
+    
     define("ADMIN_TEMPLATE",                           "admin/templates/admin_tmpl");
     define("LOGIN_TEMPLATE",                           "templates/login_tmpl");
     define("NON_MEMBER_TEMPLATE",                      "templates/non_member_tmpl");
@@ -13,4 +17,6 @@
     
     define("LEFT_PANEL_ITEM_TYPE_CONDITION",           "condition");
     define("LEFT_PANEL_ITEM_TYPE_ACTION",              "action");
+    
+    define("MAXIMUM_IF_PER_PROJECT",                   5);
 ?>

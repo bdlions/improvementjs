@@ -470,4 +470,28 @@ class Ion_auth
             $this->set_error('activation_email_unsuccessful');
             return FALSE;
         }
+        
+        public function login($identity, $password, $remember = FALSE)
+        {
+            $status = $this->ci->ion_auth_model->login($identity, $password);
+            if($status != FALSE){
+                $user_info = array();
+                $user_id = $this->ci->session->userdata('user_id');
+                if($this->in_group(ADMIN, $user_id))
+                {
+                    $user_info['user_type'] = ADMIN;
+                }
+                if($this->in_group(MEMBER, $user_id))
+                {
+                    $user_info['user_type'] = MEMBER;
+                }
+                if($this->in_group(DEMO, $user_id))
+                {
+                    $user_info['user_type'] = DEMO;
+                }
+                $this->ci->session->set_userdata($user_info);
+                return TRUE;
+            }
+            return FALSE;
+        }
 }

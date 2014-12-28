@@ -234,11 +234,6 @@ function generate_selected_item_code()
     if(name === "condition" || name === "action")
     {
         $("#code_stmt").html(""); 
-//        $.blockUI({
-//            message: '',
-//            theme: false,
-//            baseZ: 101
-//        });
         $.get('../../json/blockMap.json', function(mapping){
             $.ajax({
                 type: "POST",
@@ -246,16 +241,13 @@ function generate_selected_item_code()
                 dataType: "json",
                 data: {project_xml : block, mapping:mapping},
                 complete:function(data){
-                    //$.unblockUI();
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
                     generated_code = beautify(generated_code.trim());
                     if(name === "condition")
                     {
                         generated_code = generated_code.substring(1, generated_code.length-1);
                     }
-                    //alert(generated_code);
-                    $("#code_stmt").html(generated_code); 
-                    
+                    $("#code_stmt").html(generated_code);
                 }
             });
         });
@@ -308,20 +300,10 @@ function generate_code()
 
     var project = new Project();
     project.stage=(stage);
-    //console.log('project');
-    //console.log(project);
-//    $.blockUI({
-//        message: '',
-//        theme: false,
-//        baseZ: 500
-//    });
-
     waitScreen.show();
     $.get('../../json/blockMap.json', function(mapping){
         $.get('../../json/sample.xml', function(xml) {
             var jsonObj = $.xml2json(xml);
-            //console.log(jsonObj);
-            //console.log(project);
             mapping['variables'] = get_project_variables();
             $.ajax({
                 type: "POST",
@@ -341,18 +323,15 @@ function generate_code()
                         success: function (ajaxReturnedData) {
                             if(ajaxReturnedData === "false")
                             {
-                                $('#label_alert_message').text("Server processing error. Please try again.");
-                                $('#div_alert_message').dialog('open');
+                                $("#label_show_messages_content").html("Server processing error. Please try again.");
+                                $("#modal_show_messages").modal('show');
                                 //alert("Server processing error. Please try again.");
                             }
                             waitScreen.hide();
-                            //$.unblockUI();
                         }
-                    });
-                    
+                    });                    
                 }
             });
-
         });   
     });    
 }
@@ -398,8 +377,8 @@ function is_expression_valid()
     });
     if(!is_valid_code)
     {
-        $('#label_alert_message').text(error_message);
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html(error_message);
+        $("#modal_show_messages").modal('show');
         //alert(error_message);
         return false;
     }
@@ -620,7 +599,7 @@ function process_condition(temp_expression)
     for(var counter = 0 ; counter < expression.length ; counter++)
     {
         var single_input = expression[counter];
-        if( single_input.attr("title") === 'comparison')
+        if( single_input.attr("title") === 'comparison' || single_input.attr("title") === 'booleancomparison' )
         {
             flag = true;
             comparison_value = single_input.attr("value").trim();
@@ -1067,6 +1046,13 @@ function getLineBreakSequence()
 function add_block()
 {
     updateClientEndOperationCounter();
+    var total_if = get_total_if_left_panel();
+    if(total_if >= maximum_if_per_project && current_user_type === user_type_demo)
+    {
+        $("#label_show_messages_content").html("You have used maximum number of if block for this project.");
+        $("#modal_show_messages").modal('show');
+        return;
+    }
     $("#selectable li:last-child").after("<li class='ui-widget-content' id='0'>Click here to edit block</li>");
 }
 
@@ -1094,8 +1080,8 @@ function add_action()
     }
     else
     {
-        $('#label_alert_message').text("You are not allowed to add action here.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to add action here.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to add action here.");
     }
 }
@@ -1107,15 +1093,15 @@ function add_brackets()
     var selectedItemText = $('#selectable .ui-selected').text().trim();
     if(selectedItemText.toLowerCase() == "if" || selectedItemText.toLowerCase() == "then" || selectedItemText.toLowerCase() == "else")
     {
-        $('#label_alert_message').text("You are not allowed to add bracket here.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to add bracket here.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to add bracket here.")
         return;
     }
     if(selectedItemText.trim() == "Click here to edit condition" || selectedItemText.trim() == "Click here to edit action" || selectedItemText.trim() == "Click here to edit block")
     {
-        $('#label_alert_message').text("You are not allowed to add bracket here.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to add bracket here.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to add bracket here.")
         return;
     }
@@ -1127,8 +1113,8 @@ function add_brackets()
             {
                 if($(this).attr("id") == "ssaid" && ($(this).attr("title") == "start_space_anchor_action" || $(this).attr("title") == "start_space_anchor_action_variable"))
                 {
-                    $('#label_alert_message').text("You are not allowed to add bracket here.");
-                    $('#div_alert_message').dialog('open');
+                    $("#label_show_messages_content").html("You are not allowed to add bracket here.");
+                    $("#modal_show_messages").modal('show');
                     //alert("You are not allowed to add bracket here.")
                     return;
                 }
@@ -1190,9 +1176,9 @@ function add_brackets()
         //checking whether bracket already exists or not
         if(currentItem.next("li").text().trim() == "(")
         {
-            $('#label_alert_message').text("Breaket already exists.");
-            $('#div_alert_message').dialog('open');
-            alert("Breaket already exists.")
+            $("#label_show_messages_content").html("Breaket already exists.");
+            $("#modal_show_messages").modal('show');
+            //alert("Breaket already exists.")
         }
         else
         {
@@ -1211,8 +1197,8 @@ function add_brackets()
         //checking whether bracket already exists or not
         if($('#selectable .ui-selected').next("li").text().trim() == "{")
         {
-            $('#label_alert_message').text("Breaket already exists.");
-            $('#div_alert_message').dialog('open');
+            $("#label_show_messages_content").html("Breaket already exists.");
+            $("#modal_show_messages").modal('show');
             //alert("Breaket already exists.")
         }
         else
@@ -1266,38 +1252,38 @@ function delete_block()
     //validation checking before deletion
     if($('#selectable .ui-selected').text().length == 0)
     {
-        $('#label_alert_message').text("Please select an item to delete.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select an item to delete.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select an item to delete.");
         return;
     }
     else if($('#selectable .ui-selected').text().trim() == "Click here to edit condition")
     {
-        $('#label_alert_message').text("You are not allowed to remove empty condition.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to remove empty condition.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to remove empty condition.");
         return;
     }
-    else if($('#selectable .ui-selected').text().trim() == "Click here to edit block")
+    /*else if($('#selectable .ui-selected').text().trim() == "Click here to edit block")
     {
-        $('#label_alert_message').text("You are not allowed to remove an empty block.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to remove an empty block.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to remove an empty block.");
         return;
-    }
+    }*/
     //user wants to remove bracket
     else if($('#selectable .ui-selected').text().trim() == ")" || $('#selectable .ui-selected').text().trim() == "}" || $('#selectable .ui-selected').text().trim() == "(" || $('#selectable .ui-selected').text().trim() == "{")
     {
-        $('#label_alert_message').text("Please select delete option from Bracket menu item to delete this selected item.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select delete option from Bracket menu item to delete this selected item.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select delete option from Bracket menu item to delete this selected item.");
         return;
     }
     
     else if($('#selectable .ui-selected').text().trim() == "THEN")
     {
-        $('#label_alert_message').text("You are not allowed to remove THEN expression.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("You are not allowed to remove THEN expression.");
+        $("#modal_show_messages").modal('show');
         //alert("You are not allowed to remove THEN expression.");
         return;
     }
@@ -1365,6 +1351,14 @@ function delete_block()
 function delete_item()
 {
     updateClientEndOperationCounter();
+    
+    //deleting single row from left panel without any condition
+    if($('#selectable .ui-selected').text().trim() == "Click here to edit block")
+    {
+        $('#selectable .ui-selected').remove();
+        return;
+    }
+    
     var start_if_total_spaces = -1;
     var start_else_total_spaces = -1;
     var end_flag = 0;
@@ -1453,8 +1447,8 @@ function delete_item()
                     //selected condition is yet assigned.
                     if($(this).text().trim() == "Click here to edit condition")
                     {
-                        $('#label_alert_message').text("You are not allowed to remove an empty condition");
-                        $('#div_alert_message').dialog('open');
+                        $("#label_show_messages_content").html("You are not allowed to remove an empty condition");
+                        $("#modal_show_messages").modal('show');
                         //alert("You are not allowed to remove an empty condition");
                     }
                     else
@@ -1470,8 +1464,8 @@ function delete_item()
                         $(this).before("<li class='ui-widget-content' id='"+total_initial_spaces+"'>"+initial_spaces+"Click here to edit condition</li>");
                         //removing current selected condition
                         $(this).remove();
-                        $('#label_alert_message').text("Your selected condition is successfully removed.");
-                        $('#div_alert_message').dialog('open');
+                        $("#label_show_messages_content").html("Your selected condition is successfully removed.");
+                        $("#modal_show_messages").modal('show');
                         //alert("Your selected condition is successfully removed.");
                         //clearing natural language panel, code panel, parameter table and tree
                         $('#changing_stmt').html("");
@@ -1491,8 +1485,8 @@ function delete_item()
                     //selected condition is empty.
                     if($(this).text().trim() == "Click here to edit action")
                     {
-                        $('#label_alert_message').text("You are not allowed to remove an empty action");
-                        $('#div_alert_message').dialog('open');
+                        $("#label_show_messages_content").html("You are not allowed to remove an empty action");
+                        $("#modal_show_messages").modal('show');
                         //alert("You are not allowed to remove an empty action");
                     }
                     else
@@ -1520,8 +1514,8 @@ function delete_item()
                         }
                         //removing current selected condition
                         $(this).remove();
-                        $('#label_alert_message').text("Your selected action is successfully removed.");
-                        $('#div_alert_message').dialog('open');
+                        $("#label_show_messages_content").html("Your selected action is successfully removed.");
+                        $("#modal_show_messages").modal('show');
                         //alert("Your selected action is successfully removed.");
                         //clearing natural language panel, code panel, parameter table and tree
                         $('#changing_stmt').html("");
@@ -1613,8 +1607,8 @@ function delete_item()
                 }
             });
         });
-        $('#label_alert_message').text("Your selected action is successfully removed.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Your selected action is successfully removed.");
+        $("#modal_show_messages").modal('show');
         //alert("Your selected action is successfully removed.");
         return;
         
@@ -1681,8 +1675,8 @@ function download_project()
             }
             else
             {
-                $('#label_alert_message').text("Server processing error. Please try again.");
-                $('#div_alert_message').dialog('open');
+                $("#label_show_messages_content").html("Server processing error. Please try again.");
+                $("#modal_show_messages").modal('show');
                 //alert("Server processing error. Please try again.");
             }
             //$.unblockUI();
@@ -1769,8 +1763,8 @@ function delete_bracket()
         //updating code panel
         generate_selected_item_code(); 
         
-        $('#label_alert_message').text("Your selected bracket is removed.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Your selected bracket is removed.");
+        $("#modal_show_messages").modal('show');
         //alert("Your selected bracket is removed.");
         return;
     }
@@ -1780,8 +1774,8 @@ function delete_bracket()
     //user wants to remove ending bracket from left panel
     if($('#selectable .ui-selected').text().trim() == ")" || $('#selectable .ui-selected').text().trim() == "}")
     {
-        $('#label_alert_message').text("Please select starting breaket to remove.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please select starting breaket to remove.");
+        $("#modal_show_messages").modal('show');
         //alert("Please select starting breaket to remove.");
         return;
     }
@@ -1812,8 +1806,8 @@ function delete_bracket()
             {
                 $('#selectable .ui-selected').remove();
                 currentItem.remove();
-                $('#label_alert_message').text("Your selected bracket is removed.");
-                $('#div_alert_message').dialog('open');
+                $("#label_show_messages_content").html("Your selected bracket is removed.");
+                $("#modal_show_messages").modal('show');
                 //alert("Your selected bracket is removed.");
                 return;
             }
@@ -1823,8 +1817,8 @@ function delete_bracket()
             }
         }
     }
-    $('#label_alert_message').text("Please select a bracket to delete.");
-    $('#div_alert_message').dialog('open');
+    $("#label_show_messages_content").html("Please select a bracket to delete.");
+    $("#modal_show_messages").modal('show');
     //alert("Please select a bracket to delete.");
     return;
 }
@@ -1846,8 +1840,8 @@ function save_as_project_save_button_clicked()
     var projectNameRegExp = /^[a-z0-9]+$/i;
     if(projectNameRegExp.test(save_as_project_name)==false)
     {
-        $('#label_alert_message').text("Please enter a valid project name.");
-        $('#div_alert_message').dialog('open');
+        $("#label_show_messages_content").html("Please enter a valid project name.");
+        $("#modal_show_messages").modal('show');
         //alert( "Please enter a valid project name." );
         return false;
     }
@@ -1884,4 +1878,23 @@ function show_variables()
 {
     updateClientEndOperationCounter();
     $('#project_variable_list_div').dialog('open');
+}
+
+/*
+ * This method will return total number of if of a project
+ */
+function get_total_if_left_panel()
+{
+    var total_if = 0;
+    $('#selectable').each(function()
+    {
+        $("li", $(this)).each(function ()
+        {
+            if($(this).text().trim().toLowerCase() == "if")
+            {
+                total_if++;
+            }
+        });
+    });
+    return total_if;
 }
