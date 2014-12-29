@@ -29,7 +29,8 @@ $(function ()
             var first_selected_item_text = "";
             var second_selected_item_text ="";
             $("#add_bracket_in_condition_div_selected_items li").each(function(){
-                if($(this).attr("class") == "ui-widget-content ui-selected")
+                //if($(this).attr("class") == "ui-widget-content ui-selected")
+                if($(this).attr("class").indexOf("ui-selected") > -1)
                 {
                     total_selected_items++;   
                     if(total_selected_items == 1)
@@ -1711,7 +1712,8 @@ function button_add_bracket_in_condition_ok_pressed()
             });
             
         }
-        if ($(this).attr("class") == "ui-widget-content ui-selected")
+        //if ($(this).attr("class") == "ui-widget-content ui-selected")
+        if($(this).attr("class").indexOf("ui-selected") > -1)
         {
             $("a", $(this)).each(function ()
             {

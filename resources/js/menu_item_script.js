@@ -281,7 +281,7 @@ function generate_code()
         });
     });
     parentBlock = generate_if_blocks(li_list);
-    console.log(parentBlock);
+    //console.log(parentBlock);
     
     var parentScript = new Script();
     parentScript.block=(parentBlock);
@@ -1107,7 +1107,8 @@ function add_brackets()
     }
     $('#selectable li').each(function()
     {
-        if($(this).attr("class") == "ui-widget-content ui-selected")
+        //if($(this).attr("class") == "ui-widget-content ui-selected")
+        if($(this).attr("class").indexOf("ui-selected") > -1)
         {
             $("a", $(this)).each(function ()
             {
@@ -1214,7 +1215,8 @@ function add_brackets()
             {
                 $("li", $(this)).each(function ()
                 {
-                    if ($(this).attr("class") == "ui-widget-content ui-selected")
+                    //if ($(this).attr("class") == "ui-widget-content ui-selected")
+                    if($(this).attr("class").indexOf("ui-selected") > -1)
                     {
                         selected_expression_index = list_counter;
                         selected_expression_starting_spaces = $(this).attr("id");                        
@@ -1254,23 +1256,32 @@ function delete_block()
     {
         $("#label_show_messages_content").html("Please select an item to delete.");
         $("#modal_show_messages").modal('show');
-        //alert("Please select an item to delete.");
         return;
     }
     else if($('#selectable .ui-selected').text().trim() == "Click here to edit condition")
     {
         $("#label_show_messages_content").html("You are not allowed to remove empty condition.");
         $("#modal_show_messages").modal('show');
-        //alert("You are not allowed to remove empty condition.");
         return;
     }
-    /*else if($('#selectable .ui-selected').text().trim() == "Click here to edit block")
+    else if($('#selectable .ui-selected').text().trim() == "Click here to edit block")
     {
-        $("#label_show_messages_content").html("You are not allowed to remove an empty block.");
-        $("#modal_show_messages").modal('show');
-        //alert("You are not allowed to remove an empty block.");
-        return;
-    }*/
+        var left_panel_row_counter = 0;
+        $('#selectable').each(function()
+        {
+           $("li", $(this)).each(function ()
+           {
+               left_panel_row_counter++;
+           });
+        });
+        //only one row with "Click here to edit block" is not allowed to delete
+        if(left_panel_row_counter == 1)
+        {
+            $("#label_show_messages_content").html("You are not allowed to remove an empty block.");
+            $("#modal_show_messages").modal('show');
+            return;
+        }        
+    }
     //user wants to remove bracket
     else if($('#selectable .ui-selected').text().trim() == ")" || $('#selectable .ui-selected').text().trim() == "}" || $('#selectable .ui-selected').text().trim() == "(" || $('#selectable .ui-selected').text().trim() == "{")
     {
@@ -1284,7 +1295,6 @@ function delete_block()
     {
         $("#label_show_messages_content").html("You are not allowed to remove THEN expression.");
         $("#modal_show_messages").modal('show');
-        //alert("You are not allowed to remove THEN expression.");
         return;
     }
     
@@ -1310,12 +1320,12 @@ function delete_block()
             else
             {
                 //user selects a condition to delete
-                if($(this).attr("class") == "ui-widget-content ui-selected" && current_selected_segment.toLowerCase() == "if" )
+                if($(this).attr("class").indexOf("ui-selected") > -1 && current_selected_segment.toLowerCase() == "if" )
                 {
                     is_condition_selected = true;
                 }
                 //user selects an action to delete
-                if($(this).attr("class") == "ui-widget-content ui-selected" && (current_selected_segment.toLowerCase() == "then" || current_selected_segment.toLowerCase() == "else") )
+                if($(this).attr("class").indexOf("ui-selected") > -1 && (current_selected_segment.toLowerCase() == "then" || current_selected_segment.toLowerCase() == "else") )
                 {
                     is_action_selected = true;
                 }
@@ -1352,7 +1362,7 @@ function delete_item()
 {
     updateClientEndOperationCounter();
     
-    //deleting single row from left panel without any condition
+    //deleting single empty block from left panel ensuring existance of other block
     if($('#selectable .ui-selected').text().trim() == "Click here to edit block")
     {
         $('#selectable .ui-selected').remove();
@@ -1381,7 +1391,8 @@ function delete_item()
             if($(this).text().trim().toLowerCase() == "if")
             {
                 current_selected_segment = "if";
-                if ($(this).attr("class") == "ui-widget-content ui-selected")
+                //if ($(this).attr("class") == "ui-widget-content ui-selected")
+                if($(this).attr("class").indexOf("ui-selected") > -1)
                 {
                     start_if_total_spaces = $(this).attr("id");
                     if(start > 1 && start_if_total_spaces > 0)
@@ -1414,7 +1425,8 @@ function delete_item()
             else if($(this).text().trim().toLowerCase() == "else")
             {
                 current_selected_segment = "else";
-                if ($(this).attr("class") == "ui-widget-content ui-selected")
+                //if ($(this).attr("class") == "ui-widget-content ui-selected")
+                if($(this).attr("class").indexOf("ui-selected") > -1)
                 {
                     start_else_total_spaces = $(this).attr("id");
                     delete_start_marker = start;
@@ -1442,7 +1454,7 @@ function delete_item()
             else
             {
                 //user selects a condition to delete
-                if($(this).attr("class") == "ui-widget-content ui-selected" && current_selected_segment.toLowerCase() == "if" )
+                if($(this).attr("class").indexOf("ui-selected") > -1 && current_selected_segment.toLowerCase() == "if" )
                 {
                     //selected condition is yet assigned.
                     if($(this).text().trim() == "Click here to edit condition")
@@ -1480,7 +1492,7 @@ function delete_item()
                     is_allowed_delete = 0;
                     return false;
                 }
-                if($(this).attr("class") == "ui-widget-content ui-selected" && (current_selected_segment.toLowerCase() == "then" || current_selected_segment.toLowerCase() == "else") )
+                if($(this).attr("class").indexOf("ui-selected") > -1 && (current_selected_segment.toLowerCase() == "then" || current_selected_segment.toLowerCase() == "else") )
                 {
                     //selected condition is empty.
                     if($(this).text().trim() == "Click here to edit action")
@@ -1530,7 +1542,8 @@ function delete_item()
                     is_allowed_delete = 0;
                     return false;
                 }
-                else if($(this).attr("class") == "ui-widget-content ui-selected")
+                //else if($(this).attr("class") == "ui-widget-content ui-selected")
+                else if($(this).attr("class").indexOf("ui-selected") > -1)
                 {
                     then_else_removal_total_spaces = $(this).attr("id");
                     then_else_removal_index = start;
@@ -1601,7 +1614,8 @@ function delete_item()
         {
             $("li", $(this)).each(function ()
             {
-                if ($(this).attr("class") == "ui-widget-content ui-selected")
+                //if ($(this).attr("class") == "ui-widget-content ui-selected")
+                if($(this).attr("class").indexOf("ui-selected") > -1)
                 {
                     $(this).remove();        
                 }
