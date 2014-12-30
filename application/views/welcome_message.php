@@ -110,6 +110,7 @@ $(function() {
 });
 function save_project() {
     updateClientEndOperationCounter();
+    waitScreen.show();
     $.ajax({
         dataType: 'json',
         type: "POST",
@@ -118,8 +119,9 @@ function save_project() {
             project_id: '<?php echo $project_id;?>',
             left_panel_content: $("#selectable").html()
         },
-        success: function(data) {
+        success: function(data) {            
             $("#label_show_messages_content").html(data.message);
+            waitScreen.hide();
             $("#modal_show_messages").modal('show');
         }
     });

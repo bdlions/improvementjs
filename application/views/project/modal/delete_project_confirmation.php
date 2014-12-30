@@ -1,6 +1,7 @@
 <script type="text/javascript">
     $(function() {
         $("#button_delete").on("click", function() {
+            waitScreen.show();
             $.ajax({
                 dataType: 'json',
                 type: "POST",
@@ -10,6 +11,7 @@
                 },
                 success: function(data) {
                     $("#modal_delete_project_confirmation").modal('hide');
+                    waitScreen.hide();                    
                     window.location.reload();
                 }
             });

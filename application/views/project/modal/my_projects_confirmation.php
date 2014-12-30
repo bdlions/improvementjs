@@ -2,6 +2,7 @@
     $(function() {
         $("#button_my_projects_confirmation_save").on("click", function() {
             updateClientEndOperationCounter();
+            waitScreen.show();
             $.ajax({
                 dataType: 'json',
                 type: "POST",
@@ -11,6 +12,8 @@
                     left_panel_content: $("#selectable").html()
                 },
                 success: function(data) {
+                    $("#modal_my_projects_confirmation").modal('hide');
+                    waitScreen.hide();
                     window.location = '<?php echo base_url().'projects/show_all_projects';?>';
                 }
             });

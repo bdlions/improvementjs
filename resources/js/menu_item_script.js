@@ -311,6 +311,7 @@ function generate_code()
                 dataType: "json",
                 data: {project_xml : project, mapping:mapping, language:selected_language},
                 complete:function(data){
+                    waitScreen.hide();
                     $('#generate_code_div_modal').dialog('open');
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
                     $('#generated_code_text_area').val(beautify(generated_code.trim()));
@@ -327,7 +328,7 @@ function generate_code()
                                 $("#modal_show_messages").modal('show');
                                 //alert("Server processing error. Please try again.");
                             }
-                            waitScreen.hide();
+                            
                         }
                     });                    
                 }
