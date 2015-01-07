@@ -312,21 +312,21 @@ function generate_code()
                 data: {project_xml : project, mapping:mapping, language:selected_language},
                 complete:function(data){
                     waitScreen.hide();
-                    $('#generate_code_div_modal').dialog('open');
                     var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
-                    $('#generated_code_text_area').val(beautify(generated_code.trim()));
+                    $('#show_generated_code_title').html(get_generated_code_title());
+                    $('#textarea_generated_code').val(beautify(generated_code.trim()));
+                    $("#modal_show_generated_code").modal('show');
                     $.ajax({
                         type: "POST",
                         url: "../../general_process/save_project_code",
                         data: {
-                            code: $('#generated_code_text_area').val()
+                            code: $('#textarea_generated_code').val()
                         },
                         success: function (ajaxReturnedData) {
                             if(ajaxReturnedData === "false")
                             {
-                                $("#label_show_messages_content").html("Server processing error. Please try again.");
-                                $("#modal_show_messages").modal('show');
-                                //alert("Server processing error. Please try again.");
+                                //$("#label_show_messages_content").html("Server processing error. Please try again.");
+                                //$("#modal_show_messages").modal('show');
                             }
                             
                         }

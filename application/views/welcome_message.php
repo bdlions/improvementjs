@@ -274,25 +274,6 @@ foreach ($custom_variables as $cv) {
             </div>
         </div>
         <!-- end of action_variable_modal -->
-
-        <!-- start of generate code div modal -->
-        <div id="generate_code_div_modal" >
-            <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
-                <tr>
-                    <td width="100%" height="100%" align='center'>
-                        <textarea width='100%' height="100%" id="generated_code_text_area" rows="20" cols="90" style="font-size:8pt">
-
-                        </textarea>
-                        <!--downloading generated code-->
-                        <?php echo form_open("general_process/download_project_code");?>
-                        <input type="submit" id="generate_code_save_button" value="Download" onclick="generate_code_save_button_pressed()"/>
-                        <?php echo form_close();?>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <!-- end of generate code div modal -->
-
         <!-- start Modal window for conditional -->
         <div id="conditional_modal">
             <select name="conditionOrBooleanSelectionCombo" id="conditionOrBooleanSelectionCombo" onchange="conditionOrBooleanSelectionCombo(this)">
@@ -1012,4 +993,4 @@ foreach ($custom_variables as $cv) {
       $this->load->view('project/modal/upload_project_confirmation');
       $this->load->view('project/modal/show_messages');
       $this->load->view('project/modal/wait_screen');
-      ?>
+      $this->load->view('project/modal/show_generated_code');

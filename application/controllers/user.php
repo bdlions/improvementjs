@@ -138,7 +138,9 @@ class User extends CI_Controller
                 break;
             }
         }
+        $user_info['user_type'] = $this->session->userdata('user_type');
         $this->data['user_info'] = $user_info;
+        
         $this->template->load(MEMBER_HOME_TEMPLATE, "auth/show_user", $this->data);    
     }
 }

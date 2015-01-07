@@ -6,7 +6,9 @@ var template_service_action_url = "";
 var project_xml_path = "";
 
 var language_id_c = 1;
+var language_id_c_title = "C";
 var language_id_java = 2;
+var language_id_java_title = "Java";
 var selected_language_id = 1;
 
 var current_user_type = "";
@@ -160,4 +162,22 @@ function sessionTrackingTimerMethod()
         });
         //call ajax function
     }
+}
+
+/*
+ * This method will return title string to be displayed code modal window
+ * @returns {String}
+ */
+function get_generated_code_title()
+{
+    var language_title = "Code ";
+    if(selected_language_id === language_id_c)
+    {
+        language_title = language_title + "(" + language_id_c_title + ")";
+    }
+    else if(selected_language_id === language_id_java)
+    {
+        language_title = language_title + "(" + language_id_java_title + ")";
+    }
+    return language_title;
 }

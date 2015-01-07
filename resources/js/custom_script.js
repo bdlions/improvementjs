@@ -571,14 +571,6 @@ $(function ()
             });
         }
     });
-
-    var $dialog = $('#generate_code_div_modal').dialog({
-        height: 370,
-        width: 640,
-        autoOpen: false,
-        title: 'Code'
-    });
-    
     var $dialog = $('#download_project_div_modal').dialog({
         height: 170,
         width: 640,
@@ -2022,7 +2014,7 @@ function left_panel_condition_or_action_selected()
 function generate_code_save_button_pressed()
 {
     updateClientEndOperationCounter();
-    $('#generate_code_div_modal').dialog("close");
+    $("#modal_show_generated_code").modal('hide');
 }
 
 /*

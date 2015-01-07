@@ -26,6 +26,10 @@
                 <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['email']?></label>
             </div>
             <div class="row form-group">
+                <label class="col-md-3 control-label">Account Type:</label>
+                <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['user_type']?></label>
+            </div>
+            <div class="row form-group">
                 <label class="col-md-3 control-label">Registration Date:</label>
                 <label class="col-md-3 control-label" style="text-align:left"><?php echo $user_info['created_date']?></label>
             </div>

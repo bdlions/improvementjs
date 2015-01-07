@@ -21,6 +21,7 @@
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/bootstrap-hover-dropdown.js"></script>
         
+        <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/common.js"></script>
         
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/beautify.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/custom_script.js"></script>
@@ -39,7 +40,7 @@
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/parameter.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/code_process.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/manage_variables.js"></script>
-        <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/common.js"></script>
+        
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/parameter_table.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/manage_action.js"></script>
         <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/script/variable.js"></script>
