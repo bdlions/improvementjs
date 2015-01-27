@@ -78,7 +78,9 @@ class Welcome extends CI_Controller
         $this->template->load("default_template", 'welcome_message');
         //$this->template->load("default_template", 'test');
     }
-    
+    function touch(){
+        $this->template->load(MEMBER_PROJECT_TEMPLATE, 'touch');
+    }
     function load_project($project_id)
     {
         if (!$this->ion_auth_model->logged_in())
