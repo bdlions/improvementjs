@@ -281,7 +281,6 @@ function generate_code()
         });
     });
     parentBlock = generate_if_blocks(li_list);
-    //console.log(parentBlock);
     
     var parentScript = new Script();
     parentScript.block=(parentBlock);
@@ -425,7 +424,7 @@ function generate_if_blocks(li_list)
             else if(single_li.text().trim().toLowerCase() == "then")
             {
                 then_action_block = generate_action_block(single_li);
-                then_action_script.block=(then_action_block); 
+                then_action_script.block = then_action_block; 
                 if_block.s=("doIf");    
                 if_block.block=(condition_block);
                 if_block.script=(then_action_script);
@@ -434,7 +433,7 @@ function generate_if_blocks(li_list)
             else if(single_li.text().trim().toLowerCase() == "else")
             {
                 else_action_block = generate_action_block(single_li);
-                else_action_script.block=(else_action_block);
+                else_action_script.block = else_action_block;
                 script_actions_array[0] = then_action_script;
                 script_actions_array[1] = else_action_script;
                 if_block.s=("doIfElse");  
@@ -888,11 +887,11 @@ function generate_action_block(action)
         if( current_action_length == action_first_level_length )
         {
             action_block_array[action_counter++] = process_action_statement(current_action);
-            if(current_action.text().trim().toLowerCase() === "if")
+            if(current_action.text().trim().toLowerCase() == "if")
             {
                 while(true)
                 {
-                    if(current_action.next('li').length <= 0)
+                    if(current_action.next('li').length <= 0 || current_action.next('li').attr("id") < action_first_level_length)
                     {
                         break;
                     }
@@ -913,7 +912,7 @@ function generate_action_block(action)
         {
             break;
         }
-    }    
+    }  
     return action_block_array;
 }
 
