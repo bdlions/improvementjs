@@ -23,42 +23,6 @@ $(function ()
     $("#logical_connector_part_of_conditioon_accordion").accordion();
     //accordion initialization ends
     
-    $("#add_bracket_in_condition_div_selected_items").selectable({
-        stop: function (e, ui) {
-            var total_selected_items = 0;
-            var first_selected_item_text = "";
-            var second_selected_item_text ="";
-            $("#add_bracket_in_condition_div_selected_items li").each(function(){
-                //if($(this).attr("class") == "ui-widget-content ui-selected")
-                if($(this).attr("class").indexOf("ui-selected") > -1)
-                {
-                    total_selected_items++;   
-                    if(total_selected_items == 1)
-                    {
-                        first_selected_item_text = $(this).text();
-                    }
-                    else if(total_selected_items == 2)
-                    {
-                        second_selected_item_text = $(this).text();
-                    }
-                }
-                
-            });
-            if(total_selected_items == 1)
-            {
-                $("#label_show_messages_content").html("'(' will be added before '"+first_selected_item_text+"'");
-                $("#modal_show_messages").modal('show');
-                //alert("'(' will be added before '"+first_selected_item_text+"'");
-            }
-            else if(total_selected_items == 2)
-            {
-                $("#label_show_messages_content").html("'(' will be added before '"+first_selected_item_text+"' and ')' will be added after '"+second_selected_item_text+"'");
-                $("#modal_show_messages").modal('show');
-                //alert("'(' will be added before '"+first_selected_item_text+"' and ')' will be added after '"+second_selected_item_text+"'");
-            }
-        }
-    });
-
     $("#logical_connector_removing_condition_selected_item").selectable(
     {
         stop: function (e, ui) {
@@ -998,33 +962,6 @@ $(function ()
         }
     });
     
-    $( "#add_bracket_in_condition_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 500,
-        modal: true,
-        title: 'Selected Condition',
-        //setting buttons
-        buttons:
-        {
-            "Cancel": function()
-            {
-                updateClientEndOperationCounter();
-                $( this ).dialog( "close" );
-            },
-            "Ok": function()
-            {                
-                updateClientEndOperationCounter();
-                button_add_bracket_in_condition_ok_pressed();                
-            }            
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();       
-        }
-    });
-    
     //This modal window is created to add logical connectors
     $( "#logical_connector_div" ).dialog(
     {
@@ -1672,6 +1609,7 @@ function arithmeticOperatorSelectionComboChange(arithmeticOperatorSelectionCombo
 function button_add_bracket_in_condition_ok_pressed()
 {
     updateClientEndOperationCounter();
+    $('#modal_bracket_add').modal('hide');
     var first_anchor_id = "";
     var second_anchor_id = "";
     var total_selected_items  = 0;
@@ -1690,7 +1628,7 @@ function button_add_bracket_in_condition_ok_pressed()
     var next_item_value = "";
     var has_inside_comparison = false;
     
-    $("li", $('#add_bracket_in_condition_div_selected_items')).each(function ()
+    $("label", $('#div_add_bracket_in_condition')).each(function ()
     {
         if(next_item_check == true)
         {
@@ -1705,7 +1643,7 @@ function button_add_bracket_in_condition_ok_pressed()
             
         }
         //if ($(this).attr("class") == "ui-widget-content ui-selected")
-        if($(this).attr("class").indexOf("ui-selected") > -1)
+        if($(this).attr("class").indexOf("active") > -1)
         {
             $("a", $(this)).each(function ()
             {
@@ -1887,7 +1825,7 @@ function button_add_bracket_in_condition_ok_pressed()
     $("#selectable .ui-selected").html($left_panel_anchor_list);
     
     
-    $('#add_bracket_in_condition_div').dialog('close');
+    $('#modal_bracket_add').modal('hide');
     left_panel_condition_or_action_selected();
 }
 

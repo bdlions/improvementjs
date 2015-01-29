@@ -723,16 +723,6 @@ foreach ($custom_variables as $cv) {
 </div>
 <!-- end of arithmetic operator condition div modal -->
 
-<!-- start of logical connector div modal -->
-<div id="add_bracket_in_condition_div" >
-    <label style="font-size:10pt">Press your ctrl key and select where you want to add ( and then select where you want to add )</label>
-    <ol id="add_bracket_in_condition_div_selected_items" style="font-size:8pt;">
-       
-    </ol>
-</div>
-<!-- end of logical connector div modal -->
-
-
 <!-- start of download project div modal. This modal shows a modal window to download project left panel content-->
 <div id="download_project_div_modal" >
     <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
@@ -994,3 +984,4 @@ foreach ($custom_variables as $cv) {
       $this->load->view('project/modal/show_messages');
       $this->load->view('project/modal/wait_screen');
       $this->load->view('project/modal/show_generated_code');
+      $this->load->view('project/modal/bracket_add_modal');

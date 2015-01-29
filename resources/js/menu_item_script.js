@@ -869,7 +869,8 @@ function check_high_priority_operator(first_operator, second_operator)
  */
 function generate_action_block(action)
 {
-    var then_length = parseInt(action.attr("id"));
+    var action_length = parseInt(action.attr("id"));
+    var action_first_level_length = parseInt(action_length) + parseInt(indentation_space_length);
     var current_action = action;
     var current_action_length = 0;    
 
@@ -880,36 +881,33 @@ function generate_action_block(action)
         current_action = current_action.next("li");
         current_action_length = parseInt(current_action.attr("id"));
         //current action list is completed and we get a new block
-        if(current_action_length <= then_length)
+        if(current_action_length <= action_length)
         {
             break;
         }
-        if( current_action_length == parseInt(then_length) + parseInt(indentation_space_length) )
+        if( current_action_length == action_first_level_length )
         {
             action_block_array[action_counter++] = process_action_statement(current_action);
             if(current_action.text().trim().toLowerCase() === "if")
             {
-                current_action = current_action.next("li");
                 while(true)
                 {
                     if(current_action.next('li').length <= 0)
                     {
                         break;
                     }
-                    if( current_action.attr("id") == current_action_length && (current_action.text().trim().toLowerCase() === "then" || current_action.text().trim().toLowerCase() === "else"))
-                    {
-                        current_action = current_action.next("li");
-                    }
-                    else if( parseInt(current_action.attr("id")) > current_action_length )
-                    {
-                        current_action = current_action.next("li");
-                    }
-                    else
+                    var next_action = current_action.next("li");
+                    var next_action_text = next_action.text().trim().toLowerCase();
+                    if( next_action.attr("id") == action_first_level_length && next_action_text != "then" && next_action_text != "else")
                     {
                         break;
                     }
+                    else
+                    {
+                        current_action = current_action.next("li");
+                    }
                 }
-            }
+            }            
         }        
         if(current_action.next('li').length <= 0)
         {
@@ -1087,7 +1085,7 @@ function add_action()
     }
 }
 
-//user selects if or THEN or else and then selects Add Brackets button
+//user wants to add brackets in condition
 function add_brackets()
 {
     updateClientEndOperationCounter();
@@ -1096,14 +1094,12 @@ function add_brackets()
     {
         $("#label_show_messages_content").html("You are not allowed to add bracket here.");
         $("#modal_show_messages").modal('show');
-        //alert("You are not allowed to add bracket here.")
         return;
     }
     if(selectedItemText.trim() == "Click here to edit condition" || selectedItemText.trim() == "Click here to edit action" || selectedItemText.trim() == "Click here to edit block")
     {
         $("#label_show_messages_content").html("You are not allowed to add bracket here.");
         $("#modal_show_messages").modal('show');
-        //alert("You are not allowed to add bracket here.")
         return;
     }
     $('#selectable li').each(function()
@@ -1117,7 +1113,6 @@ function add_brackets()
                 {
                     $("#label_show_messages_content").html("You are not allowed to add bracket here.");
                     $("#modal_show_messages").modal('show');
-                    //alert("You are not allowed to add bracket here.")
                     return;
                 }
             });
@@ -1129,121 +1124,25 @@ function add_brackets()
         $("input", $(this)).each(function () {
             if($(this).attr("name") == "condition")
             {
-                //opening logical connector div modal window
-                $('#add_bracket_in_condition_div').dialog('open');
                 var selected_anchor_list = "";
                 $("a", $('#selectable .ui-selected')).each(function ()
                 {
                     //we are not showing first anchor which contains starting spaces
                     if($(this).attr("id") != "ssaid"){
-                        selected_anchor_list = selected_anchor_list+"<li class='ui-widget-content'>";
+                        selected_anchor_list = selected_anchor_list+'<div class="form-group bracket-condition">';
+                        selected_anchor_list = selected_anchor_list+'<label class="btn btn-primary">';
                         selected_anchor_list = selected_anchor_list+$(this).prop('outerHTML');
-                        selected_anchor_list = selected_anchor_list + "</li>";
+                        selected_anchor_list = selected_anchor_list+'</label>';
+                        selected_anchor_list = selected_anchor_list + '</div>';
                     }
-                });
-                document.getElementById("add_bracket_in_condition_div_selected_items").innerHTML = selected_anchor_list;
+                });                
+                $("#div_add_bracket_in_condition").html(selected_anchor_list);
+                bracketValidation();
+                $("#modal_bracket_add").modal('show');
                 return;
             }
         });
-    });
-    //adding bracket for condition ends
-    
-    //text content of currently selected item from left panel
-    var id1 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    var id2 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-    
-    var bracketStart;
-    var bracketEnd;
-    if(selectedItemText.toLowerCase() == "if")
-    {
-        bracketStart = "(";
-        bracketEnd = ")";
-    }
-    if(selectedItemText == "THEN" || selectedItemText.toLowerCase() == "else")
-    {
-        bracketStart = "{";
-        bracketEnd = "}";
-    }
-
-    //counting total number of leading spaces of this selected item
-    var total_spaces = $('#selectable .ui-selected').attr("id");
-    var starting_space = "";
-    for(var i = 0 ; i < total_spaces ; i++){
-       starting_space = starting_space + "&nbsp;";
-    }
-
-    if(selectedItemText.toLowerCase() == "if")
-    {
-        var currentItem = $('#selectable .ui-selected');
-        //checking whether bracket already exists or not
-        if(currentItem.next("li").text().trim() == "(")
-        {
-            $("#label_show_messages_content").html("Breaket already exists.");
-            $("#modal_show_messages").modal('show');
-            //alert("Breaket already exists.")
-        }
-        else
-        {
-            //adding starting bracket
-            currentItem.after("<li class='ui-widget-content' id = '"+total_spaces+"' title='"+id1+"-"+id2+"-startbracket' >"+starting_space+bracketStart+"</li>");
-            while(currentItem.text().trim() != "THEN")
-            {
-                currentItem = currentItem.next("li");
-            }
-            //adding ending bracket
-            currentItem.before("<li class='ui-widget-content' id = '"+total_spaces+"' title='"+id1+"-"+id2+"-endbracket' >"+starting_space+bracketEnd+"</li>");
-        }
-    }
-    if(selectedItemText == "THEN" || selectedItemText.toLowerCase() == "else")
-    {
-        //checking whether bracket already exists or not
-        if($('#selectable .ui-selected').next("li").text().trim() == "{")
-        {
-            $("#label_show_messages_content").html("Breaket already exists.");
-            $("#modal_show_messages").modal('show');
-            //alert("Breaket already exists.")
-        }
-        else
-        {
-            //adding starting bracket
-            $('#selectable .ui-selected').after("<li class='ui-widget-content' id='"+total_spaces+"'>"+starting_space+bracketStart+"</li>");
-            var selected_expression_starting_spaces = 0;
-            var selected_expression_index = -1;
-            var list_counter = 1;
-            var closing_breaket_added = 0;
-            //searching ending bracket position
-            $('#selectable').each(function()
-            {
-                $("li", $(this)).each(function ()
-                {
-                    //if ($(this).attr("class") == "ui-widget-content ui-selected")
-                    if($(this).attr("class").indexOf("ui-selected") > -1)
-                    {
-                        selected_expression_index = list_counter;
-                        selected_expression_starting_spaces = $(this).attr("id");                        
-                    }
-                    else if(list_counter > selected_expression_index+1 && selected_expression_index > -1)
-                    {
-                        var current_expression_spaces = $(this).attr("id");
-                        if(current_expression_spaces <= selected_expression_starting_spaces)
-                        {
-                            //adding ending bracket
-                            $(this).before("<li class='ui-widget-content' id='"+total_spaces+"'>"+starting_space+bracketEnd+"</li>");
-                            //making sure that ending bracket is added
-                            closing_breaket_added = 1;
-                            return false;
-                        }
-                    }
-                    list_counter++;
-                });
-            });
-            //ending bracket will be added at the end
-            if(closing_breaket_added == 0)
-            {
-                $("#selectable li:last-child").after("<li class='ui-widget-content' id='"+total_spaces+"'>"+starting_space+bracketEnd+"</li>");
-            }
-        }
-    }
+    });    
 }
 
 /*
