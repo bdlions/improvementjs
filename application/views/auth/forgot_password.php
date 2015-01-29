@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="pull-right col-md-2">
+            <div class="pull-right col-md-3">
                 <?php echo form_input($submit_send_email+array('class'=>'form-control btn-success'));?>
             </div>
         </div>
