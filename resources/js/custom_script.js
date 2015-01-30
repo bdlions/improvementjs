@@ -869,43 +869,6 @@ $(function ()
         }
     });
     
-    $( "#log_out_warning_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 500,
-        modal: true,
-        title: 'Warning',
-        //setting buttons
-        buttons:
-        {
-            "No": function()
-            {
-                sessionRenewConfirmed = false;
-                $( this ).dialog( "close" );
-                window.location.replace(server_base_url);
-            },
-            "Yes": function()
-            {                
-                sessionRenewConfirmed = true;
-                $.ajax({
-                    type: "POST",
-                    url: "../../welcome/keep_server_alive",
-                    data: {                
-                    },
-                    success: function () { 
-                        lastOperationExecutionTimeInSecond = 0;
-                        //alert("Server alive.");
-                    }
-                });
-                $( this ).dialog( "close" );
-            }            
-        },
-        close: function()
-        {
-            sessionRenewConfirmed = false;         
-        }
-    });
     $( "#condition_boolean_middle_part_change_confirmation_div" ).dialog(
     {
         //setting some properties

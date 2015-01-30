@@ -265,5 +265,24 @@ class General_process extends CI_Controller
         }
         echo $status;
     }
+    /*
+     * Ajax Call
+     * This method will keep current session alive for the current logged in user
+     */
+    function keep_server_alive()
+    {
+        if (!$this->ion_auth->logged_in())
+        {
+            redirect('auth/login', 'refresh');
+        }
+    }
+    
+    /*
+     * Ajax Call
+     * This method will logout user 
+     */
+    function logout() {
+        $this->ion_auth->logout();
+    }
 }
 ?>

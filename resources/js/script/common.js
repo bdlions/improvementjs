@@ -32,7 +32,9 @@ var boolean_variable_code_panel_comparison_equal = " == ";
 var boolean_variable_code_panel_comparison_not_equal = " != ";
 
 var timerMethodExecutionTimeIntervalInMiliSecond = 30000;
-var idleTimeDurationCheckedValueInSecond = 568; 
+var sessionExpirationTime = 600; 
+var showWarningBeforeSessionExpiration = 30;
+var sesstionExpirationThreshHold = 5;
 var clientEndOperationCounter = 0;
 var lastOperationExecutionTimeInSecond = 0;
 var sessionRenewConfirmed = true;
@@ -130,37 +132,34 @@ function sessionTrackingTimerMethod()
     var currentTime = new Date();    
     var currentTimeInSecond = currentTime.getTime()/1000;
     var idleTimeDuration = currentTimeInSecond - lastOperationExecutionTimeInSecond;
-    //alert("Idle time:"+(currentTimeInSecond - lastOperationExecutionTimeInSecond));
+    console.log("idleTimeDuration"+idleTimeDuration);
+    console.log("clientEndOperationCounter"+clientEndOperationCounter);
     if(clientEndOperationCounter <= 0)
     {
-        if(idleTimeDuration > idleTimeDurationCheckedValueInSecond)
+        if(idleTimeDuration > (sessionExpirationTime - showWarningBeforeSessionExpiration - sesstionExpirationThreshHold) )
         {
             if(sessionRenewConfirmed)
             {
-                $('#log_out_warning_div').dialog('open');
-            }            
-            //alert("Your sesssion will be expired within a minute if you are idle.");
+                $('#modal_log_out_warning').modal('show');
+            }  
         }  
-        if(idleTimeDuration > idleTimeDurationCheckedValueInSecond + 30)
+        if(idleTimeDuration > sessionExpirationTime)
         {
             window.location.replace(server_base_url);
         }
     }
     else
     {
-        //alert("clientEndOperationCounter:"+clientEndOperationCounter);
-        
         clientEndOperationCounter = 0;
         $.ajax({
             type: "POST",
-            url: "../../welcome/keep_server_alive",
-            data: {                
+            url: server_base_url+"general_process/keep_server_alive",
+            data:{                
             },
             success: function () { 
-                //alert("Server alive.");
+                
             }
         });
-        //call ajax function
     }
 }
 

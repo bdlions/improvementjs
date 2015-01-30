@@ -883,15 +883,6 @@ foreach ($custom_variables as $cv) {
     </table>
 </div>
 
-<div id="log_out_warning_div" >
-    <table width="100%" border="1" style="border-collapse:collapse;">
-        <tr>
-            <td><label>your session is about to expire. Do you want to continue working?</label></td>
-            
-        </tr>
-    </table>
-</div>
-
 <div id="condition_boolean_middle_part_change_confirmation_div" >
     <table width="100%" border="1" style="border-collapse:collapse;">
         <tr>
@@ -981,7 +972,8 @@ foreach ($custom_variables as $cv) {
 </div>
 <?php $this->load->view('project/modal/my_projects_confirmation');
       $this->load->view('project/modal/upload_project_confirmation');
-      $this->load->view('project/modal/show_messages');
+      $this->load->view('modal/show_messages_modal');
+      $this->load->view('modal/log_out_warning_modal');
       $this->load->view('project/modal/wait_screen');
       $this->load->view('project/modal/show_generated_code');
       $this->load->view('project/modal/bracket_add_modal');

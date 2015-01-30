@@ -265,13 +265,4 @@ class Welcome extends CI_Controller
         }
 
     }
-    
-    function keep_server_alive()
-    {
-        if (!$this->ion_auth->logged_in())
-        {
-            //redirect them to the login page
-            redirect('auth/login', 'refresh');
-        }
-    }
 }
