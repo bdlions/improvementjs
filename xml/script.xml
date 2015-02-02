@@ -66,12 +66,12 @@
 	<feature>
 		<options>basicfunction</options>
 		<optionstype>UserAge</optionstype>
-		<natural>User Age $p years ago </natural>
-		<code>Age[$p]</code>
+		<natural>Script1 User Age $pscript2 years ago </natural>
+		<code>Agescript3[$pscript2]</code>
 		<help>http://www.help.com/age</help>
 		<parameters>
 			<parameter>
-				<name>p</name>
+				<name>pscript2</name>
 				<type>INTEGER</type>
 				<default>0</default>
 			</parameter>
@@ -80,12 +80,12 @@
 	<feature>
 		<options>advancedfunction</options>
 		<optionstype>born</optionstype>
-		<natural>Born in Year $dateborn</natural>
-		<code>AdvancedAge($country, $color, $dateborn)</code>
+		<natural>Script1 Born in Year $datebornscript2</natural>
+		<code>AdvancedAgescript3($countryscript4, $colorscript5, $datebornscript2)</code>
 		<help>http://www.help.com/born</help>
 		<parameters>
 			<parameter>
-				<name>country</name>
+				<name>countryscript4</name>
 				<type>text</type>
 				<allowedvalues>
 					<value>USA</value>
@@ -96,7 +96,7 @@
 				<allowvar>No</allowvar>
 			</parameter>
 			<parameter>
-				<name>color</name>
+				<name>colorscript5</name>
 				<type>text</type>
 				<allowedvalues>
 					<value>White</value>
@@ -107,7 +107,7 @@
 				<allowvar>No</allowvar>
 			</parameter>
 			<parameter>
-				<name>dateborn</name>
+				<name>datebornscript2</name>
 				<type>INTEGER</type>
 				<interval>
 					<lowerlimit>1950</lowerlimit>
@@ -121,12 +121,12 @@
 	<feature>
 		<options>advancedfunction</options>
 		<optionstype>height</optionstype>
-		<natural>User Height of $heig</natural>
-		<code>Height($heig)</code>
+		<natural>Script1 User Height of $heigscript2</natural>
+		<code>Heightscript3($heigscript2)</code>
 		<help></help>
 		<parameters>
 			<parameter>
-				<name>heig</name>
+				<name>heigscript2</name>
 				<type>REAL</type>
 				<interval>
 					<lowerlimit>4.0</lowerlimit>
@@ -172,17 +172,18 @@
 	<feature>
 		<options>action</options>
 		<optionstype>run</optionstype>
-		<natural>run on $day</natural>
-		<code>Run($day)</code>
+		<natural>runscript1 on $dayscript2</natural>
+		<code>Runscript3($dayscript2)</code>
 		<help></help>
 		<parameters>
 			<parameter>
-				<name>day</name>
+				<name>dayscript2</name>
 				<type>text</type>
 				<allowedvalues>
 					<value>Monday</value>
 					<value>Tuesday</value>
 					<value>Wednesday</value>
+					<value>Friday</value>
 				</allowedvalues>
 				<default>Monday</default>
 				<allowvar>No</allowvar>
@@ -192,23 +193,24 @@
 	<feature>
 		<options>action</options>
 		<optionstype>sleep</optionstype>
-		<natural>sleep on $day at $hour</natural>
-		<code>Sleep($day,$hour)</code>
+		<natural>sleepscript1 on $dayscript2 at $hourscript3</natural>
+		<code>Sleepscript4($dayscript2,$hourscript3)</code>
 		<help></help>
 		<parameters>
 			<parameter>
-				<name>day</name>
+				<name>dayscript2</name>
 				<type>text</type>
 				<allowedvalues>
 					<value>Monday</value>
 					<value>Tuesday</value>
 					<value>Wednesday</value>
+					<value>Thursday</value>
 				</allowedvalues>
 				<default>Monday</default>
 				<allowvar>No</allowvar>
 			</parameter>
 			<parameter>
-				<name>hour</name>
+				<name>hourscript3</name>
 				<type>INTEGER</type>
 				<interval>
 					<lowerlimit>0</lowerlimit>

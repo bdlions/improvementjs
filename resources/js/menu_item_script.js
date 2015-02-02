@@ -301,38 +301,35 @@ function generate_code()
     project.stage=(stage);
     waitScreen.show();
     $.get('../../json/blockMap.json', function(mapping){
-        $.get('../../json/sample.xml', function(xml) {
-            var jsonObj = $.xml2json(xml);
-            mapping['variables'] = get_project_variables();
-            $.ajax({
-                type: "POST",
-                url: template_service,
-                dataType: "json",
-                data: {project_xml : project, mapping:mapping, language:selected_language},
-                complete:function(data){
-                    waitScreen.hide();
-                    var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
-                    $('#show_generated_code_title').html(get_generated_code_title());
-                    $('#textarea_generated_code').val(beautify(generated_code.trim()));
-                    $("#modal_show_generated_code").modal('show');
-                    $.ajax({
-                        type: "POST",
-                        url: "../../general_process/save_project_code",
-                        data: {
-                            code: $('#textarea_generated_code').val()
-                        },
-                        success: function (ajaxReturnedData) {
-                            if(ajaxReturnedData === "false")
-                            {
-                                //$("#label_show_messages_content").html("Server processing error. Please try again.");
-                                //$("#modal_show_messages").modal('show');
-                            }
-                            
+        mapping['variables'] = get_project_variables();
+        $.ajax({
+            type: "POST",
+            url: template_service,
+            dataType: "json",
+            data: {project_xml : project, mapping:mapping, language:selected_language},
+            complete:function(data){
+                waitScreen.hide();
+                var generated_code = data.responseText.replace(/(\r\n|\t|\r|\n)/gi, '').replace(/({)/gi,'\r\n{\r\n').replace(/(})/gi,'\r\n}\r\n').replace(/(;)/gi,';\r\n');
+                $('#show_generated_code_title').html(get_generated_code_title());
+                $('#textarea_generated_code').val(beautify(generated_code.trim()));
+                $("#modal_show_generated_code").modal('show');
+                $.ajax({
+                    type: "POST",
+                    url: "../../general_process/save_project_code",
+                    data: {
+                        code: $('#textarea_generated_code').val()
+                    },
+                    success: function (ajaxReturnedData) {
+                        if(ajaxReturnedData === "false")
+                        {
+                            //$("#label_show_messages_content").html("Server processing error. Please try again.");
+                            //$("#modal_show_messages").modal('show');
                         }
-                    });                    
-                }
-            });
-        });   
+
+                    }
+                });                    
+            }
+        }); 
     });    
 }
 function is_expression_valid()
@@ -1000,9 +997,10 @@ function process_action_statement(current_action)
                 {
                     var value = anchor_id_to_value[$(this).attr("id")];
                     var name = anchor_id_to_name[$(this).attr("id")];
-                    action_block.s=(name);
+                    //action_block.s=(name);
                     var result_array = reverse_code_process(anchor_id_to_value[$(this).attr("id")], anchor_id_to_name[$(this).attr("id")], $(this).attr("value"));
-                    action_block.l=(result_array[1]);                        
+                    action_block.l=(result_array[1]);  
+                    action_block.s=(result_array[2]);
                 });
             });
         }

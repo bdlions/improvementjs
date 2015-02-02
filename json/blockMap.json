@@ -25,16 +25,22 @@
 		"Age":"basicfunction",
 		"AdvancedAge":"advancedfunction",
 		"Height":"advancedfunction",
-		"custombyuser":"externaloption"
+		"custombyuser":"externaloption",
+                "Agescript3":"basicfunction",
+                "AdvancedAgescript3":"advancedfunction",
+                "Heightscript3":"advancedfunction"
 	},
         "function_params":
 	{
-		"Monday":"Mon"
+		"Monday":"Mon",
+                "USA":"US"
 	},
 	"actions":
 	{
 		"Run":"action",
-		"Sleep":"action"
+		"Sleep":"action",
+                "Runscript3":"action",
+                "Sleepscript4":"action"
 	},
 	"variables":
 	{
