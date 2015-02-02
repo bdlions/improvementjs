@@ -723,23 +723,6 @@ foreach ($custom_variables as $cv) {
 </div>
 <!-- end of arithmetic operator condition div modal -->
 
-<!-- start of download project div modal. This modal shows a modal window to download project left panel content-->
-<div id="download_project_div_modal" >
-    <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
-        <tr>
-            <td width="100%" height="100%" align='center'>
-                <!--downloading project-->
-                <?php echo form_open("general_process/download_project");?>
-                     <label >File Name</label>
-                    <input type="text" id="project_content_file_name" name="project_content_file_name" value=""/>
-                    <input type="submit" id="download_project_save_button" value="Save" onclick="download_project_save_button_clicked()"/>
-                <?php echo form_close();?>
-            </td>
-        </tr>
-    </table>
-</div>
-<!-- end of download project div modal -->
-
 <div id="delete_block_confirmation_div_modal" >
     <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
         <tr>
@@ -977,3 +960,4 @@ foreach ($custom_variables as $cv) {
       $this->load->view('project/modal/wait_screen');
       $this->load->view('project/modal/show_generated_code');
       $this->load->view('project/modal/bracket_add_modal');
+      $this->load->view('project/modal/download_project_modal');

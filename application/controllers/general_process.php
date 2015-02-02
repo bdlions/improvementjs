@@ -161,34 +161,6 @@ class General_process extends CI_Controller
         
     }
     
-    /*
-     * Downloading project content and variables stored in xml file in server
-     */
-    function download_project()
-    {
-        $project_id = $this->session->userdata('project_id');
-        $file_path = "./project/".$project_id.".xml";
-        if (file_exists($file_path)) {
-            $content = file_get_contents($file_path);
-            if($content == "")
-            {
-                return;
-            }
-            $file_name = "project_content.xml";
-            if(isset($_POST['project_content_file_name']))
-            {
-                if(strlen($_POST['project_content_file_name']) > 0 ){
-                    $file_name = $_POST['project_content_file_name'].".xml";
-                    $_POST['project_content_file_name'] = "";
-                }
-            }
-            header("Content-Type:text/plain");
-            header("Content-Length: " . filesize($file_path));
-            header("Content-Disposition: 'attachment'; filename=".$file_name);
-            echo $content;
-        }
-    }
-    
     function download_project_code()
     {
         $project_id = $this->session->userdata('project_id');
@@ -207,49 +179,6 @@ class General_process extends CI_Controller
         }
     } 
     //--------------------------------- Ajax calling related methods-----------------------------
-    /*
-     * Before downloading project info we are generating xml file with project content and variables in server
-     */
-    function save_project_left_panel_and_variables()
-    {
-        if ( !$this->ion_auth->logged_in() ) 
-        {
-            redirect('auth/login', 'refresh');
-        } 
-        $status = "false";
-        $project_type_id = $this->session->userdata('current_project_type_id');
-        $project_code_variables = "<project><code>";
-        $project_id = $this->session->userdata('project_id');
-        if( isset($_POST['code']) && $_POST['code'] != "" )
-        {
-            $custom_variables = $this->ion_auth->where('project_id',$project_id)->get_project_variables()->result();
-
-            $project_code_variables = $project_code_variables.htmlentities($_POST['code']);
-            $project_code_variables = $project_code_variables."</code>";
-            $project_code_variables = $project_code_variables."<variables>";
-            foreach ($custom_variables as $cv)
-            {
-                $project_code_variables = $project_code_variables."<variable>";
-                $project_code_variables = $project_code_variables."<id>".$cv->variable_id."</id>";
-                $project_code_variables = $project_code_variables."<name>".$cv->variable_name."</name>";
-                $project_code_variables = $project_code_variables."<type>".$cv->variable_type."</type>";
-                $project_code_variables = $project_code_variables."<value>".$cv->variable_value."</value>";
-                $project_code_variables = $project_code_variables."</variable>";
-            }
-            $project_code_variables = $project_code_variables."</variables>";
-            $project_code_variables = $project_code_variables."<properties>";
-            $project_code_variables = $project_code_variables."<project_type_id>".$project_type_id."</project_type_id>";
-            $project_code_variables = $project_code_variables."</properties>";
-            $project_code_variables = $project_code_variables."</project>";
-            $file_path = "./project/".$project_id.".xml";
-            if ( write_file($file_path, $project_code_variables))
-            {
-                $status = "true";
-            }
-        }
-        echo $status;
-    }
-    
     function save_project_code()
     {
         $status = "false";

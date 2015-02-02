@@ -1565,17 +1565,15 @@ function delete_item()
 }
 
 /*
- * User selects menu item to save project left panel content
+ * User selects menu item to download a project
  **/
 function download_project()
 {
     updateClientEndOperationCounter();
-    //project left panel content
     var left_panel_content = $("#selectable").html();
-    //saving project left panel into server
     $.ajax({
         type: "POST",
-        url: "../../general_process/save_project_left_panel_and_variables",
+        url: server_base_url+"projects/generate_content_to_download_project",
         data: {
             code: left_panel_content
         },
@@ -1583,16 +1581,13 @@ function download_project()
         {
             if(ajaxReturnedData === "true")
             {
-                $('#download_project_div_modal').dialog('open');
-                document.getElementById("project_content_file_name").value = "";
+                $('#modal_download_project').modal('show');
             }
             else
             {
                 $("#label_show_messages_content").html("Server processing error. Please try again.");
                 $("#modal_show_messages").modal('show');
-                //alert("Server processing error. Please try again.");
             }
-            //$.unblockUI();
         }
     }); 
 }

@@ -535,12 +535,6 @@ $(function ()
             });
         }
     });
-    var $dialog = $('#download_project_div_modal').dialog({
-        height: 170,
-        width: 640,
-        autoOpen: false,
-        title: 'Download Project'
-    });
     
     var $logicalConnectorRemovingConditionDialog = $('#logical_connector_removing_condition_div').dialog({
         height: 170,
@@ -1916,15 +1910,6 @@ function generate_code_save_button_pressed()
 {
     updateClientEndOperationCounter();
     $("#modal_show_generated_code").modal('hide');
-}
-
-/*
- * User presses download button to download project left panel content
- **/
-function download_project_save_button_clicked()
-{
-    updateClientEndOperationCounter();
-    $('#download_project_div_modal').dialog("close");
 }
 
 /*
