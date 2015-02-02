@@ -1569,6 +1569,7 @@ function download_project()
 {
     updateClientEndOperationCounter();
     var left_panel_content = $("#selectable").html();
+    waitScreen.show();
     $.ajax({
         type: "POST",
         url: server_base_url+"projects/generate_content_to_download_project",
@@ -1577,6 +1578,7 @@ function download_project()
         },
         success: function (ajaxReturnedData) 
         {
+            waitScreen.hide();
             if(ajaxReturnedData === "true")
             {
                 $('#modal_download_project').modal('show');

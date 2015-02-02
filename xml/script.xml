@@ -78,6 +78,20 @@
 		</parameters>
 	</feature>
 	<feature>
+		<options>basicfunction</options>
+		<optionstype>UserAge2</optionstype>
+		<natural>Script1 User Age2 $pscript2 years ago </natural>
+		<code>Ages2cript3[$pscript2]</code>
+		<help>http://www.help.com/age</help>
+		<parameters>
+			<parameter>
+				<name>pscript2</name>
+				<type>INTEGER</type>
+				<default>0</default>
+			</parameter>
+		</parameters>
+	</feature>
+	<feature>
 		<options>advancedfunction</options>
 		<optionstype>born</optionstype>
 		<natural>Script1 Born in Year $datebornscript2</natural>
