@@ -958,6 +958,6 @@ foreach ($custom_variables as $cv) {
       $this->load->view('modal/show_messages_modal');
       $this->load->view('modal/log_out_warning_modal');
       $this->load->view('project/modal/wait_screen');
-      $this->load->view('project/modal/show_generated_code');
+      $this->load->view('project/modal/show_generated_code_modal');
       $this->load->view('project/modal/bracket_add_modal');
       $this->load->view('project/modal/download_project_modal');

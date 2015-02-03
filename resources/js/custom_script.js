@@ -1902,16 +1902,6 @@ function left_panel_condition_or_action_selected()
         generate_selected_item_code();
     }); 
 }
-
-/*
- * User presses download btton in code download window
- **/
-function generate_code_save_button_pressed()
-{
-    updateClientEndOperationCounter();
-    $("#modal_show_generated_code").modal('hide');
-}
-
 /*
  * When a new project is loaded, left panel content is assigned from database. After assigning left panel content
  * there are some redundant tags and we need to clear those

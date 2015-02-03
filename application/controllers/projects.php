@@ -527,6 +527,47 @@ class Projects extends CI_Controller {
         echo json_encode($response);
     }
     
+    // ------------------------------ Generate Code Module ------------------------------//
+    /*
+     * Ajax Call
+     * This method will store project code in a file
+     */
+    function save_project_code()
+    {
+        $status = "false";
+        $project_id = $this->session->userdata('project_id');
+        if($this->input->post('code'))
+        {
+            $project_code = $this->input->post('code');
+            $file_path = "./code/".$project_id.".txt";
+            if ( write_file($file_path, $project_code))
+            {
+                $status = "true";
+            }
+        }
+        echo $status;
+    }
+    /*
+     * Ajax Call
+     * This method will download project code
+     */
+    function download_project_code()
+    {
+        $project_id = $this->session->userdata('project_id');
+        $file_path = "./code/".$project_id.".txt";
+        if (file_exists($file_path)) {
+            $content = "";
+            $lines = file($file_path); // gets file in array using new lines character
+            foreach($lines as $line)
+            {
+                $content = $content.$line."\r\n";
+            }
+            header("Content-Type:text/plain");
+            header("Content-Disposition: 'attachment'; filename=code.txt");
+            echo $content;
+        }
+    }
+    
     // ------------------------------ Download Project Module ---------------------------//
     /*
      * Ajax call 

@@ -26,15 +26,15 @@
 		"AdvancedAge":"advancedfunction",
 		"Height":"advancedfunction",
 		"custombyuser":"externaloption",
-                "Agescript3":"basicfunction",
-                "Ages2cript3":"basicfunction",
-                "AdvancedAgescript3":"advancedfunction",
-                "Heightscript3":"advancedfunction"
+		"Agescript3":"basicfunction",
+		"Ages2cript3":"basicfunction",
+		"AdvancedAgescript3":"advancedfunction",
+		"Heightscript3":"advancedfunction"
 	},
         "function_params":
 	{
 		"Monday":"Mon",
-                "USA":"US"
+        "USA":"US"
 	},
 	"actions":
 	{

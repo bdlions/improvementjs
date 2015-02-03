@@ -160,40 +160,6 @@ class General_process extends CI_Controller
         }
         
     }
-    
-    function download_project_code()
-    {
-        $project_id = $this->session->userdata('project_id');
-        $file_path = "./code/".$project_id.".txt";
-        if (file_exists($file_path)) {
-            $content = "";
-            $lines = file($file_path); // gets file in array using new lines character
-            foreach($lines as $line)
-            {
-                $content = $content.$line."\r\n";
-            }
-            header("Content-Type:text/plain");
-            //header("Content-Length: " . filesize($file_path));
-            header("Content-Disposition: 'attachment'; filename=code.txt");
-            echo $content;
-        }
-    } 
-    //--------------------------------- Ajax calling related methods-----------------------------
-    function save_project_code()
-    {
-        $status = "false";
-        $project_id = $this->session->userdata('project_id');
-        if(isset($_POST['code']))
-        {
-            $project_code = $_POST['code'];
-            $file_path = "./code/".$project_id.".txt";
-            if ( write_file($file_path, $project_code))
-            {
-                $status = "true";
-            }
-        }
-        echo $status;
-    }
     /*
      * Ajax Call
      * This method will keep current session alive for the current logged in user

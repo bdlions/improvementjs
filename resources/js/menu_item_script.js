@@ -205,6 +205,9 @@ if(typeof String.prototype.trim !== 'function') {
     }
 }
 
+/*
+ * This method will generate code based on selected item on left panel
+ */
 function generate_selected_item_code()
 {
     var block = new Block();
@@ -254,6 +257,9 @@ function generate_selected_item_code()
     }
 }
 
+/*
+ * This method will generate code of current project
+ */
 function generate_code()
 {
     if( !is_expression_valid() )
@@ -315,23 +321,21 @@ function generate_code()
                 $("#modal_show_generated_code").modal('show');
                 $.ajax({
                     type: "POST",
-                    url: "../../general_process/save_project_code",
+                    url: server_base_url+"projects/save_project_code",
                     data: {
                         code: $('#textarea_generated_code').val()
                     },
-                    success: function (ajaxReturnedData) {
-                        if(ajaxReturnedData === "false")
-                        {
-                            //$("#label_show_messages_content").html("Server processing error. Please try again.");
-                            //$("#modal_show_messages").modal('show');
-                        }
-
+                    success: function (data) {
+                        //success
                     }
                 });                    
             }
         }); 
     });    
 }
+/*
+ * This method will check whether all expression on left panel are valid or not
+ */
 function is_expression_valid()
 {
     var is_valid_code = true;
@@ -376,7 +380,6 @@ function is_expression_valid()
     {
         $("#label_show_messages_content").html(error_message);
         $("#modal_show_messages").modal('show');
-        //alert(error_message);
         return false;
     }
     return is_valid_code;
