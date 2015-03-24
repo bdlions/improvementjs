@@ -821,47 +821,47 @@ $(function ()
         }
     });
     
-    $( "#add_variables_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 420,
-        modal: true,
-        title: 'Add Variables',
-        //setting buttons
-        buttons:
-        {
-            
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();
-            //closing the dialog            
-        }
-    });
+//    $( "#add_variables_div" ).dialog(
+//    {
+//        //setting some properties
+//        autoOpen: false,
+//        width: 420,
+//        modal: true,
+//        title: 'Add Variables',
+//        //setting buttons
+//        buttons:
+//        {
+//            
+//        },
+//        close: function()
+//        {
+//            updateClientEndOperationCounter();
+//            //closing the dialog            
+//        }
+//    });
     
-    $( "#project_variable_list_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 600,
-        modal: true,
-        title: 'Project Variables',
-        //setting buttons
-        buttons:
-        {
-            "Ok": function()
-            {                
-                updateClientEndOperationCounter();
-                $( this ).dialog( "close" );                              
-            }
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();
-            //closing the dialog            
-        }
-    });
+//    $( "#project_variable_list_div" ).dialog(
+//    {
+//        //setting some properties
+//        autoOpen: false,
+//        width: 600,
+//        modal: true,
+//        title: 'Project Variables',
+//        //setting buttons
+//        buttons:
+//        {
+//            "Ok": function()
+//            {                
+//                updateClientEndOperationCounter();
+//                $( this ).dialog( "close" );                              
+//            }
+//        },
+//        close: function()
+//        {
+//            updateClientEndOperationCounter();
+//            //closing the dialog            
+//        }
+//    });
     
     $( "#condition_boolean_middle_part_change_confirmation_div" ).dialog(
     {

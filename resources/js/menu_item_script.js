@@ -1609,7 +1609,7 @@ function add_variables()
         
     document.getElementById('add_variable_value_label').style.visibility='hidden';
     document.getElementById('add_variable_value_text').style.visibility='hidden';
-    $('#add_variables_div').dialog('open');
+    $('#modal_add_variables').modal('show');
     
 }
 
@@ -1788,7 +1788,7 @@ function save_as_replace_project_no_button_clicked()
 function show_variables()
 {
     updateClientEndOperationCounter();
-    $('#project_variable_list_div').dialog('open');
+    $('#modal_show_variables').modal('show');
 }
 
 /*

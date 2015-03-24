@@ -47,6 +47,7 @@ function button_add_variable_ok_pressed()
     var variable_name = document.getElementById('add_variable_name').value;
     if(variable_name == "")
     {
+        $('#modal_add_variables').modal('hide');
         $("#label_show_messages_content").html("Please assign variable name.");
         $("#modal_show_messages").modal('show');
         return false;
@@ -54,6 +55,7 @@ function button_add_variable_ok_pressed()
     //alpha numeric variable name is checking
     var pattern = /^[A-Za-z]{1}[A-Za-z0-9]+$/;
     if (!pattern.test(variable_name)) {
+        $('#modal_add_variables').modal('hide');
         $("#label_show_messages_content").html("Name is not valid.Please input alphanumeric value!");
         $("#modal_show_messages").modal('show');
         return false;
@@ -73,6 +75,7 @@ function button_add_variable_ok_pressed()
         //text is not valid as number value
         if(!isNumber(variable_value))
         {
+            $('#modal_add_variables').modal('hide');
             $("#label_show_messages_content").html("Please assign number as variable value.");
             $("#modal_show_messages").modal('show');
             return false;
@@ -80,6 +83,7 @@ function button_add_variable_ok_pressed()
     }
     if(variable_value == "")
     {
+        $('#modal_add_variables').modal('hide');
         $("#label_show_messages_content").html("Please assign variable value.");
         $("#modal_show_messages").modal('show');
         return false;
@@ -93,6 +97,7 @@ function button_add_variable_ok_pressed()
     });
     if(variable_exist == true)
     {
+        $('#modal_add_variables').modal('hide');
         $("#label_show_messages_content").html("Variable name already exists. Please use a different variable name.");
         $("#modal_show_messages").modal('show');
         return false;
@@ -106,17 +111,18 @@ function button_add_variable_ok_pressed()
 /*
  * User presses cancel button after opening add variable modal window
  **/
-function button_add_variable_cancel_pressed()
-{
-    updateClientEndOperationCounter();
-    $('#add_variables_div').dialog("close");
-}
+//function button_add_variable_cancel_pressed()
+//{
+//    updateClientEndOperationCounter();
+//    $('#add_variables_div').dialog("close");
+//}
 
 /*
  * Before deleting a variable this method checks whether this variable is used in program or not
  **/
 function is_variable_used_delete_button_clicked(variable_id)
 {
+    $('#modal_show_variables').modal('hide');
     updateClientEndOperationCounter();
     var is_variable_used = false;
     //getting variable info
@@ -144,6 +150,7 @@ function is_variable_used_delete_button_clicked(variable_id)
     });
     if(is_variable_used == true)
     {
+        
         $("#label_show_messages_content").html("You have used this variable. You will not be able to delete it.");
         $("#modal_show_messages").modal('show');
         return false;

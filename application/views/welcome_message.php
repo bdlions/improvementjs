@@ -589,7 +589,7 @@ foreach ($custom_variables as $cv) {
 <!-- end conditional Modal window for logical connector -->
 
 <!-- start of add variable  div modal -->
-<div id="add_variables_div" >
+<!--<div id="add_variables_div" >
     <?php echo form_open("variables/create_variable");?>    
     <table>
         <tr>
@@ -622,13 +622,13 @@ foreach ($custom_variables as $cv) {
             </td>
         </tr>        
     </table>
-    <!--<button id="button_add_variable_ok" onclick="button_add_variable_ok_pressed()" type="button">Ok</button>-->
+    <button id="button_add_variable_ok" onclick="button_add_variable_ok_pressed()" type="button">Ok</button>
     <input type = "hidden" value="" name="project_left_panel_content_backup" id="project_left_panel_content_backup" />
     <input type="submit" id="button_add_variable_ok" onclick="return button_add_variable_ok_pressed()" value="Save"/>
     <button id="button_add_variable_cancel" onclick="button_add_variable_cancel_pressed()" type="button">Cancel</button>
     <?php echo form_close();?>
     
-</div>
+</div>-->
 <!-- end of add variable div modal -->
 
 <!-- start of arithmetic operator  div modal -->
@@ -838,7 +838,7 @@ foreach ($custom_variables as $cv) {
     </table>
 </div>
 
-<div id="project_variable_list_div" >
+<!--<div id="project_variable_list_div" >
     <table width="100%" border="1" style="border-collapse:collapse;">
         <tr>
             <td>Variable Name</td>
@@ -864,7 +864,7 @@ foreach ($custom_variables as $cv) {
         <input type='hidden' id='delete_variable_project_left_panel_content' name='delete_variable_project_left_panel_content' value=''/>                
         <?php echo form_close();?>
     </table>
-</div>
+</div>-->
 
 <div id="condition_boolean_middle_part_change_confirmation_div" >
     <table width="100%" border="1" style="border-collapse:collapse;">
@@ -961,3 +961,5 @@ foreach ($custom_variables as $cv) {
       $this->load->view('project/modal/show_generated_code_modal');
       $this->load->view('project/modal/bracket_add_modal');
       $this->load->view('project/modal/download_project_modal');
+      $this->load->view('project/modal/show_variables_modal');
+      $this->load->view('project/modal/add_variables_modal');
