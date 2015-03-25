@@ -615,112 +615,115 @@ $(function ()
     });
     
     //This modal window is created to add arithmetic operator from menu item
-    $( "#arithmetic_operator_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 400,
-        modal: true,
-        title: 'Add Arithmetic Operator',
-        //setting buttons
-        buttons:
-        {
-            "Cancel": function()
-            {
-                updateClientEndOperationCounter();
-                $( this ).dialog( "close" );
-            },
-            "Ok": function()
-            {
-                updateClientEndOperationCounter();
-                var selected_operator = $("#arithmetic_operator_selection_combo option:selected").text();
-    
-                var right_part_value = "";
-                var right_part_expression_type = $("#arithmetic_operator_right_part_type_selection_combo option:selected").text();
-                if(right_part_expression_type == "CONDITION")
-                {
-                    //opening arithmetic operator condition div modal window
-                    document.getElementById('arithmetic_operator_selected_item').value = $("#arithmetic_operator_selection_combo option:selected").text();
+  
+//    
+//    $( "#arithmetic_operator_div" ).dialog(
+//    {
+//        //setting some properties
+//        autoOpen: false,
+//        width: 400,
+//        modal: true,
+//        title: 'Add Arithmetic Operator',
+//        //setting buttons
+//        buttons:
+//        {
+//            "Cancel": function()
+//            {
+//                updateClientEndOperationCounter();
+//                $( this ).dialog( "close" );
+//            },
+//            "Ok": function()
+//            {
+//                updateClientEndOperationCounter();
+//                var selected_operator = $("#arithmetic_operator_selection_combo option:selected").text();
+//    
+//                var right_part_value = "";
+//                var right_part_expression_type = $("#arithmetic_operator_right_part_type_selection_combo option:selected").text();
+//                if(right_part_expression_type == "CONDITION")
+//                {
+//                    //opening arithmetic operator condition div modal window
+//                    document.getElementById('arithmetic_operator_selected_item').value = $("#arithmetic_operator_selection_combo option:selected").text();
+//
+//                    $('#arithmetic_operator_condition_div').dialog('open');                    
+//                }
+//                else if(right_part_expression_type == "CONSTANT")
+//                {
+//                    right_part_value = document.getElementById('arithmetic_operator_right_part_value').value;
+//                    //only number is allowed as constant value
+//                    if(right_part_value == "" || !isNumber(right_part_value))
+//                    {
+//                        $("#label_show_messages_content").html("Please assign a number for the constant part.");
+//                        $("#modal_show_messages").modal('show');
+//                        //alert("Please assign a number for the constant part.");
+//                        return;
+//                    }
+//                    process_operator(selected_operator, "constant","constant",right_part_value,right_part_value,"true");
+//                }
+//                $( this ).dialog( "close" );
+//            }
+//        },
+//        close: function()
+//        {
+//            updateClientEndOperationCounter();
+//            //closing the dialog            
+//        }
+//    });
 
-                    $('#arithmetic_operator_condition_div').dialog('open');                    
-                }
-                else if(right_part_expression_type == "CONSTANT")
-                {
-                    right_part_value = document.getElementById('arithmetic_operator_right_part_value').value;
-                    //only number is allowed as constant value
-                    if(right_part_value == "" || !isNumber(right_part_value))
-                    {
-                        $("#label_show_messages_content").html("Please assign a number for the constant part.");
-                        $("#modal_show_messages").modal('show');
-                        //alert("Please assign a number for the constant part.");
-                        return;
-                    }
-                    process_operator(selected_operator, "constant","constant",right_part_value,right_part_value,"true");
-                }
-                $( this ).dialog( "close" );
-            }
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();
-            //closing the dialog            
-        }
-    });
-    //This modal window is created to add condition as right part of arithmetic operator
-    $( "#arithmetic_operator_condition_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 220,
-        modal: true,
-        title: 'Current Conditions',
-        //setting buttons
-        buttons:
-        {
-            "Cancel": function()
-            {
-                updateClientEndOperationCounter();
-                $( this ).dialog( "close" );
-            },
-            "Ok": function()
-            {
-                updateClientEndOperationCounter();
-                var selected_operator = document.getElementById('arithmetic_operator_selected_item').value;
-                var leftP = $("#arithmetic_operator_condition_left_part").html(); 
-
-                if (leftP == "") {
-                    $("#label_show_messages_content").html("Please select a condition.");
-                    $("#modal_show_messages").modal('show');
-                    //alert("Please select a condition.");
-                    return;
-                }
-                else
-                {
-                    $('#arithmetic_operator_condition_div').dialog('close');
-                    var parent_node_array = new Array();
-                    var child_node_array = new Array();
-                    var language = $("#arithmetic_operator_condition_left_part").text();
-                    counter = 0;
-                    $("input", $("#arithmetic_operator_condition_left_part")).each(function ()
-                    {
-                        parent_node_array[counter] = 	$(this).attr("value");
-                        child_node_array[counter] = 	$(this).attr("name");
-                        counter++;
-                    });
-                    var code_array = default_code_generation(parent_node_array,child_node_array);
-                    process_operator(selected_operator, child_node_array[0],parent_node_array[0],language,code_array[0],"true");                    
-                }
-                $("#arithmetic_operator_condition_left_part").html("");
-                document.getElementById("arithmetic_operator_condition_left_part").style.border = "";
-                $( this ).dialog( "close" );
-            }
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();
-            //closing the dialog            
-        }
-    });
+//    //This modal window is created to add condition as right part of arithmetic operator
+//    $( "#arithmetic_operator_condition_div" ).dialog(
+//    {
+//        //setting some properties
+//        autoOpen: false,
+//        width: 220,
+//        modal: true,
+//        title: 'Current Conditions',
+//        //setting buttons
+//        buttons:
+//        {
+//            "Cancel": function()
+//            {
+//                updateClientEndOperationCounter();
+//                $( this ).dialog( "close" );
+//            },
+//            "Ok": function()
+//            {
+//                updateClientEndOperationCounter();
+//                var selected_operator = document.getElementById('arithmetic_operator_selected_item').value;
+//                var leftP = $("#arithmetic_operator_condition_left_part").html(); 
+//
+//                if (leftP == "") {
+//                    $("#label_show_messages_content").html("Please select a condition.");
+//                    $("#modal_show_messages").modal('show');
+//                    //alert("Please select a condition.");
+//                    return;
+//                }
+//                else
+//                {
+//                    $('#arithmetic_operator_condition_div').dialog('close');
+//                    var parent_node_array = new Array();
+//                    var child_node_array = new Array();
+//                    var language = $("#arithmetic_operator_condition_left_part").text();
+//                    counter = 0;
+//                    $("input", $("#arithmetic_operator_condition_left_part")).each(function ()
+//                    {
+//                        parent_node_array[counter] = 	$(this).attr("value");
+//                        child_node_array[counter] = 	$(this).attr("name");
+//                        counter++;
+//                    });
+//                    var code_array = default_code_generation(parent_node_array,child_node_array);
+//                    process_operator(selected_operator, child_node_array[0],parent_node_array[0],language,code_array[0],"true");                    
+//                }
+//                $("#arithmetic_operator_condition_left_part").html("");
+//                document.getElementById("arithmetic_operator_condition_left_part").style.border = "";
+//                $( this ).dialog( "close" );
+//            }
+//        },
+//        close: function()
+//        {
+//            updateClientEndOperationCounter();
+//            //closing the dialog            
+//        }
+//    });
     
     //This modal window is created to add boolean variable for logical connector operator
     $( "#logical_connector_boolean_variables_div" ).dialog(
@@ -1044,36 +1047,105 @@ $(function ()
             updateClientEndOperationCounter();       
         }
     });
+ 
     
-    $( "#arithmetic_operator_change_div" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 300,
-        modal: true,
-        title: 'Warning',
-        //setting buttons
-        buttons:
-        {
-            "No": function()
-            {
-                updateClientEndOperationCounter();
-                $( this ).dialog( "close" );
-            },
-            "Yes": function()
-            {                
-                updateClientEndOperationCounter();
-                $( this ).dialog( "close" );
-                changeArithmeticOperator($("#arithmetic_operator_change_combo option:selected").text().trim());
-            }            
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();       
-        }
-    });    
+//    $( "#arithmetic_operator_change_div" ).dialog(
+//    {
+//        //setting some properties
+//        autoOpen: false,
+//        width: 300,
+//        modal: true,
+//        title: 'Warning',
+//        //setting buttons
+//        buttons:
+//        {
+//            "No": function()
+//            {
+//                updateClientEndOperationCounter();
+//                $( this ).dialog( "close" );
+//            },
+//            "Yes": function()
+//            {                
+//                updateClientEndOperationCounter();
+//                $( this ).dialog( "close" );
+//                changeArithmeticOperator($("#arithmetic_operator_change_combo option:selected").text().trim());
+//            }            
+//        },
+//        close: function()
+//        {
+//            updateClientEndOperationCounter();       
+//        }
+//    });    
 });
 
+function add_arithmetic_ok_pressed(){
+                updateClientEndOperationCounter();
+                var selected_operator = $("#arithmetic_operator_selection_combo option:selected").text();
+                var right_part_value = "";
+                var right_part_expression_type = $("#arithmetic_operator_right_part_type_selection_combo option:selected").text();
+                if(right_part_expression_type == "CONDITION")
+                {
+                    //opening arithmetic operator condition div modal window
+                    //document.getElementById('arithmetic_operator_selected_item').value = $("#arithmetic_operator_selection_combo option:selected").text();
+
+                    $('#modal_arithmetic_operator_condition').modal('show');                    
+                }
+                else if(right_part_expression_type == "CONSTANT")
+                {
+                    right_part_value = document.getElementById('arithmetic_operator_right_part_value').value;
+                    //only number is allowed as constant value
+                    if(right_part_value == "" || !isNumber(right_part_value))
+                    {
+                        $('#modal_add_arithmetic').modal('hide');
+                        $("#label_show_messages_content").html("Please assign a number for the constant part.");
+                        $("#modal_show_messages").modal('show');
+                        //alert("Please assign a number for the constant part.");
+                        return;
+                    }
+                    process_operator(selected_operator, "constant","constant",right_part_value,right_part_value,"true");
+                }
+                $('#modal_add_arithmetic').modal('hide');
+        
+    }
+
+    function arithmetic_operator_condition_ok_pressed(){
+         updateClientEndOperationCounter();
+                var selected_operator = document.getElementById('arithmetic_operator_selected_item').value;
+                var leftP = $("#arithmetic_operator_condition_left_part").html(); 
+
+                if (leftP == "") {
+                    $('#modal_arithmetic_operator_condition').modal('hide');
+                    $("#label_show_messages_content").html("Please select a condition.");
+                    $("#modal_show_messages").modal('show');
+                    //alert("Please select a condition.");
+                    return;
+                }
+                else
+                {
+                    $('#modal_arithmetic_operator_condition').modal('hide'); 
+                    var parent_node_array = new Array();
+                    var child_node_array = new Array();
+                    var language = $("#arithmetic_operator_condition_left_part").text();
+                    counter = 0;
+                    $("input", $("#arithmetic_operator_condition_left_part")).each(function ()
+                    {
+                        parent_node_array[counter] = 	$(this).attr("value");
+                        child_node_array[counter] = 	$(this).attr("name");
+                        counter++;
+                    });
+                    var code_array = default_code_generation(parent_node_array,child_node_array);
+                    process_operator(selected_operator, child_node_array[0],parent_node_array[0],language,code_array[0],"true");                    
+                }
+                $("#arithmetic_operator_condition_left_part").html("");
+                document.getElementById("arithmetic_operator_condition_left_part").style.border = "";
+                $('#modal_arithmetic_operator_condition').modal('hide');
+            
+    }
+    function change_arithmetic_operator_ok_pressed(){
+         updateClientEndOperationCounter();
+                $('#modal_arithmetic_operator_change').modal('hide');
+                changeArithmeticOperator($("#arithmetic_operator_change_combo option:selected").text().trim());
+    }
 //user clicks anchor from expression from above code panel
 function manageExpression($href) {
     updateClientEndOperationCounter();
@@ -1159,7 +1231,7 @@ function manageExpression($href) {
         {
             $("select#arithmetic_operator_change_combo")[0].selectedIndex = 3;
         }
-        $('#arithmetic_operator_change_div').dialog('open');
+        $('#modal_arithmetic_operator_change').modal('show');
     }
     
     

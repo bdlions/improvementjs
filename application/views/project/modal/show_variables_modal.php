@@ -1,3 +1,28 @@
+<script type="text/javascript">
+    $(function() {
+        $("#delete_variable_variable_id").on("click", function() {
+            waitScreen.show();
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                url: '<?php echo base_url(); ?>' + "variables/delete_variablet",
+                data: {
+                    project_id: $("#input_project_id").val()
+                },
+                success: function(data) {
+                    $("#modal_delete_project_confirmation").modal('hide');
+                    waitScreen.hide();                    
+                    window.location.reload();
+                }
+            });
+        });
+    });
+  
+</script>
+
+
+
+
 <div class="modal fade" id="modal_show_variables" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -18,10 +18,24 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/improvementjs/application/views/welcome_message.php</file>
-            <file>file:/C:/xampp/htdocs/improvementjs/application/views/project/variable/modal_add_variable.php</file>
-            <file>file:/C:/xampp/htdocs/improvementjs/application/views/default_template.php</file>
-            <file>file:/C:/xampp/htdocs/improvementjs/script/manage_variables.js</file>
+            <file>file:/C:/wamp/www/improvementjs/constants/general.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/libraries/Ion_auth.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/views/admin/admin_login.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/views/design/menu_bar.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/controllers/admin.php</file>
+            <file>file:/C:/wamp/www/improvementjs/resources/js/menu_item_script.js</file>
+            <file>file:/C:/wamp/www/improvementjs/application/models/ion_auth_model.php</file>
+            <file>file:/C:/wamp/www/improvementjs/resources/js/script/manage_variables.js</file>
+            <file>file:/C:/wamp/www/improvementjs/resources/js/custom_script.js</file>
+            <file>file:/C:/wamp/www/improvementjs/application/views/default_template.php</file>
+            <file>file:/C:/wamp/www/improvementjs/system/helpers/cookie_helper.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/views/project/modal/show_variables_modal.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/views/project/modal/add_variables_modal.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/controllers/auth.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/views/templates/non_member_tmpl.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/views/welcome_message.php</file>
+            <file>file:/C:/wamp/www/improvementjs/application/config/ion_auth.php</file>
+            <file>file:/C:/wamp/www/improvementjs/resources/css/styles.css</file>
         </group>
     </open-files>
 </project-private>

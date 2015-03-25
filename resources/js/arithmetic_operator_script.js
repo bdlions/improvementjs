@@ -61,7 +61,7 @@ function add_arithmetic_operators()
     document.getElementById('arithmetic_operator_right_part_value_label').style.visibility='visible';
     document.getElementById('arithmetic_operator_right_part_value').style.visibility='visible';
 
-    $('#arithmetic_operator_div').dialog('open');
+    $('#modal_add_arithmetic').modal('show');
 }
 
 function process_operator(selected_operator, name,value,language,code, is_arithmetic_operator)
