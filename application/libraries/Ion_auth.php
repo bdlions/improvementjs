@@ -64,8 +64,8 @@ class Ion_auth
 		$this->ci->lang->load('ion_auth');
 		$this->ci->load->model('ion_auth_model');
 		$this->ci->load->helper('cookie');
-
-		//auto-login the user if they are remembered
+                
+                //auto-login the user if they are remembered
 		if (!$this->logged_in() && get_cookie('identity') && get_cookie('remember_code'))
 		{
 			$this->ci->ion_auth = $this;
@@ -473,7 +473,7 @@ class Ion_auth
         
         public function login($identity, $password, $remember = FALSE)
         {
-            $status = $this->ci->ion_auth_model->login($identity, $password);
+            $status = $this->ci->ion_auth_model->login($identity, $password, $remember);
             if($status != FALSE){
                 $user_info = array();
                 $user_id = $this->ci->session->userdata('user_id');
