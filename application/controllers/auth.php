@@ -43,10 +43,7 @@ class Auth extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'required');
 
         if ($this->form_validation->run() == true) { //check to see if the user is logging in
-            //check for "remember me"
-            $remember = (bool) $this->input->post('remember');
-
-            if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) 
+            if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'))) 
             {
                 //if the login is successful
                 //redirect to the main page
@@ -78,45 +75,21 @@ class Auth extends CI_Controller {
             }
         } 
         else {
-            $identity = "";
-            $password = "";
-            $remember = false;
-            if (get_cookie('identity')) {
-                $identity = get_cookie('identity');
-                //delete_cookie('identity');
-            }
-            if (get_cookie('u_p')) {
-                $password = get_cookie('u_p');
-            }
-            if (get_cookie('is_remember')) {
-                $remember = true;
-            }
             //the user is not logging in so display the login page
             //set the flash data error message if there is one
-            //$this->session->set_flashdata('message', $this->ion_auth_model->errors());
-            //$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
             $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-            $this->session->set_flashdata('message', "");
-            //$this->ion_auth_model->clear_errors();
             $this->data['identity'] = array('name' => 'identity',
                 'id' => 'identity',
                 'type' => 'text',
-                'value' => $identity,
+                'value' => $this->form_validation->set_value('identity'),
             );
             $this->data['password'] = array('name' => 'password',
                 'id' => 'password',
-                'type' => 'password',
-                'value' => $password,
+                'type' => 'password'
             );
             
-            //$this->load->library('user_agent');
-            //$this->data['browser'] = $this->agent->browser();
-            //$this->data['version'] = $this->agent->version();
-            
-            $this->data['remember'] = $remember;
             $this->template->set('main_content', 'auth/login');
             $this->template->load("default_template", 'auth/login', $this->data);
-            //$this->load->view('auth/login', $this->data);
         }
     }
 

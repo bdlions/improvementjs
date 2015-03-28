@@ -13,7 +13,7 @@ $(function ()
     $("#logical_connector_condition_left_item_accordion").accordion();
     $("#logical_connector_condition_comparison_item_accordion").accordion();
     $("#logical_connector_condition_right_item_accordion").accordion();    
-    $("#arithmetic_operator_condition_accordion").accordion();
+    //$("#arithmetic_operator_condition_accordion").accordion();
     $("#condition_boolean_variables_left_part_accordion").accordion(); 
     $("#condition_boolean_variables_middle_part_accordion").accordion(); 
     $("#condition_boolean_variables_right_part_accordion").accordion(); 
@@ -669,7 +669,7 @@ $(function ()
 //        }
 //    });
 
-//    //This modal window is created to add condition as right part of arithmetic operator
+    //This modal window is created to add condition as right part of arithmetic operator
 //    $( "#arithmetic_operator_condition_div" ).dialog(
 //    {
 //        //setting some properties
@@ -1086,8 +1086,8 @@ function add_arithmetic_ok_pressed(){
                 if(right_part_expression_type == "CONDITION")
                 {
                     //opening arithmetic operator condition div modal window
-                    //document.getElementById('arithmetic_operator_selected_item').value = $("#arithmetic_operator_selection_combo option:selected").text();
-
+                    document.getElementById('arithmetic_operator_selected_item').value = $("#arithmetic_operator_selection_combo option:selected").text();
+                    //$("#arithmetic_operator_condition_div").dialog('open');
                     $('#modal_arithmetic_operator_condition').modal('show');                    
                 }
                 else if(right_part_expression_type == "CONSTANT")
@@ -1231,7 +1231,7 @@ function manageExpression($href) {
         {
             $("select#arithmetic_operator_change_combo")[0].selectedIndex = 3;
         }
-        $('#modal_arithmetic_operator_change').modal('show');
+        //$('#modal_arithmetic_operator_change').modal('show');
     }
     
     
