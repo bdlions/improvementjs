@@ -964,4 +964,5 @@ $this->load->view('project/modal/show_variables_modal');
 $this->load->view('project/modal/add_variables_modal');
 $this->load->view('project/modal/add_arithmetic_modal');
 $this->load->view('project/modal/action_variable_modal');
+$this->load->view('project/modal/arithmetic_operator_condition_modal');
 ?>

@@ -1087,7 +1087,8 @@ function add_arithmetic_ok_pressed(){
                 if(right_part_expression_type == "CONDITION")
                 {
                     //opening arithmetic operator condition div modal window
-                    document.getElementById('arithmetic_operator_selected_item').value = $("#arithmetic_operator_selection_combo option:selected").text();
+                    //document.getElementById('arithmetic_operator_selected_item').value = $("#arithmetic_operator_selection_combo option:selected").text();
+                    $("#arithmetic_operator_selected_item").val(selected_operator);
                     //$("#arithmetic_operator_condition_div").dialog('open');
                     $('#modal_arithmetic_operator_condition').modal('show');                    
                 }
@@ -1232,7 +1233,7 @@ function manageExpression($href) {
         {
             $("select#arithmetic_operator_change_combo")[0].selectedIndex = 3;
         }
-        //$('#modal_arithmetic_operator_change').modal('show');
+        $('#modal_arithmetic_operator_change').modal('show');
     }
     
     
