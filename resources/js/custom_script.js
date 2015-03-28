@@ -758,34 +758,35 @@ $(function ()
         }
     });
     
-    $( "#delete_block_confirmation_div_modal" ).dialog(
-    {
-        //setting some properties
-        autoOpen: false,
-        width: 420,
-        modal: true,
-        title: 'Confirmation Dialog',
-        //setting buttons
-        buttons:
-        {
-            "Cancel": function()
-            {
-                updateClientEndOperationCounter();
-                $( this ).dialog( "close" );
-            },
-            "Ok": function()
-            {
-                updateClientEndOperationCounter();
-                delete_item();
-                $( this ).dialog( "close" );
-            }
-        },
-        close: function()
-        {
-            updateClientEndOperationCounter();
-            //closing the dialog            
-        }
-    });    
+//
+//    $( "#delete_block_confirmation_div_modal" ).dialog(
+//    {
+//        //setting some properties
+//        autoOpen: false,
+//        width: 420,
+//        modal: true,
+//        title: 'Confirmation Dialog',
+//        //setting buttons
+//        buttons:
+//        {
+//            "Cancel": function()
+//            {
+//                updateClientEndOperationCounter();
+//                $( this ).dialog( "close" );
+//            },
+//            "Ok": function()
+//            {
+//                updateClientEndOperationCounter();
+//                delete_item();
+//                $( this ).dialog( "close" );
+//            }
+//        },
+//        close: function()
+//        {
+//            updateClientEndOperationCounter();
+//            //closing the dialog            
+//        }
+//    });    
     $( "#save_as_project_div_modal" ).dialog(
     {
         //setting some properties
@@ -1563,6 +1564,11 @@ function checkConditionBooleanButton()
         return true;
     }
 }
+   function delete_ok_pressed(){
+       updateClientEndOperationCounter();
+       delete_item();
+       $(modal_delete_block_confirmation).modal('hide');
+   }
 
 function actionComboChange(action_comb)
 {
