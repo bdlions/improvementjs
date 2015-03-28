@@ -1254,8 +1254,8 @@ function delete_block()
     {
         document.getElementById("label_delete_block_confirmation_div_modal").innerHTML = "Are you sure you want to delete this?";
     }
-    //user confirmation dialog
-    $('#delete_block_confirmation_div_modal').dialog('open');
+    //user confirmation modal
+    $('#modal_delete_block_confirmation').modal('show');
 }
 
 function delete_item()
