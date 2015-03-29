@@ -21,14 +21,14 @@
                                 if ($key != "comparison" && $key != "action") {
                                     ?>
                                     <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="headingTwo">
+                                        <div class="panel-heading" role="tab" id="headingArithmatic">
                                             <h4 class="panel-title">
-                                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo<?php echo $counter ?>" aria-expanded="false" aria-controls="collapseTwo<?php echo $counter ?>">
+                                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseArithmatic<?php echo $counter ?>" aria-expanded="false" aria-controls="collapseArithmatic<?php echo $counter ?>">
                                                 <?php echo $key; ?>
                                                 </a>
                                             </h4>
                                         </div>
-                                        <div id="collapseTwo<?php echo $counter ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                        <div id="collapseArithmatic<?php echo $counter ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingArithmatic">
                                             <div class="panel-body">
                                                 <?php
                                                 foreach ($objectList as $customObj) {
@@ -53,14 +53,14 @@
                             }
                             ?>
                             <div class="panel panel-default">
-                                <div class="panel-heading" role="tab" id="headingTwo">
+                                <div class="panel-heading" role="tab" id="headingArithmatic">
                                     <h4 class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo<?php echo $counter ?>" aria-expanded="false" aria-controls="collapseTwo<?php echo $counter ?>">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseArithmatic<?php echo $counter ?>" aria-expanded="false" aria-controls="collapseArithmatic<?php echo $counter ?>">
                                             Number Variables
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseTwo<?php echo $counter ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div id="collapseArithmatic<?php echo $counter ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingArithmatic">
                                     <div class="panel-body">
                                         <?php
                                         foreach ($custom_variables as $cv) {

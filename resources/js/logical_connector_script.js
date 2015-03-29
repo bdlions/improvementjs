@@ -74,7 +74,8 @@ function add_logical_operators()
         }
     });
     //opening logical connector div modal window
-    $('#logical_connector_div').dialog('open');
+//    $('#logical_connector_div').dialog('open');
+    $('#modal_add_logical_connector').modal('show');
     //adding condition list in modal window
     document.getElementById("logical_connector_selected_item").innerHTML = logical_connector_list_items;    
 }
@@ -284,6 +285,7 @@ function button_logical_connector_removing_condition_delete_pressed()
     //user presses delete button without selecting a condition from condition list
     if(currentItem.text() == "")
     {
+        
         $("#label_show_messages_content").html("Please select an item.");
         $("#modal_show_messages").modal('show');
         //alert("Please select an item.");
@@ -427,6 +429,7 @@ function button_logical_connector_ok_pressed()
     //user presses ok button without selecting a condition from condition list
     if(currentItem.text() == "")
     {
+        $("#modal_add_logical_connector").modal('hide');
         $("#label_show_messages_content").html("Please select an item.");
         $("#modal_show_messages").modal('show');
         //alert("Please select an item.");
@@ -472,16 +475,18 @@ function button_logical_connector_ok_pressed()
         document.getElementById('logical_connector_boolean_variable_selected_anchor_title').value = last_anchor_title;
     }
     //closing logical connector modal window
-    $('#logical_connector_div').dialog("close");
+//    $('#logical_connector_div').dialog("close");
+    $('#modal_add_logical_connector').modal("hide");
     
     if(logicalConnectorItemTypeIndex == 0)
     {
         //opening conditional modal window
-        $('#logical_connector_conditional_modal').dialog('open');
+        $('#modal_logical_connector_condition').modal('show');
     }
     else if(logicalConnectorItemTypeIndex == 1)
     {
-        $('#logical_connector_boolean_variables_div').dialog('open');
+//        $('#logical_connector_boolean_variables_div').dialog('open');
+        $('#modal_logical_connector_boolean').modal('show');
     }
     
 }
@@ -594,14 +599,15 @@ function buttonLogicalConnectorConditionOkPressed()
 
     //checking whether user selects all of the three parts of a condition
     if (leftP == "" || cmpP == "" || rightP == "") {
-        $("#label_show_messages_content").html("Incomple condition.");
+        $("#label_show_messages_content").html("Incompte condition.");
         $("#modal_show_messages").modal('show');
         //alert("Incomple condition.");
         return;
     }
     else
     {
-        $('#logical_connector_conditional_modal').dialog('close');
+//        $('#logical_connector_conditional_modal').dialog('close');
+        $('#modal_logical_connector_condition').modal('hide');
         
         //generatin random id for each part of a condition
         var id1 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);

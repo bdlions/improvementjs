@@ -165,39 +165,39 @@ echo $variable_values;
         <td class="list_style" width="50%" valign="top">
             <div id="demo1" class="demo" style="height:300px; width:100%; overflow: scroll; overflow-x: hidden">
 
-<?php
-foreach ($fObjectArray as $key => $objectList) {
-    ?>
+                <?php
+                foreach ($fObjectArray as $key => $objectList) {
+                    ?>
                     <ul>
                         <li id="<?php echo $key ?>" rel="folder">
                             <a href="#"><?php echo $key; ?></a>
                             <ul>
-                    <?php
-                    foreach ($objectList as $customObj) {
-                        echo "<li id='{$customObj->optionstype}' name='{$key}' rel='default'><a href='#' >";
-                        echo $customObj->optionstype;
-                        echo "</a></li>";
-                    }
-                    ?>
+                                <?php
+                                foreach ($objectList as $customObj) {
+                                    echo "<li id='{$customObj->optionstype}' name='{$key}' rel='default'><a href='#' >";
+                                    echo $customObj->optionstype;
+                                    echo "</a></li>";
+                                }
+                                ?>
 
                             </ul>
                         </li>                                  
 
                     </ul>
-    <?php
-}
-?>
+                    <?php
+                }
+                ?>
                 <ul>
                     <li id="<?php echo "variable" ?>" rel="folder">
                         <a href="#"><?php echo "variable"; ?></a>
                         <ul>
-                <?php
-                foreach ($custom_variables as $cv) {
-                    echo "<li title='{$cv->variable_type}' id='{$cv->variable_name}' name='variable' rel='default'><a href='#' >";
-                    echo $cv->variable_name;
-                    echo "</a></li>";
-                }
-                ?>
+                            <?php
+                            foreach ($custom_variables as $cv) {
+                                echo "<li title='{$cv->variable_type}' id='{$cv->variable_name}' name='variable' rel='default'><a href='#' >";
+                                echo $cv->variable_name;
+                                echo "</a></li>";
+                            }
+                            ?>
 
                         </ul>
                     </li>
@@ -209,8 +209,9 @@ foreach ($fObjectArray as $key => $objectList) {
 
 </table>
 
+
 <!-- start of action_variable_modal -->
-<div id="action_variable_modal" >
+<!--<div id="action_variable_modal" >
     <select name="actonSelectionCombo" id="actonSelectionCombo" onchange="actionComboChange(this)">
         <option value="condition" selected = "selected">Condition</option>
         <option value="action">Action</option>
@@ -264,11 +265,11 @@ echo "</p></div>";
                 </td>
             </tr>
         </table>
-    </div>
+    </div>-->
 </div>
 <!-- end of action_variable_modal -->
 <!-- start Modal window for conditional -->
-<div id="conditional_modal">
+<!--<div id="conditional_modal">
     <select name="conditionOrBooleanSelectionCombo" id="conditionOrBooleanSelectionCombo" onchange="conditionOrBooleanSelectionCombo(this)">
         <option value="condition" selected = "selected">Condition</option>
         <option value="action">Boolean Variable</option>
@@ -322,56 +323,56 @@ echo "</p></div>";
                     </div>
 
                     <div id="comparison_accordion" style="width:200px; font-size:10pt; float:left;">
-                        <?php
-                        foreach ($fObjectArray as $key => $objectList) {
-                            if ($key == "comparison") {
-                                echo "<h5><a href='#'>{$key}</a></h5>";
-                                //echo $key."</br>";
-                                echo "<div><p>";
-                                foreach ($objectList as $customObj) {
-                                    $displayNatural = $customObj->natural;
-                                    //echo "<a style='text-decoration:none;' href='#' id='c_p' onclick='setChangingStmt(this)'>{$customObj->optionstype}</a>";
-                                    echo "<a style='text-decoration:none;' href='#' id='c_p' onclick='setChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
-                                    echo "<br/>";
-                                }
-                                echo "</p></div>";
-                            }
-                        }
-                        ?>
+<?php
+foreach ($fObjectArray as $key => $objectList) {
+    if ($key == "comparison") {
+        echo "<h5><a href='#'>{$key}</a></h5>";
+        //echo $key."</br>";
+        echo "<div><p>";
+        foreach ($objectList as $customObj) {
+            $displayNatural = $customObj->natural;
+            //echo "<a style='text-decoration:none;' href='#' id='c_p' onclick='setChangingStmt(this)'>{$customObj->optionstype}</a>";
+            echo "<a style='text-decoration:none;' href='#' id='c_p' onclick='setChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
+            echo "<br/>";
+        }
+        echo "</p></div>";
+    }
+}
+?>
                     </div>
 
                     <div id="action_accordion" style="width:150px; font-size:10pt; float:left;">
-                        <?php
-                        foreach ($fObjectArray as $key => $objectList) {
-                            if ($key != "comparison" && $key != "action") {
-                                echo "<h5><a href='#'>{$key}</a></h5>";
-                                //echo $key."</br>";
-                                echo "<div><p>";
-                                foreach ($objectList as $customObj) {
-                                    $displayNatural = $customObj->natural;
-                                    $searchedPattern = array();
-                                    $replacementPattern = array();
-                                    foreach ($customObj->parameters as $param) {
-                                        $searchedPattern[] = "$" . $param->name;
-                                        $replacementPattern[] = $param->default;
-                                    }
-                                    $displayNatural = str_replace($searchedPattern, $replacementPattern, $displayNatural);
+<?php
+foreach ($fObjectArray as $key => $objectList) {
+    if ($key != "comparison" && $key != "action") {
+        echo "<h5><a href='#'>{$key}</a></h5>";
+        //echo $key."</br>";
+        echo "<div><p>";
+        foreach ($objectList as $customObj) {
+            $displayNatural = $customObj->natural;
+            $searchedPattern = array();
+            $replacementPattern = array();
+            foreach ($customObj->parameters as $param) {
+                $searchedPattern[] = "$" . $param->name;
+                $replacementPattern[] = $param->default;
+            }
+            $displayNatural = str_replace($searchedPattern, $replacementPattern, $displayNatural);
 
-                                    //echo "<a style='text-decoration:none;' href='#' id='r_p' onclick='setChangingStmt(this)'>{$customObj->optionstype}</a>";
-                                    echo "<a style='text-decoration:none;' href='#' id='r_p' onclick='setChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
-                                    echo "<br/>";
-                                }
-                                echo "</p></div>";
-                            }
-                        }
-                        echo "<h5><a href='#'>Variables</a></h5>";
-                        echo "<div><p>";
-                        foreach ($custom_variables as $cv) {
-                            echo "<a style='text-decoration:none;' href='#' id='r_p' onclick='setChangingStmt(this)'><input id='{$cv->variable_type}' type = 'hidden' value='variable' name='{$cv->variable_name}' />{$cv->variable_name}</a>";
-                            echo "<br/>";
-                        }
-                        echo "</p></div>";
-                        ?>
+            //echo "<a style='text-decoration:none;' href='#' id='r_p' onclick='setChangingStmt(this)'>{$customObj->optionstype}</a>";
+            echo "<a style='text-decoration:none;' href='#' id='r_p' onclick='setChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
+            echo "<br/>";
+        }
+        echo "</p></div>";
+    }
+}
+echo "<h5><a href='#'>Variables</a></h5>";
+echo "<div><p>";
+foreach ($custom_variables as $cv) {
+    echo "<a style='text-decoration:none;' href='#' id='r_p' onclick='setChangingStmt(this)'><input id='{$cv->variable_type}' type = 'hidden' value='variable' name='{$cv->variable_name}' />{$cv->variable_name}</a>";
+    echo "<br/>";
+}
+echo "</p></div>";
+?>
                     </div>
                 </td>
             </tr>
@@ -403,42 +404,45 @@ echo "</p></div>";
 ?>
                     </div> 
                     <div id="condition_boolean_variables_middle_part_accordion" style="width:200px; font-size:10pt; float:left;">
-                        <?php
-                        echo "<h5><a href='#'>Comparison</a></h5>";
-                        echo "<div><p>";
-                        echo "<a style='text-decoration:none;' href='#' id='c_b_v_m_p' onclick='conditionBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is equal to' />is equal to</a>";
-                        echo "<br/>";
-                        echo "<a style='text-decoration:none;' href='#' id='c_b_v_m_p' onclick='conditionBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is not equal to' />is not equal to</a>";
-                        echo "<br/>";
-                        echo "</p></div>";
-                        ?>
+<?php
+echo "<h5><a href='#'>Comparison</a></h5>";
+echo "<div><p>";
+echo "<a style='text-decoration:none;' href='#' id='c_b_v_m_p' onclick='conditionBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is equal to' />is equal to</a>";
+echo "<br/>";
+echo "<a style='text-decoration:none;' href='#' id='c_b_v_m_p' onclick='conditionBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is not equal to' />is not equal to</a>";
+echo "<br/>";
+echo "</p></div>";
+?>
                     </div>
                     <div id="condition_boolean_variables_right_part_accordion" style="width:150px; font-size:10pt; float:left;">
-                        <?php
-                        echo "<h5><a href='#'>Boolean Value</a></h5>";
-                        echo "<div><p>";
-                        echo "<a style='text-decoration:none;' href='#' id='c_b_v_r_p' onclick='conditionBooleanVariablesSetSelectedVariableValue(this)'><input id='booleanvalue' type = 'hidden' value='booleanvalue' name='true' />true</a>";
-                        echo "<br/>";
-                        echo "<a style='text-decoration:none;' href='#' id='c_b_v_r_p' onclick='conditionBooleanVariablesSetSelectedVariableValue(this)'><input id='booleanvalue' type = 'hidden' value='booleanvalue' name='false' />false</a>";
-                        echo "<br/>";
-                        echo "</p></div>";
-                        ?>
+<?php
+echo "<h5><a href='#'>Boolean Value</a></h5>";
+echo "<div><p>";
+echo "<a style='text-decoration:none;' href='#' id='c_b_v_r_p' onclick='conditionBooleanVariablesSetSelectedVariableValue(this)'><input id='booleanvalue' type = 'hidden' value='booleanvalue' name='true' />true</a>";
+echo "<br/>";
+echo "<a style='text-decoration:none;' href='#' id='c_b_v_r_p' onclick='conditionBooleanVariablesSetSelectedVariableValue(this)'><input id='booleanvalue' type = 'hidden' value='booleanvalue' name='false' />false</a>";
+echo "<br/>";
+echo "</p></div>";
+?>
                     </div>
                 </td>
             </tr>
         </table>
-    </div>    
-</div>
+    </div>    -->
+<!--</div>-->
 <!-- end Modal window for conditional -->
 
+
+
+
 <!-- start of logical connector div modal -->
-<div id="logical_connector_div" >
+<!--<div id="logical_connector_div" >
     <label>Insert</label>
     <select name="logicalConnectorSelectionCombo" id="logicalConnectorSelectionCombo">
         <option value="AND" selected = "selected">AND</option>
         <option value="OR">OR</option>
     </select>
-    <!-- user can adds a new condtion or a boolean variable -->
+     user can adds a new condtion or a boolean variable 
     <select name="logicalConnectorItemType" id="logicalConnectorItemType">
         <option value="Condition" selected = "selected">Condition</option>
         <option value="BooleanVariable">Boolean Variable</option>
@@ -446,7 +450,7 @@ echo "</p></div>";
     <label>after</label>
     <ol id="logical_connector_selected_item" style="font-size:8pt;">       
     </ol>
-</div>
+</div>-->
 <!-- end of logical connector div modal -->
 
 <!-- start of logical connector removing condition div modal -->
@@ -471,7 +475,7 @@ echo "</p></div>";
 
 
 <!-- start Modal window for logical connector conditional window-->
-<div id="logical_connector_conditional_modal">
+<!--<div id="logical_connector_conditional_modal">
     <table width="600" style="border-collapse:collapse;">
         <tr height="30px">
             <td>
@@ -515,52 +519,52 @@ echo "</p></div>";
                 </div>
 
                 <div id="logical_connector_condition_comparison_item_accordion" style="width:200px; font-size:10pt; float:left;">
-                    <?php
-                    foreach ($fObjectArray as $key => $objectList) {
-                        if ($key == "comparison") {
-                            echo "<h5><a href='#'>{$key}</a></h5>";
-                            echo "<div><p>";
-                            foreach ($objectList as $customObj) {
-                                $displayNatural = $customObj->natural;
-                                echo "<a style='text-decoration:none;' href='#' id='l_c_c_p' onclick='logicalConnectorSetChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
-                                echo "<br/>";
-                            }
-                            echo "</p></div>";
-                        }
-                    }
-                    ?>
+<?php
+foreach ($fObjectArray as $key => $objectList) {
+    if ($key == "comparison") {
+        echo "<h5><a href='#'>{$key}</a></h5>";
+        echo "<div><p>";
+        foreach ($objectList as $customObj) {
+            $displayNatural = $customObj->natural;
+            echo "<a style='text-decoration:none;' href='#' id='l_c_c_p' onclick='logicalConnectorSetChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
+            echo "<br/>";
+        }
+        echo "</p></div>";
+    }
+}
+?>
                 </div>
 
                 <div id="logical_connector_condition_right_item_accordion" style="width:150px; font-size:10pt; float:left;">
-                    <?php
-                    foreach ($fObjectArray as $key => $objectList) {
-                        if ($key != "comparison" && $key != "action") {
-                            echo "<h5><a href='#'>{$key}</a></h5>";
-                            //echo $key."</br>";
-                            echo "<div><p>";
-                            foreach ($objectList as $customObj) {
-                                $displayNatural = $customObj->natural;
-                                $searchedPattern = array();
-                                $replacementPattern = array();
-                                foreach ($customObj->parameters as $param) {
-                                    $searchedPattern[] = "$" . $param->name;
-                                    $replacementPattern[] = $param->default;
-                                }
-                                $displayNatural = str_replace($searchedPattern, $replacementPattern, $displayNatural);
-                                echo "<a style='text-decoration:none;' href='#' id='l_c_r_p' onclick='logicalConnectorSetChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
-                                echo "<br/>";
-                            }
-                            echo "</p></div>";
-                        }
-                    }
-                    echo "<h5><a href='#'>Variables</a></h5>";
-                    echo "<div><p>";
-                    foreach ($custom_variables as $cv) {
-                        echo "<a style='text-decoration:none;' href='#' id='l_c_r_p' onclick='logicalConnectorSetChangingStmt(this)'><input id='{$cv->variable_type}' type = 'hidden' value='variable' name='{$cv->variable_name}' />{$cv->variable_name}</a>";
-                        echo "<br/>";
-                    }
-                    echo "</p></div>";
-                    ?>
+<?php
+foreach ($fObjectArray as $key => $objectList) {
+    if ($key != "comparison" && $key != "action") {
+        echo "<h5><a href='#'>{$key}</a></h5>";
+        //echo $key."</br>";
+        echo "<div><p>";
+        foreach ($objectList as $customObj) {
+            $displayNatural = $customObj->natural;
+            $searchedPattern = array();
+            $replacementPattern = array();
+            foreach ($customObj->parameters as $param) {
+                $searchedPattern[] = "$" . $param->name;
+                $replacementPattern[] = $param->default;
+            }
+            $displayNatural = str_replace($searchedPattern, $replacementPattern, $displayNatural);
+            echo "<a style='text-decoration:none;' href='#' id='l_c_r_p' onclick='logicalConnectorSetChangingStmt(this)'><input type = 'hidden' value='{$key}' name='{$customObj->optionstype}' />{$displayNatural}</a>";
+            echo "<br/>";
+        }
+        echo "</p></div>";
+    }
+}
+echo "<h5><a href='#'>Variables</a></h5>";
+echo "<div><p>";
+foreach ($custom_variables as $cv) {
+    echo "<a style='text-decoration:none;' href='#' id='l_c_r_p' onclick='logicalConnectorSetChangingStmt(this)'><input id='{$cv->variable_type}' type = 'hidden' value='variable' name='{$cv->variable_name}' />{$cv->variable_name}</a>";
+    echo "<br/>";
+}
+echo "</p></div>";
+?>
                 </div>
             </td>
         </tr>
@@ -571,7 +575,7 @@ echo "</p></div>";
                 <input type = "hidden" value="" name="logical_connector_selected_anchor_title" id="logical_connector_selected_anchor_title" />                
             </td>
         </tr>
-    </table>
+    </table>-->
 </div>
 <!-- end conditional Modal window for logical connector -->
 
@@ -715,30 +719,9 @@ echo "</p></div>";
         </tr>
     </table>
 </div>-->
-<div class="modal fade" id="modal_delete_block_confirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Confirmation Dialog</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-offset-1 col-md-10">
-                      <label id="label_delete_block_confirmation_div_modal" name="label_delete_block_confirmation_div_modal">Are you sure you want to delete this?</label>  
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>                
-            </div>
-            <div class="modal-footer">
-                <input type="submit" class="btn btn-success" id="button_delete" onclick="delete_ok_pressed()" value="Delete"/>  
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+
 <!-- start of logical connector boolean variable div modal -->
-<div id="logical_connector_boolean_variables_div" >
+<!--<div id="logical_connector_boolean_variables_div" >
     <table width="100%" style="border-collapse:collapse;">
         <tr height="30px">
             <td>
@@ -750,30 +733,30 @@ echo "</p></div>";
         <tr>
             <td width="100%" valign='top' >
                 <div id="logical_connector_boolean_variables_left_part_accordion" style="width:150px; font-size:10pt; float:left;">
-<?php
-echo "<h5><a href='#'>Boolean Variables</a></h5>";
-echo "<div><p>";
-foreach ($custom_variables as $cv) {
-    //sincere this will be used in arithmetic operator so boolean variable will not be visible here
-    if ($cv->variable_type == "BOOLEAN") {
-        echo "<a style='text-decoration:none;' href='#' id='l_c_b_v_l_p' onclick='logicalConnectorBooleanVariablesSetSelectedVariable(this)'><input id='{$cv->variable_type}' type = 'hidden' value='variable' name='{$cv->variable_name}' />{$cv->variable_name}</a>";
-        echo "<br/>";
-    }
-}
-echo "</p></div>";
-?>
+                    <?php
+                    echo "<h5><a href='#'>Boolean Variables</a></h5>";
+                    echo "<div><p>";
+                    foreach ($custom_variables as $cv) {
+                        //sincere this will be used in arithmetic operator so boolean variable will not be visible here
+                        if ($cv->variable_type == "BOOLEAN") {
+                            echo "<a style='text-decoration:none;' href='#' id='l_c_b_v_l_p' onclick='logicalConnectorBooleanVariablesSetSelectedVariable(this)'><input id='{$cv->variable_type}' type = 'hidden' value='variable' name='{$cv->variable_name}' />{$cv->variable_name}</a>";
+                            echo "<br/>";
+                        }
+                    }
+                    echo "</p></div>";
+                    ?>
 
                 </div> 
                 <div id="logical_connector_boolean_variables_middle_part_accordion" style="width:200px; font-size:10pt; float:left;">
-<?php
-echo "<h5><a href='#'>Comparison</a></h5>";
-echo "<div><p>";
-echo "<a style='text-decoration:none;' href='#' id='l_c_b_v_m_p' onclick='logicalConnectorBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is equal to' />is equal to</a>";
-echo "<br/>";
-echo "<a style='text-decoration:none;' href='#' id='l_c_b_v_m_p' onclick='logicalConnectorBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is not equal to' />is not equal to</a>";
-echo "<br/>";
-echo "</p></div>";
-?>
+                    <?php
+                    echo "<h5><a href='#'>Comparison</a></h5>";
+                    echo "<div><p>";
+                    echo "<a style='text-decoration:none;' href='#' id='l_c_b_v_m_p' onclick='logicalConnectorBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is equal to' />is equal to</a>";
+                    echo "<br/>";
+                    echo "<a style='text-decoration:none;' href='#' id='l_c_b_v_m_p' onclick='logicalConnectorBooleanVariablesSetSelectedVariableComparison(this)'><input id='booleancomparison' type = 'hidden' value='booleancomparison' name='is not equal to' />is not equal to</a>";
+                    echo "<br/>";
+                    echo "</p></div>";
+                    ?>
                 </div>
                 <div id="logical_connector_boolean_variables_right_part_accordion" style="width:150px; font-size:10pt; float:left;">
                     <?php
@@ -800,7 +783,7 @@ echo "</p></div>";
                 <input type = "hidden" value="" name="logical_connector_boolean_variable_selected_anchor_title" id="logical_connector_boolean_variable_selected_anchor_title" />                
             </td>
         </tr>
-    </table>
+    </table>-->
 </div>
 <!-- end of logical connector boolean variable div modal -->
 
@@ -809,15 +792,15 @@ echo "</p></div>";
         <tr>
             <td width="100%" height="100%" align='center'>
 
-<?php
-$attributes = array('name' => 'form_submission', 'onsubmit' => 'return save_as_project_save_button_clicked()');
-echo form_open("general_process/save_as_project", $attributes);
-?>
+                <?php
+                $attributes = array('name' => 'form_submission', 'onsubmit' => 'return save_as_project_save_button_clicked()');
+                echo form_open("general_process/save_as_project", $attributes);
+                ?>
                 <label >Project Name</label>
                 <input type="text" id="save_as_project_project_name" name="save_as_project_project_name" value=""/>
                 <input type="hidden" id="save_as_project_left_panel_content" name="save_as_project_left_panel_content" value=""/>
                 <input type="submit" id="save_as_project_save_button" value="Save"/>
-<?php echo form_close(); ?>
+                <?php echo form_close(); ?>
 
             </td>
         </tr>
@@ -836,7 +819,7 @@ echo form_open("general_process/save_as_project", $attributes);
 
                 <input type="submit" id="save_as_replace_project_yes_button" value="Yes" onclick="return save_as_replace_project_yes_button_clicked()"/>
                 <input type="submit" id="save_as_replace_project_no_button" value="No" onclick="return save_as_replace_project_no_button_clicked()"/>
-<?php echo form_close(); ?>
+                <?php echo form_close(); ?>
             </td>
         </tr>
     </table>
@@ -889,40 +872,40 @@ foreach ($custom_variables as $cv) {
 
 <div id="external_variable_list" >
     <table width="100%" style="border-collapse:collapse;">
-<?php
-foreach ($external_variable_list as $external_variable) {
-    ?>
+        <?php
+        foreach ($external_variable_list as $external_variable) {
+            ?>
             <tr>
                 <td valign='top' >
-    <?php echo $external_variable; ?>  
+                    <?php echo $external_variable; ?>  
                 </td>
             </tr>    
-    <?php
-}
-?> 
+            <?php
+        }
+        ?> 
     </table>
-<?php
-$variable_values_counter = 0;
-$variable_values = "";
-foreach ($external_variable_values as $external_variable_value) {
-    if ($variable_values_counter == 0) {
-        $variable_values = $variable_values . $external_variable_value;
-    } else {
-        $variable_values = $variable_values . " , " . $external_variable_value;
+    <?php
+    $variable_values_counter = 0;
+    $variable_values = "";
+    foreach ($external_variable_values as $external_variable_value) {
+        if ($variable_values_counter == 0) {
+            $variable_values = $variable_values . $external_variable_value;
+        } else {
+            $variable_values = $variable_values . " , " . $external_variable_value;
+        }
+        $variable_values_counter++;
     }
-    $variable_values_counter++;
-}
-?> 
+    ?> 
     <table width="100%" style="border-collapse:collapse;">
         <tr>    
             <td>
-        <?php echo $variable_values; ?>
+                <?php echo $variable_values; ?>
             </td>
         </tr>         
     </table>
 </div>
 
-<div id="logical_operator_change_div" >
+<!--<div id="logical_operator_change_div" >
     <table>        
         <tr>
             <td style="">Select Logical Operator:</td>
@@ -934,7 +917,7 @@ foreach ($external_variable_values as $external_variable_value) {
             </td>
         </tr>              
     </table> 
-</div>
+</div>-->
 
 <!--<div id="arithmetic_operator_change_div" >
     <table>        
@@ -963,6 +946,13 @@ $this->load->view('project/modal/download_project_modal');
 $this->load->view('project/modal/show_variables_modal');
 $this->load->view('project/modal/add_variables_modal');
 $this->load->view('project/modal/add_arithmetic_modal');
+$this->load->view('project/modal/change_arithmetic_modal');
+$this->load->view('project/modal/condition_edit_modal');
 $this->load->view('project/modal/action_variable_modal');
 $this->load->view('project/modal/arithmetic_operator_condition_modal');
+$this->load->view('project/modal/add_logical_connector_modal');
+$this->load->view('project/modal/logical_connector_condition_modal');
+$this->load->view('project/modal/logical_connector_boolean_modal');
+$this->load->view('project/modal/change_logical_operator_modal');
+$this->load->view('project/modal/delete_block_modal');
 ?>

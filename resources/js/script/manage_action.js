@@ -64,6 +64,7 @@ function action_variable_modal_ok_pressed()
         var total_if = get_total_if_left_panel();
         if(total_if >= maximum_if_per_project && current_user_type === user_type_demo)
         {
+            $('#modal_action_or_block_selection').modal("hide");
             $("#label_show_messages_content").html("You have used maximum number of if block for this project.");
             $("#modal_show_messages").modal('show');
             return;
@@ -76,6 +77,7 @@ function action_variable_modal_ok_pressed()
         var booleanVariableName = $("#action_variable_selection_part").text();
         //checking whether user selects a variable or not
         if (booleanVariablePart == "") {
+            $('#modal_action_or_block_selection').modal("hide");
             $("#label_show_messages_content").html("Please select a variable.");
             $("#modal_show_messages").modal('show');
             return false;
@@ -104,6 +106,7 @@ function action_variable_modal_ok_pressed()
         li_value = $("#condition_modal_selected_item .ui-selected").text();
         if(li_value == "")
         {
+            $('#modal_action_or_block_selection').modal("hide");
             $("#label_show_messages_content").html("Please select an item.");
             $("#modal_show_messages").modal('show');
             return false;
@@ -114,6 +117,7 @@ function action_variable_modal_ok_pressed()
         li_value = $("#action_modal_selected_item .ui-selected").text();
         if(li_value == "")
         {
+            $('#modal_action_or_block_selection').modal("hide");
             $("#label_show_messages_content").html("Please select an item.");
             $("#modal_show_messages").modal('show');
             return false;
@@ -191,7 +195,8 @@ function action_variable_modal_ok_pressed()
         div_part = div_part + "</div>";
         $('#selectable .ui-selected').html("<a title = start_space_anchor_action_variable style='cursor:pointer;' id=" + starting_space_anchor_id + "> <input id='natural' type='hidden'>" + starting_space +"</input></a><a style='cursor:pointer;' id='"+id1+"'>" +booleanVariablePart+ "</a><a style='cursor:pointer;' id='"+id2+"'> = </a><a style='cursor:pointer;' id='"+id3+"'> "+booleanVariableValue+" </a>"+div_part);
     }
-    $('#action_variable_modal').dialog("close");
+//    $('#action_variable_modal').dialog("close");
+    $('#modal_action_or_block_selection').modal("hide");
 
     left_panel_condition_or_action_selected();
     return true;

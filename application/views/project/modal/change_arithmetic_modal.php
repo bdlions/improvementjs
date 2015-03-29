@@ -1,4 +1,4 @@
-
+<!--
 <div class="modal fade" id="modal_add_arithmetic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -45,9 +45,9 @@
                 <input type="submit" class="btn btn-success" id="button_add_variable_ok" onclick="add_arithmetic_ok_pressed()" value="Save"/>  
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div> /.modal-content 
+    </div> /.modal-dialog 
+</div> /.modal -->
 
 <div class="modal fade" id="modal_arithmetic_operator_change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

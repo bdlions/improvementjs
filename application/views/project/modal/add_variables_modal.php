@@ -42,18 +42,6 @@
                             </div>
                             <div class="col-md-2"></div>
                         </div>
-<!--                        <div class="row form-group">
-                            <div class="col-md-9"></div>
-                            <div class="col-md-2">
-                                <input type="submit" class="btn btn-success" id="button_add_variable_ok" onclick="return button_add_variable_ok_pressed()" value="Save"/>  
-                            </div>
-                            <div class="col-md-3 ">
-                                <div class="pull-right">
-                                <input  type="submit" class="btn btn-warning" id="button_add_variable_cancel" onclick="button_add_variable_cancel_pressed()" value="Cancel" />
-                             <input type="submit" class="btn btn-success" id="button_add_variable_ok" onclick="return button_add_variable_ok_pressed()" value="Save"/>  
-                                </div>
-                            </div>
-                        </div>-->
                        <input type = "hidden" value="" name="project_left_panel_content_backup" id="project_left_panel_content_backup" />
                     </div>
 
