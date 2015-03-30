@@ -807,23 +807,23 @@ $(function()
 //            //closing the dialog            
 //        }
 //    });    
-    $("#save_as_project_div_modal").dialog(
-            {
-                //setting some properties
-                autoOpen: false,
-                width: 420,
-                modal: true,
-                title: 'Save As Project',
-                //setting buttons
-                buttons:
-                        {
-                        },
-                close: function()
-                {
-                    updateClientEndOperationCounter();
-                    //closing the dialog            
-                }
-            });
+//    $("#save_as_project_div_modal").dialog(
+//            {
+//                //setting some properties
+//                autoOpen: false,
+//                width: 420,
+//                modal: true,
+//                title: 'Save As Project',
+//                //setting buttons
+//                buttons:
+//                        {
+//                        },
+//                close: function()
+//                {
+//                    updateClientEndOperationCounter();
+//                    //closing the dialog            
+//                }
+//            });
 
     $("#save_as_replace_project_div_modal").dialog(
             {

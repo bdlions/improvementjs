@@ -1739,7 +1739,7 @@ function save_as()
     updateClientEndOperationCounter();
     document.getElementById("save_as_project_project_name").value = "";
     document.getElementById("save_as_project_left_panel_content").value = $("#selectable").html();
-    $('#save_as_project_div_modal').dialog('open');
+    $('#modal_save_confirmation').modal('show'); 
 }
 
 function save_as_project_save_button_clicked()
@@ -1751,6 +1751,7 @@ function save_as_project_save_button_clicked()
     var projectNameRegExp = /^[a-z0-9]+$/i;
     if(projectNameRegExp.test(save_as_project_name)==false)
     {
+        $("#modal_save_confirmation").modal('hide');
         $("#label_show_messages_content").html("Please enter a valid project name.");
         $("#modal_show_messages").modal('show');
         //alert( "Please enter a valid project name." );
@@ -1761,8 +1762,8 @@ function save_as_project_save_button_clicked()
     {
         if(project_name_list[counter] == save_as_project_name)
         {
-            $('#save_as_project_div_modal').dialog('close');
-            $('#save_as_replace_project_div_modal').dialog('open');
+            $("#modal_save_confirmation").modal('hide');
+            $('#modal_save_as_replace_project').modal('show');
             document.getElementById("save_as_replace_project_name").value = project_name_list[counter];
             document.getElementById("save_as_replace_project_id").value = project_id_list[counter];
             return false;
@@ -1781,7 +1782,7 @@ function save_as_replace_project_yes_button_clicked()
 function save_as_replace_project_no_button_clicked()
 {
     updateClientEndOperationCounter();
-    $('#save_as_replace_project_div_modal').dialog('close');
+    $('#modal_save_as_replace_project').modal('hide');
     return false;
 }
 

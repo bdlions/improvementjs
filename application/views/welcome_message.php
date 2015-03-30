@@ -787,7 +787,7 @@ echo "</p></div>";
 </div>
 <!-- end of logical connector boolean variable div modal -->
 
-<div id="save_as_project_div_modal" >
+<!--<div id="save_as_project_div_modal" >
     <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
         <tr>
             <td width="100%" height="100%" align='center'>
@@ -805,7 +805,7 @@ echo "</p></div>";
             </td>
         </tr>
     </table>
-</div>
+</div>-->
 
 <div id="save_as_replace_project_div_modal" >
     <table width='100%' height="100%" border='1' style='border-collapse:collapse;'>
@@ -955,4 +955,6 @@ $this->load->view('project/modal/logical_connector_condition_modal');
 $this->load->view('project/modal/logical_connector_boolean_modal');
 $this->load->view('project/modal/change_logical_operator_modal');
 $this->load->view('project/modal/delete_block_modal');
+$this->load->view('project/modal/save_project_modal');
 ?>
+
