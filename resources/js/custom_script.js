@@ -154,9 +154,10 @@ $(function()
                 if (external_variable_values != "") {
                     //$.unblockUI();
                     $("#label_show_messages_content").html("Processing completed.");
-                    $("#modal_show_messages").modal('show');
+//                    $("#modal_show_messages").modal('show');
                     //alert("Processing completed.");
-                    $('#external_variable_list').dialog('open');
+//                    $('#external_variable_list').dialog('open');
+                    $('#modal_external_variables_show').modal('show');
                     has_external_variables = "false";
                 }
 
@@ -884,62 +885,63 @@ $(function()
 //            //closing the dialog            
 //        }
 //    });
+//
+//    $("#condition_boolean_middle_part_change_confirmation_div").dialog(
+//            {
+//                //setting some properties
+//                autoOpen: false,
+//                width: 500,
+//                modal: true,
+//                title: 'Warning',
+//                //setting buttons
+//                buttons:
+//                        {
+//                            "No": function()
+//                            {
+//                                updateClientEndOperationCounter();
+//                                $(this).dialog("close");
+//                            },
+//                            "Yes": function()
+//                            {
+//                                updateClientEndOperationCounter();
+//                                $(this).dialog("close");
+//                                updateConditionBooleanVariableMiddleOrRightPart();
+//                            }
+//                        },
+//                close: function()
+//                {
+//                    updateClientEndOperationCounter();
+//                }
+//            });
 
-    $("#condition_boolean_middle_part_change_confirmation_div").dialog(
-            {
-                //setting some properties
-                autoOpen: false,
-                width: 500,
-                modal: true,
-                title: 'Warning',
-                //setting buttons
-                buttons:
-                        {
-                            "No": function()
-                            {
-                                updateClientEndOperationCounter();
-                                $(this).dialog("close");
-                            },
-                            "Yes": function()
-                            {
-                                updateClientEndOperationCounter();
-                                $(this).dialog("close");
-                                updateConditionBooleanVariableMiddleOrRightPart();
-                            }
-                        },
-                close: function()
-                {
-                    updateClientEndOperationCounter();
-                }
-            });
 
-    $("#condition_boolean_right_part_change_confirmation_div").dialog(
-            {
-                //setting some properties
-                autoOpen: false,
-                width: 500,
-                modal: true,
-                title: 'Warning',
-                //setting buttons
-                buttons:
-                        {
-                            "No": function()
-                            {
-                                updateClientEndOperationCounter();
-                                $(this).dialog("close");
-                            },
-                            "Yes": function()
-                            {
-                                updateClientEndOperationCounter();
-                                $(this).dialog("close");
-                                updateConditionBooleanVariableMiddleOrRightPart();
-                            }
-                        },
-                close: function()
-                {
-                    updateClientEndOperationCounter();
-                }
-            });
+//    $("#condition_boolean_right_part_change_confirmation_div").dialog(
+//            {
+//                //setting some properties
+//                autoOpen: false,
+//                width: 500,
+//                modal: true,
+//                title: 'Warning',
+//                //setting buttons
+//                buttons:
+//                        {
+//                            "No": function()
+//                            {
+//                                updateClientEndOperationCounter();
+//                                $(this).dialog("close");
+//                            },
+//                            "Yes": function()
+//                            {
+//                                updateClientEndOperationCounter();
+//                                $(this).dialog("close");
+//                                updateConditionBooleanVariableMiddleOrRightPart();
+//                            }
+//                        },
+//                close: function()
+//                {
+//                    updateClientEndOperationCounter();
+//                }
+//            });
 
 
     //This modal window is created to add logical connectors
@@ -1001,45 +1003,47 @@ $(function()
 //                }
 //            });
 
-    $("#external_variable_list").dialog(
-            {
-                //setting some properties
-                autoOpen: false,
-                width: 500,
-                modal: true,
-                title: 'External variables',
-                //setting buttons
-                buttons:
-                        {
-                            "Cancel": function()
-                            {
-                                $(this).dialog("close");
-                                updateClientEndOperationCounter();
-                                external_variable_values = "";
-                            },
-                            "Ok": function()
-                            {
-                                updateClientEndOperationCounter();
-                                //updating text input value
-                                $('#externalTextInput').val(external_variable_values);
-                                //calling text input onchange method
-                                if (document.createEvent && document.getElementById('externalTextInput').dispatchEvent) {
-                                    var evt = document.createEvent("HTMLEvents");
-                                    evt.initEvent("change", true, true);
-                                    document.getElementById('externalTextInput').dispatchEvent(evt); // for DOM-compliant browsers
-                                } else if (document.getElementById('externalTextInput').fireEvent) {
-                                    document.getElementById('externalTextInput').fireEvent("onchange"); // for IE
-                                }
-                                $(this).dialog("close");
-                            }
-                        },
-                close: function()
-                {
-                    external_variable_values = "";
-                    updateClientEndOperationCounter();
-                    //closing the dialog            
-                }
-            });
+
+
+//    $("#external_variable_list").dialog(
+//            {
+//                //setting some properties
+//                autoOpen: false,
+//                width: 500,
+//                modal: true,
+//                title: 'External variables',
+//                //setting buttons
+//                buttons:
+//                        {
+//                            "Cancel": function()
+//                            {
+//                                $(this).dialog("close");
+//                                updateClientEndOperationCounter();
+//                                external_variable_values = "";
+//                            },
+//                            "Ok": function()
+//                            {
+//                                updateClientEndOperationCounter();
+//                                //updating text input value
+//                                $('#externalTextInput').val(external_variable_values);
+//                                //calling text input onchange method
+//                                if (document.createEvent && document.getElementById('externalTextInput').dispatchEvent) {
+//                                    var evt = document.createEvent("HTMLEvents");
+//                                    evt.initEvent("change", true, true);
+//                                    document.getElementById('externalTextInput').dispatchEvent(evt); // for DOM-compliant browsers
+//                                } else if (document.getElementById('externalTextInput').fireEvent) {
+//                                    document.getElementById('externalTextInput').fireEvent("onchange"); // for IE
+//                                }
+//                                $(this).dialog("close");
+//                            }
+//                        },
+//                close: function()
+//                {
+//                    external_variable_values = "";
+//                    updateClientEndOperationCounter();
+//                    //closing the dialog            
+//                }
+//            });
 
 //    $("#logical_operator_change_div").dialog(
 //            {
@@ -1219,6 +1223,34 @@ function change_logical_operator_ok_pressed() {
     changeLogicalOperator($("#logical_operator_change_combo option:selected").text().trim());
 
 }
+
+function external_variables_ok_pressed() {
+    updateClientEndOperationCounter();
+    //updating text input value
+    $('#externalTextInput').val(external_variable_values);
+    //calling text input onchange method
+    if (document.createEvent && document.getElementById('externalTextInput').dispatchEvent) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", true, true);
+        document.getElementById('externalTextInput').dispatchEvent(evt); // for DOM-compliant browsers
+    } else if (document.getElementById('externalTextInput').fireEvent) {
+        document.getElementById('externalTextInput').fireEvent("onchange"); // for IE
+    }
+    external_variable_values = "";
+    $("#modal_external_variables_show").modal("hide");
+}
+
+function boolean_right_part_change_ok_pressed() {
+    updateClientEndOperationCounter();
+    $("#modal_condition_boolean_right_part_change").modal("hide");
+    updateConditionBooleanVariableMiddleOrRightPart();
+}
+function boolean_middle_part_change_ok_pressed() {
+    updateClientEndOperationCounter();
+    $("#modal_condition_boolean_middle_part_change").modal("hide");
+    updateConditionBooleanVariableMiddleOrRightPart();
+    
+}
 //user clicks anchor from expression from above code panel
 function manageExpression($href) {
     updateClientEndOperationCounter();
@@ -1258,7 +1290,7 @@ function manageExpression($href) {
         {
             document.getElementById("lable_condition_boolean_middle_part_change_confirmation").innerHTML = "Do you want to convert it to 'is equal to'?";
         }
-        $('#condition_boolean_middle_part_change_confirmation_div').dialog('open');
+        $('#modal_condition_boolean_middle_part_change').modal('show');
     }
 
     if (input_tag.getAttribute("id") == "booleanvalue")
@@ -1271,7 +1303,7 @@ function manageExpression($href) {
         {
             document.getElementById("lable_condition_boolean_right_part_change_confirmation").innerHTML = "Do you want to convert it to 'true'?";
         }
-        $('#condition_boolean_right_part_change_confirmation_div').dialog('open');
+        $('#modal_condition_boolean_right_part_change').modal('show');
     }
 
     if (input_tag.getAttribute("value") == "logicalconnector")
