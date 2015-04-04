@@ -157,14 +157,7 @@ function is_variable_used_delete_button_clicked(variable_id)
     }
     else
     {
-        if (confirm('Are you sure you want to delete this variable?')) 
-        {
-            return true;
-        } 
-        else 
-        {
-            return false;
-        }
-        
+      $("#modal_delete_variable_confirm").modal('show');        
     }    
 }
+

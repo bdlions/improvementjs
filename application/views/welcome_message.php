@@ -209,78 +209,6 @@ echo $variable_values;
 
 </table>
 
-
-<div id="logical_connector_removing_condition_div" >    
-    <ol id="logical_connector_removing_condition_selected_item" style="font-size:12pt;">       
-    </ol>
-
-    <input type = "hidden" value="" name="logical_connector_removing_condition_selected_operator_anchor_id" id="logical_connector_removing_condition_selected_operator_anchor_id" />
-    <table width="600" style="border-collapse:collapse;">
-        <tr height="20px">            
-        </tr>
-        <tr height="20px">
-            <td align="right">
-                <button id="button_logical_connector_removing_condition_delete" onclick="button_logical_connector_removing_condition_delete_pressed()" type="button">Delete</button>
-                <button id="button_logical_connector_removing_condition_cancel" onclick="button_logical_connector_removing_condition_cancel_pressed()" type="button">Cancel</button>
-            </td>
-        </tr>
-    </table>    
-</div>
-
-<!--<div id="condition_boolean_middle_part_change_confirmation_div" >
-    <table width="100%" border="1" style="border-collapse:collapse;">
-        <tr>
-            <td><label id="lable_condition_boolean_middle_part_change_confirmation"></label></td>
-
-        </tr>
-    </table>
-</div>-->
-
-<!--<div id="condition_boolean_right_part_change_confirmation_div" >
-    <table width="100%" border="1" style="border-collapse:collapse;">
-        <tr>
-            <td><label id="lable_condition_boolean_right_part_change_confirmation"></label></td>
-
-        </tr>
-    </table>
-</div>-->
-
-<!--<div id="external_variable_list" >
-    <table width="100%" style="border-collapse:collapse;">
-        <?php
-        foreach ($external_variable_list as $external_variable) {
-            ?>
-            <tr>
-                <td valign='top' >
-                    <?php echo $external_variable; ?>  
-                </td>
-            </tr>    
-            <?php
-        }
-        ?> 
-    </table>
-    <?php
-    $variable_values_counter = 0;
-    $variable_values = "";
-    foreach ($external_variable_values as $external_variable_value) {
-        if ($variable_values_counter == 0) {
-            $variable_values = $variable_values . $external_variable_value;
-        } else {
-            $variable_values = $variable_values . " , " . $external_variable_value;
-        }
-        $variable_values_counter++;
-    }
-    ?> 
-    <table width="100%" style="border-collapse:collapse;">
-        <tr>    
-            <td>
-                <?php echo $variable_values; ?>
-            </td>
-        </tr>         
-    </table>-->
-<!--</div>-->
-
-
 <?php
 $this->load->view('project/modal/my_projects_confirmation');
 $this->load->view('project/modal/upload_project_confirmation');
@@ -290,8 +218,7 @@ $this->load->view('project/modal/wait_screen');
 $this->load->view('project/modal/show_generated_code_modal');
 $this->load->view('project/modal/bracket_add_modal');
 $this->load->view('project/modal/download_project_modal');
-$this->load->view('project/modal/show_variables_modal');
-$this->load->view('project/modal/add_variables_modal');
+$this->load->view('project/modal/manage_variables_modal');
 $this->load->view('project/modal/add_arithmetic_modal');
 $this->load->view('project/modal/change_arithmetic_operator_modal');
 $this->load->view('project/modal/condition_edit_modal');
@@ -306,5 +233,6 @@ $this->load->view('project/modal/save_project_modal');
 $this->load->view('project/modal/external_variables_show_modal');
 $this->load->view('project/modal/Boolean_right_part_change_modal');
 $this->load->view('project/modal/Boolean_middle_part_change_modal');
+$this->load->view('project/modal/delete_logical_connector_modal');
 ?>
 

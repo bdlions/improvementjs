@@ -82,6 +82,7 @@ class Variables extends CI_Controller
      */
     function delete_variable()
     {
+        $response = array();
         $project_id = $this->session->userdata('project_id');    
         $project_type_id = $this->session->userdata('current_project_type_id');
         $redirected_path = "";
@@ -112,7 +113,8 @@ class Variables extends CI_Controller
                 $this->ion_auth->where('variable_id',$variable_id)->delete_variable();
             }            
         }
-        redirect($redirected_path, 'refresh');
+        $response['status'] = 1;
+        echo json_encode($response);
     }
 }
 ?>

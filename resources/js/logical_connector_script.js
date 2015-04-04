@@ -262,15 +262,7 @@ function delete_logical_operator()
         //alert(error_message);
         return;
     }
-    
-    //blocking current window before rendering modal window to select logical connector operator
-    $.blockUI({
-        message: '',
-        theme: false,
-        baseZ: 500
-    });
-    //opening logical connector div modal window
-    $('#logical_connector_removing_condition_div').dialog('open');
+    $('#modal_delete_logical_conector_confirmation').modal('show');
     //adding condition list in modal window
     document.getElementById("logical_connector_removing_condition_selected_item").innerHTML = first_condition+second_condition; 
 }
@@ -401,7 +393,7 @@ function button_logical_connector_removing_condition_delete_pressed()
         generate_selected_item_code();  
     }
     //closing logical connector removing condition modal window
-    $('#logical_connector_removing_condition_div').dialog('close');
+    $('#modal_delete_logical_conector_confirmation').modal('hide');
     //unblocking the user interface
     //$.unblockUI();
     $("#label_show_messages_content").html("Successfully deleted.");
@@ -700,7 +692,7 @@ function button_logical_connector_removing_condition_cancel_pressed()
 {
     updateClientEndOperationCounter();
     //closing logical connector removing condition modal window
-    $('#logical_connector_removing_condition_div').dialog("close");
+    $('#modal_delete_logical_conector_confirmation').modal("hide");
     //unblocking the user interface
     //$.unblockUI();
 }
