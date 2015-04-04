@@ -13,7 +13,7 @@
                     if (data.status == 1) {
                         $("#modal_delete_variable_confirm").modal('hide');
                         window.location.reload();
-                    } else
+                    } else{
                         $("#label_show_messages_content").html("Error while deleting the variable.");
                         $("#modal_show_messages").modal('show');
                 }

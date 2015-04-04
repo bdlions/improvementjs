@@ -591,6 +591,7 @@ function buttonLogicalConnectorConditionOkPressed()
 
     //checking whether user selects all of the three parts of a condition
     if (leftP == "" || cmpP == "" || rightP == "") {
+        $("#modal_logical_connector_condition").modal("hide");
         $("#label_show_messages_content").html("Incompte condition.");
         $("#modal_show_messages").modal('show');
         //alert("Incomple condition.");
