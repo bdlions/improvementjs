@@ -132,8 +132,6 @@ function sessionTrackingTimerMethod()
     var currentTime = new Date();    
     var currentTimeInSecond = currentTime.getTime()/1000;
     var idleTimeDuration = currentTimeInSecond - lastOperationExecutionTimeInSecond;
-    console.log("idleTimeDuration"+idleTimeDuration);
-    console.log("clientEndOperationCounter"+clientEndOperationCounter);
     if(clientEndOperationCounter <= 0)
     {
         if(idleTimeDuration > (sessionExpirationTime - showWarningBeforeSessionExpiration - sesstionExpirationThreshHold) )

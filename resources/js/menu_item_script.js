@@ -175,11 +175,9 @@ function beautify(unindent_code) {
             source = unpacker_filter(source);
         }
         output = js_beautify(source, opts);
-        //console.log(output);
     }
     if (the.editor)
     {
-        //console.log(output);
         the.editor.setValue(output);
     } 
     else {
@@ -725,17 +723,14 @@ function process_operand(operand_input_list)
     }
     else
     {
-        //console.log(operand_array);
         var processing_stack_array = new Array();
         var processing_stack_array_counter = 0;
         for( var counter = 0 ; counter < operand_array.length ; counter++ )
         {
-            //console.log(counter);
             var single_input = operand_array[counter];
             var value = single_input.attr("value");
             if( is_arithmetic_operator(value) )
             {
-                //console.log('got operator');
                 var second_element = processing_stack_array[--processing_stack_array_counter];
                 var first_element = processing_stack_array[--processing_stack_array_counter];
                 
@@ -744,7 +739,6 @@ function process_operand(operand_input_list)
                 var right_block = new Block();
                 var right_value = "";
                 var operand_block = new Block();
-                //operand_block.setS(value);
                 if(first_element.constructor === Block)
                 {
                     left_block = first_element;                    
@@ -828,6 +822,8 @@ function process_operand(operand_input_list)
 
 function is_arithmetic_operator(value)
 {
+    //removing empty space if exists
+    value = value.trim();
     if( value === '+' || value === '-' || value === '*' || value === '/')
     {
         return true;

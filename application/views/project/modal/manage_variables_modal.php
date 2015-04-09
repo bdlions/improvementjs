@@ -9,13 +9,18 @@
                     delete_variable_variable_id: $("#delete_variable_variable_id").val(),
                     delete_variable_project_left_panel_content: $("#delete_variable_project_left_panel_content").val()
                 },
-                success: function(data) {
-                    if (data.status == 1) {
+                success: function(data) 
+                {
+                    if (data.status == 1) 
+                    {
                         $("#modal_delete_variable_confirm").modal('hide');
                         window.location.reload();
-                    } else{
+                    } 
+                    else
+                    {
                         $("#label_show_messages_content").html("Error while deleting the variable.");
                         $("#modal_show_messages").modal('show');
+                    }
                 }
             });
         });
@@ -71,12 +76,10 @@
                     <div class="col-md-1"></div>
                 </div>                
             </div>
-            <div class="modal-footer">
-                
+            <div class="modal-footer">                
                 <input type="submit" class="btn btn-success" id="button_add_variable_ok" onclick="return button_add_variable_ok_pressed()" value="Save"/>  
-                        <?php echo form_close(); ?>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                <?php echo form_close(); ?>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

@@ -728,15 +728,19 @@ function manageExpression($href) {
 
     //deselecting and closing all tree nodes
     $("#demo1").jstree('close_all', -1);
+    //resetting parameters table
+    $('#parameters_table').html("");
     setTimeout(function() {
         $.jstree._focused().deselect_all();
     }, 100);
-
     //retrieving input tag(<input>) inside anchor tag(<a>)
     var input_tag = $href.getElementsByTagName("input")[0];
     //expanding tree node based on selected anchor from above code panel
     setTimeout(function() {
-        $.jstree._focused().select_node("#" + input_tag.getAttribute("name"));
+        if (input_tag.getAttribute("value") != "arithmeticoperator" && input_tag.getAttribute("id") != "booleancomparison")
+        {
+            $.jstree._focused().select_node("#" + input_tag.getAttribute("name"));
+        }        
     }, 100);
     document.cookie = "selectedParent" + "=" + input_tag.getAttribute("value");
     document.cookie = "selectedChild" + "=" + input_tag.getAttribute("name");
@@ -777,7 +781,6 @@ function manageExpression($href) {
         {
             $("select#logical_operator_change_combo")[0].selectedIndex = 1;
         }
-//        $('#logical_operator_change_div').dialog('open');
         $('#modal_change_logical_operator').modal('show');
     }
     if (input_tag.getAttribute("value") == "arithmeticoperator")
@@ -1758,7 +1761,7 @@ function changeArithmeticOperator(selectedItem)
     });
     //updating parameters table
     document.getElementById("parameters_table").innerHTML = "";
-
+    
     //updating code panel
     generate_selected_item_code();
 }
