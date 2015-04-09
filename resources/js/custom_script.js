@@ -5,108 +5,74 @@ if (typeof String.prototype.trim !== 'function') {
 }
 $(function()
 {
-    //accordion initialization starts
-    $("#item_accordion").accordion();
-    $("#comparison_accordion").accordion();
-    $("#action_accordion").accordion();
-    $("#action_variable_selection_accordion").accordion();
-    $("#logical_connector_condition_left_item_accordion").accordion();
-    $("#logical_connector_condition_comparison_item_accordion").accordion();
-    $("#logical_connector_condition_right_item_accordion").accordion();
-    //$("#arithmetic_operator_condition_accordion").accordion();
-    $("#condition_boolean_variables_left_part_accordion").accordion();
-    $("#condition_boolean_variables_middle_part_accordion").accordion();
-    $("#condition_boolean_variables_right_part_accordion").accordion();
-    $("#logical_connector_boolean_variables_left_part_accordion").accordion();
-    $("#logical_connector_boolean_variables_middle_part_accordion").accordion();
-    $("#logical_connector_boolean_variables_right_part_accordion").accordion();
-    $("#logical_connector_part_of_conditioon_accordion").accordion();
-    //accordion initialization ends
-
     $("#logical_connector_removing_condition_selected_item").selectable(
-            {
-                stop: function(e, ui) {
-                    $(".ui-selected:first", this).each(function() {
-                        $(this).siblings().removeClass("ui-selected");
-                    });
-                }
+    {
+        stop: function(e, ui) {
+            $(".ui-selected:first", this).each(function() {
+                $(this).siblings().removeClass("ui-selected");
             });
+        }
+    });
 
     $("#selectable").selectable(
-            {
-                stop: function(e, ui) {
-                    $(".ui-selected:first", this).each(function() {
+    {
+        stop: function(e, ui) {
+            $(".ui-selected:first", this).each(function() {
 
-                        updateClientEndOperationCounter();
+                updateClientEndOperationCounter();
 
-                        $(this).siblings().removeClass("ui-selected");
-                        var li_value = $(this).text().trim();
+                $(this).siblings().removeClass("ui-selected");
+                var li_value = $(this).text().trim();
 
-                        if (li_value == "Click here to edit action" || li_value == "Click here to edit block") {
-                            /*$.blockUI({
-                             message: '',
-                             theme: false,
-                             baseZ: 500
-                             });*/
-                            $("#action_variable_selection_part").html("");
-                            document.getElementById("action_variable_selection_part").style.border = "";
-                            $('#action_variable_selection_accordion').hide();
+                if (li_value == "Click here to edit action" || li_value == "Click here to edit block") {
+                    $("#action_variable_selection_part").html("");
+                    document.getElementById("action_variable_selection_part").style.border = "";
 
-//                    $('#action_variable_modal').dialog('open');
-                            $('#modal_action_or_block_selection').modal('show');
-                            if (li_value == "Click here to edit block")
-                            {
-                                $('#condition_modal_selected_item .ui-selected').removeClass('ui-selected');
-                                document.getElementById('actonSelectionCombo').selectedIndex = 0;
-                                document.getElementById('actonSelectionCombo').style.visibility = 'hidden';
-                                $('#condition_modal_selected_item').show();
-                                $('#action_modal_selected_item').hide();
-                                $('#action_variable_selection_list').hide();
+                    $('#modal_action_or_block_selection').modal('show');
+                    if (li_value == "Click here to edit block")
+                    {
+                        $('#condition_modal_selected_item .ui-selected').removeClass('ui-selected');
+                        document.getElementById('actonSelectionCombo').selectedIndex = 0;
+                        document.getElementById('actonSelectionCombo').style.visibility = 'hidden';
+                        $('#condition_modal_selected_item').show();
+                        $('#action_modal_selected_item').hide();
+                        $('#action_variable_selection_list').hide();
 
-                            }
-                            else if (li_value == "Click here to edit action")
-                            {
-                                $('#condition_modal_selected_item .ui-selected').removeClass('ui-selected');
-                                document.getElementById('actonSelectionCombo').selectedIndex = 1;
-                                document.getElementById('actonSelectionCombo').style.visibility = 'visible';
-                                $('#condition_modal_selected_item').hide();
-                                $('#action_modal_selected_item').show();
-                                $('#action_variable_selection_list').hide();
+                    }
+                    else if (li_value == "Click here to edit action")
+                    {
+                        $('#condition_modal_selected_item .ui-selected').removeClass('ui-selected');
+                        document.getElementById('actonSelectionCombo').selectedIndex = 1;
+                        document.getElementById('actonSelectionCombo').style.visibility = 'visible';
+                        $('#condition_modal_selected_item').hide();
+                        $('#action_modal_selected_item').show();
+                        $('#action_variable_selection_list').hide();
 
-                            }
-                            return false;
-                        } else if (li_value == "Click here to edit condition") {
-                            /*$.blockUI({
-                             message: '',
-                             theme: false,
-                             baseZ: 500
-                             });*/
-//                    $('#modal_cond(itional').modal('show');
-//                    $( "#modal_conditional" ).modal( "option", "width",620);
-                            document.getElementById('conditionOrBooleanSelectionCombo').selectedIndex = 0;
-                            $('#condition_selected_div').show();
-                            $('#condition_selection_div_boolean_variable').hide();
-//                    $('#conditional_modal').dialog('open');
-                            $('#modal_conditional').modal('show');
-
-                        }
-                        else if (li_value.toLowerCase() == "if" || li_value == "THEN" || li_value.toLowerCase() == "else" || li_value == "(" || li_value == ")" || li_value == "{" || li_value == "}")
-                        {
-                            //clearing natural language panel, code panel, parameter table and tree
-                            $('#changing_stmt').html("");
-                            $('#code_stmt').html("");
-                            $('#parameters_table').html("");
-                            $("li", $("#demo1")).each(function()
-                            {
-                                $(this).hide();
-                            });
-                        }
-                        else if (li_value != "") {
-                            left_panel_condition_or_action_selected();
-                        }
+                    }
+                    return false;
+                } else if (li_value == "Click here to edit condition") {
+                    document.getElementById('conditionOrBooleanSelectionCombo').selectedIndex = 0;
+                    $('#condition_selected_div').show();
+                    $('#condition_selection_div_boolean_variable').hide();
+                    $('#modal_conditional').modal('show');
+                }
+                else if (li_value.toLowerCase() == "if" || li_value == "THEN" || li_value.toLowerCase() == "else" || li_value == "(" || li_value == ")" || li_value == "{" || li_value == "}")
+                {
+                    //clearing natural language panel, code panel, parameter table and tree
+                    $('#changing_stmt').html("");
+                    $('#code_stmt').html("");
+                    $('#parameters_table').html("");
+                    $("li", $("#demo1")).each(function()
+                    {
+                        $(this).hide();
                     });
                 }
+                else if (li_value != "") {
+                    left_panel_condition_or_action_selected();
+                }
             });
+        }
+    });
 
     $("#l_p_c").hide();
     $("#demo1")
@@ -152,16 +118,10 @@ $(function()
             {
                 updateClientEndOperationCounter();
                 if (external_variable_values != "") {
-                    //$.unblockUI();
                     $("#label_show_messages_content").html("Processing completed.");
-//                    $("#modal_show_messages").modal('show');
-                    //alert("Processing completed.");
-//                    $('#external_variable_list').dialog('open');
                     $('#modal_external_variables_show').modal('show');
                     has_external_variables = "false";
                 }
-
-
                 //selected node name
                 var id = data.rslt.obj.attr("id");
                 //parent name of selected node
@@ -205,7 +165,6 @@ $(function()
                 //As a result we need to update left panel, panel above code, code panel, parameters table
                 if (selectedParent.trim() != name.trim() || selectedChild.trim() != id.trim())
                 {
-
                     //resetting parameters table content
                     document.getElementById("parameters_table").innerHTML = "";
                     document.cookie = "selectedParent" + "=" + name;
@@ -390,49 +349,52 @@ $(function()
                     return;
                 }
 
-                if (selectedParent === "variable" && is_action_selected)
+                if (selectedParent === "variable")
                 {
-                    var var_name = "";
-                    var var_value = "";
-                    var var_type = "NUMBER";
+                    if(is_action_selected)
+                    {
+                        var var_name = "";
+                        var var_value = "";
+                        var var_type = "NUMBER";
 
-                    var anchor_counter = 1;
-                    $("div", $("#selectable .ui-selected")).each(function() {
-                        $("input", $(this)).each(function() {
-                            if (anchor_counter === 3) {
-                                var_value = $(this).attr("value");
-                            }
-                            anchor_counter++;
+                        var anchor_counter = 1;
+                        $("div", $("#selectable .ui-selected")).each(function() {
+                            $("input", $(this)).each(function() {
+                                if (anchor_counter === 3) {
+                                    var_value = $(this).attr("value");
+                                }
+                                anchor_counter++;
+                            });
                         });
-                    });
 
-                    if (var_value == "TRUE" || var_value == "FALSE")
-                    {
-                        var_type = "BOOLEAN";
-                    }
-                    var table_content = "<table width='100%'  border='1' style='border-collapse:collapse;'>";
-                    table_content = table_content + "<tr><td width='50%' align='center'>Variable Value</td><td width='50%' align='center'>";
-                    if (var_type === "NUMBER")
-                    {
-                        table_content = table_content + "<input type='text' id='textinput_variable' name = 'textinput_variable' value = '" + var_value + "' onchange='updateNumberVariableValue(\"" + var_name + "\")'></input></td></tr>";
-                    }
-                    else if (var_type === "BOOLEAN")
-                    {
-                        table_content = table_content + "<select name='combo_variable' id='combo_variable' onchange='comboVariableChange(\"" + var_name + "\")'>";
-                        if (var_value == "TRUE")
+                        if (var_value == "TRUE" || var_value == "FALSE")
                         {
-                            table_content = table_content + "<option value='TRUE' selected = 'selected'>TRUE</option>";
-                            table_content = table_content + "<option value='FALSE'>FALSE</option>";
+                            var_type = "BOOLEAN";
                         }
-                        else
+                        var table_content = "<table width='100%'  border='1' style='border-collapse:collapse;'>";
+                        table_content = table_content + "<tr><td width='50%' align='center'>Variable Value</td><td width='50%' align='center'>";
+                        if (var_type === "NUMBER")
                         {
-                            table_content = table_content + "<option value='TRUE'>TRUE</option>";
-                            table_content = table_content + "<option value='FALSE' selected = 'selected'>FALSE</option>";
+                            table_content = table_content + "<input type='text' id='textinput_variable' name = 'textinput_variable' value = '" + var_value + "' onchange='updateNumberVariableValue(\"" + var_name + "\")'></input></td></tr>";
                         }
-                    }
-                    table_content = table_content + "</table>";
-                    document.getElementById("parameters_table").innerHTML = table_content;
-                    update_variable_value_in_action(var_name, var_value);
+                        else if (var_type === "BOOLEAN")
+                        {
+                            table_content = table_content + "<select name='combo_variable' id='combo_variable' onchange='comboVariableChange(\"" + var_name + "\")'>";
+                            if (var_value == "TRUE")
+                            {
+                                table_content = table_content + "<option value='TRUE' selected = 'selected'>TRUE</option>";
+                                table_content = table_content + "<option value='FALSE'>FALSE</option>";
+                            }
+                            else
+                            {
+                                table_content = table_content + "<option value='TRUE'>TRUE</option>";
+                                table_content = table_content + "<option value='FALSE' selected = 'selected'>FALSE</option>";
+                            }
+                        }
+                        table_content = table_content + "</table>";
+                        document.getElementById("parameters_table").innerHTML = table_content;
+                        update_variable_value_in_action(var_name, var_value);
+                    }                    
                     return;
                 }
 
@@ -518,50 +480,32 @@ $(function()
     });
 
     $("#action_modal_selected_item").selectable(
-            {
-                stop: function(e, ui) {
-                    $(".ui-selected:first", this).each(function() {
-                        $(this).siblings().removeClass("ui-selected");
-                    });
-                }
+    {
+        stop: function(e, ui) {
+            $(".ui-selected:first", this).each(function() {
+                $(this).siblings().removeClass("ui-selected");
             });
+        }
+    });
 
     $("#condition_modal_selected_item").selectable(
-            {
-                stop: function(e, ui) {
-                    $(".ui-selected:first", this).each(function() {
-                        $(this).siblings().removeClass("ui-selected");
-                    });
-                }
+    {
+        stop: function(e, ui) {
+            $(".ui-selected:first", this).each(function() {
+                $(this).siblings().removeClass("ui-selected");
             });
+        }
+    });
 
     $("#logical_connector_selected_item").selectable(
-            {
-                stop: function(e, ui) {
-                    $(".ui-selected:first", this).each(function() {
-                        $(this).siblings().removeClass("ui-selected");
-                    });
-                }
+    {
+        stop: function(e, ui) {
+            $(".ui-selected:first", this).each(function() {
+                $(this).siblings().removeClass("ui-selected");
             });
+        }
+    });
 
-
-    $("#save_as_replace_project_div_modal").dialog(
-            {
-                //setting some properties
-                autoOpen: false,
-                width: 420,
-                modal: true,
-                title: 'Save As Project',
-                //setting buttons
-                buttons:
-                        {
-                        },
-                close: function()
-                {
-                    updateClientEndOperationCounter();
-                    //closing the dialog            
-                }
-            });
 });
 
 function add_arithmetic_ok_pressed() {
@@ -589,7 +533,7 @@ function add_arithmetic_ok_pressed() {
             //alert("Please assign a number for the constant part.");
             return;
         }
-        process_operator(selected_operator, "constant", "constant", right_part_value, right_part_value, "true");
+        process_operator(selected_operator, "Constant", "number", right_part_value, right_part_value, "true");
     }
     $('#modal_add_arithmetic').modal('hide');
 
@@ -604,7 +548,6 @@ function arithmetic_operator_condition_ok_pressed() {
         $('#modal_arithmetic_operator_condition').modal('hide');
         $("#label_show_messages_content").html("Please select a condition.");
         $("#modal_show_messages").modal('show');
-        //alert("Please select a condition.");
         return;
     }
     else

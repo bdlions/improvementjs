@@ -177,7 +177,7 @@ function process_operator(selected_operator, name,value,language,code, is_arithm
                 }
                 $left_panel_code_list = $left_panel_code_list + $(this).prop('outerHTML');        
                 $left_panel_code_list = $left_panel_code_list + "<input style='' id="+id1+" type='hidden' name='condition' value="+selected_operator_code+"></input>";
-                $left_panel_code_list = $left_panel_code_list + "<input style='' "+title_attribute+" id="+id2+" type='hidden' name='condition' value="+code+"></input>";
+                $left_panel_code_list = $left_panel_code_list + "<input style='' "+title_attribute+" id="+id2+" type='hidden' name='condition' value='"+code+"'></input>";
             }
             else
             {
