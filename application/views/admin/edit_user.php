@@ -12,7 +12,7 @@
             <strong>Please enter the user information below to update</strong>
         </div>
         <div class="panel-body">
-            <?php echo form_open('admin', 'class="form-horizontal" role="form"'); ?>
+            <?php echo form_open('admin/edit_user/'.$user_id, 'class="form-horizontal" role="form"'); ?>
             <div class="row">
                 <div class="col-md-offset-1 col-md-8">
                     <div class="form-group">

@@ -22,9 +22,9 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-4 col-md-4">
-                                <div class="checkbox">
+<!--                                <div class="checkbox">
                                     <label style="float: left;"><?php echo form_checkbox('remember', 'remember', $remember); ?>Remember me</label>
-                                </div>
+                                </div>-->
                             </div>
                             <div class="col-md-4">
                                 <button style="width: 100%" type="submit" class="btn btn-success btn-md" name="submit">Login</button>

@@ -770,9 +770,9 @@ class Admin extends CI_Controller {
 
         if ($this->form_validation->run() == true) { //check to see if the user is logging in
             //check for "remember me"
-            $remember = (bool) $this->input->post('remember');
+//            $remember = (bool) $this->input->post('remember');
 
-            if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) 
+            if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'))) 
             {
                 if (!$this->ion_auth->is_admin()) {
                     //User wants to access this page
