@@ -1208,7 +1208,7 @@ class Ion_auth_model extends CI_Model {
 
         $this->db->delete($this->tables['users'], array('id' => $id));
         $this->remove_from_group(NULL, $id);
-
+        $this->db->delete($this->tables['project_info'], array('user_id' => $id));
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             $this->trigger_events(array('post_delete_user', 'post_delete_user_unsuccessful'));

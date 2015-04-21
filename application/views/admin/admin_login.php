@@ -6,6 +6,9 @@
             </div>
             <div class="panel-body">
                 <div class="row">
+                    <?php if ($message != NULL): ?>
+                        <div class="alert alert-danger alert-dismissible"><?php echo $message; ?></div>
+                    <?php endif; ?>
                     <div class="col-md-10 col-md-offset-1">
                         <?php echo form_open("admin/login", "class='form-horizontal' role='form'"); ?>
                         <div class="form-group">
@@ -22,9 +25,6 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-4 col-md-4">
-<!--                                <div class="checkbox">
-                                    <label style="float: left;"><?php echo form_checkbox('remember', 'remember', $remember); ?>Remember me</label>
-                                </div>-->
                             </div>
                             <div class="col-md-4">
                                 <button style="width: 100%" type="submit" class="btn btn-success btn-md" name="submit">Login</button>

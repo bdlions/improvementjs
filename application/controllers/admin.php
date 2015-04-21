@@ -731,29 +731,15 @@ class Admin extends CI_Controller {
     function signin() 
     {
         $this->data['message'] = '';
-        $identity = "";
-        $password = "";
-        $remember = false;
-        if (get_cookie('identity')) {
-            $identity = get_cookie('identity');
-        }
-        if (get_cookie('u_p')) {
-            $password = get_cookie('u_p');
-        }
-        if (get_cookie('is_remember')) {
-            $remember = true;
-        }
+        
         $this->data['identity'] = array('name' => 'identity',
             'id' => 'identity',
-            'type' => 'text',
-            'value' => $identity,
+            'type' => 'text'
         );
         $this->data['password'] = array('name' => 'password',
             'id' => 'password',
-            'type' => 'password',
-            'value' => $password,
+            'type' => 'password'
         );
-        $this->data['remember'] = $remember;
         $this->template->load(LOGIN_TEMPLATE, "admin/admin_login", $this->data);
     }
 
@@ -763,15 +749,12 @@ class Admin extends CI_Controller {
     function login() 
     {
         $this->data['title'] = "Login";
-
+        $this->data['message'] = "";
         //validate form input
         $this->form_validation->set_rules('identity', 'Identity', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
 
         if ($this->form_validation->run() == true) { //check to see if the user is logging in
-            //check for "remember me"
-//            $remember = (bool) $this->input->post('remember');
-
             if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'))) 
             {
                 if (!$this->ion_auth->is_admin()) {
@@ -795,35 +778,19 @@ class Admin extends CI_Controller {
         } 
         else 
         {
-            $identity = "";
-            $password = "";
-            $remember = false;
-            if (get_cookie('identity')) {
-                $identity = get_cookie('identity');
-                //delete_cookie('identity');
-            }
-            if (get_cookie('u_p')) {
-                $password = get_cookie('u_p');
-            }
-            if (get_cookie('is_remember')) {
-                $remember = true;
-            }
             //set the flash data error message if there is one
-            $this->session->set_flashdata('message', $this->ion_auth_model->errors());
-            $this->data['message'] = $this->session->flashdata('message');
+            $this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
             $this->data['identity'] = array('name' => 'identity',
                 'id' => 'identity',
-                'type' => 'text',
-                'value' => $identity,
+                'type' => 'text'
             );
             $this->data['password'] = array('name' => 'password',
                 'id' => 'password',
-                'type' => 'password',
-                'value' => $password,
+                'type' => 'password'
             );
-            $this->data['remember'] = $remember;
-            $this->template->load(LOGIN_TEMPLATE, 'admin/admin_login', $this->data);
+            $this->template->load(LOGIN_TEMPLATE, 'admin/admin_login', $this->data);           
         }
+        
     }
 
     /*
